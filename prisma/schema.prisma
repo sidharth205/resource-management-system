@@ -1,0 +1,219 @@
+// Resource Management System — Prisma Schema
+// LOCK THIS FILE on Day 1. Any change after B/C start building against the
+// API contract needs a heads-up in the team chat, since it can change response shapes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  admin
+  manager
+  employee
+}
+
+enum ProjectStatus {
+  active
+  on_hold
+  completed
+  closed
+}
+
+enum TaskPriority {
+  low
+  medium
+  high
+}
+
+enum TaskStatus {
+  to_do
+  in_progress
+  on_hold
+  completed
+}
+
+enum TimesheetStatus {
+  pending
+  approved
+  rejected
+}
+
+enum UserStatus {
+  active
+  inactive
+  archived
+}
+
+// Mirrors a Supabase auth.users row 1:1 via the same id.
+// Created by a Supabase Auth trigger / or directly in the Users API handler.
+model Profile {
+  id            String    @id @default(uuid()) // same as auth.users.id
+  name          String
+  email         String    @unique
+  role          Role
+  designationId String?
+  designation   Designation? @relation(fields: [designationId], references: [id])
+  managerId     String?
+  manager       Profile?  @relation("ManagerToEmployee", fields: [managerId], references: [id])
+  reports       Profile[] @relation("ManagerToEmployee")
+  status        UserStatus @default(active)
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  managedProjects   Project[]        @relation("ProjectManager")
+  projectMemberships ProjectMember[]
+  assignedTasks     Task[]           @relation("TaskAssignee")
+  taskComments      TaskComment[]
+  taskAttachments   TaskAttachment[]
+  timesheets        Timesheet[]      @relation("TimesheetEmployee")
+  approvedTimesheets Timesheet[]     @relation("TimesheetApprover")
+  notifications     Notification[]
+  auditLogs         AuditLog[]
+
+  @@map("profiles")
+}
+
+// Standalone lookup — no longer tied to a Department (Department was cut from scope).
+model Designation {
+  id       String     @id @default(uuid())
+  name     String
+  status   UserStatus @default(active)
+  profiles Profile[]
+
+  @@map("designations")
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+  managerId   String
+  manager     Profile       @relation("ProjectManager", fields: [managerId], references: [id])
+  startDate   DateTime
+  endDate     DateTime?
+  status      ProjectStatus @default(active)
+  progress    Int           @default(0) // % complete, derived from task completion — no Milestones table
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  members ProjectMember[]
+  tasks   Task[]
+  timesheets Timesheet[]
+
+  @@map("projects")
+}
+
+model ProjectMember {
+  id           String   @id @default(uuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  profileId    String
+  profile      Profile  @relation(fields: [profileId], references: [id])
+  roleOnProject String? // free text, e.g. "Contributor" — not a permissions role
+  addedAt      DateTime @default(now())
+
+  @@unique([projectId, profileId])
+  @@map("project_members")
+}
+
+model Task {
+  id             String       @id @default(uuid())
+  projectId      String
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignedTo     String
+  assignee       Profile      @relation("TaskAssignee", fields: [assignedTo], references: [id])
+  title          String
+  description    String?
+  priority       TaskPriority @default(medium)
+  status         TaskStatus   @default(to_do)
+  dueDate        DateTime?
+  estimatedHours Float?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  comments    TaskComment[]
+  attachments TaskAttachment[]
+  timesheets  Timesheet[]
+
+  @@map("tasks")
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    Profile  @relation(fields: [authorId], references: [id])
+  comment   String
+  createdAt DateTime @default(now())
+
+  @@map("task_comments")
+}
+
+model TaskAttachment {
+  id         String   @id @default(uuid())
+  taskId     String
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  fileUrl    String
+  fileName   String
+  uploadedBy String
+  uploader   Profile  @relation(fields: [uploadedBy], references: [id])
+  uploadedAt DateTime @default(now())
+
+  @@map("task_attachments")
+}
+
+model Timesheet {
+  id         String          @id @default(uuid())
+  employeeId String
+  employee   Profile         @relation("TimesheetEmployee", fields: [employeeId], references: [id])
+  projectId  String
+  project    Project         @relation(fields: [projectId], references: [id])
+  taskId     String?
+  task       Task?           @relation(fields: [taskId], references: [id])
+  date       DateTime
+  hours      Float
+  remarks    String?
+  status     TimesheetStatus @default(pending)
+  approvedBy String?
+  approver   Profile?        @relation("TimesheetApprover", fields: [approvedBy], references: [id])
+  approvedAt DateTime?
+  createdAt  DateTime        @default(now())
+
+  @@map("timesheets")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      Profile  @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String   // e.g. "task_assigned", "timesheet_approved", "timesheet_rejected"
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+// Immutable — never updated or deleted through the app, only inserted via lib/audit.ts
+model AuditLog {
+  id            String   @id @default(uuid())
+  userId        String
+  user          Profile  @relation(fields: [userId], references: [id])
+  module        String   // "users" | "projects" | "tasks" | "timesheets" | "designations"
+  action        String   // "create" | "update" | "delete" | "approve" | "reject"
+  recordId      String
+  previousValue Json?
+  newValue      Json?
+  createdAt     DateTime @default(now())
+
+  @@map("audit_logs")
+}
