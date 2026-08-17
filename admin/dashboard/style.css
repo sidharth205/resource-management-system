@@ -1,1 +1,179 @@
-/* Local styles for Admin - Dashboard */
+/* =========================================
+   BASE LAYOUT & SIDEBAR 
+========================================= */
+body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; overflow-x: hidden; }
+.app-container { display: flex; height: 100vh; }
+.sidebar { width: 250px; background-color: #A8C0FF; display: flex; flex-direction: column; padding-top: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+.profile-section { display: flex; align-items: center; padding: 20px; background-color: #8daaf0; margin-bottom: 20px; border-radius: 0 25px 25px 0; width: 90%; }
+.avatar { font-size: 24px; background: #553c9a; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+.welcome-text { font-size: 0.8rem; font-weight: bold; color: #333; }
+.nav-menu { flex: 1; display: flex; flex-direction: column; padding: 0 10px; }
+.nav-item { text-decoration: none; color: #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: background 0.2s; }
+.nav-item:hover { background-color: rgba(255, 255, 255, 0.3); }
+.nav-item.active { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.logout-btn { margin: 20px; padding: 15px; background: transparent; border: none; text-align: left; font-weight: bold; cursor: pointer; font-size: 1rem; }
+
+.main-content { flex: 1; display: flex; flex-direction: column; padding: 20px 40px; overflow-y: auto; }
+.top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }
+.top-header h2 { margin: 0; color: #333; font-size: 1.3rem; letter-spacing: 0.5px; }
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.bell-icon { font-size: 1.4rem; cursor: pointer; }
+.header-profile { font-weight: bold; color: #2d3748; font-size: 0.9rem; }
+
+/* =========================================
+   AFD DASHBOARD GRID & CARDS
+========================================= */
+.dashboard-grid-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1.3fr 1.2fr 1.5fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.dash-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card-title-bar {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #4a5568;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.card-content-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 1. Active Users Today */
+.user-pill-row {
+    background-color: #c6f6d5; /* Soft green from mockup */
+    padding: 10px 14px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #22543d;
+}
+
+/* 2. Active Projects */
+.project-header-stat {
+    text-align: center;
+    border-bottom: 1px solid #edf2f7;
+    padding-bottom: 8px;
+}
+.project-header-stat h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    color: #553c9a; /* Deep purple from mockup */
+    font-weight: 900;
+}
+.project-header-stat p {
+    margin: 2px 0 0 0;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #718096;
+    letter-spacing: 0.5px;
+}
+
+.project-progress-row {
+    background-color: #f3e8ff; /* Soft pastel purple container */
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #4a5568;
+}
+.proj-name { max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.proj-bar-container {
+    background: #ffffff;
+    border-radius: 4px;
+    width: 45px;
+    height: 14px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #d8b4fe;
+}
+.proj-fill {
+    background-color: #48bb78;
+    height: 100%;
+    position: absolute;
+    left: 0; top: 0;
+}
+.proj-percentage {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: #1a202c;
+    line-height: 14px;
+}
+
+/* 3. System Notifications */
+.notif-bar {
+    background-color: #fbd38d; /* Soft peach/tan color from mockup */
+    height: 38px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+/* 4. Total Employees */
+.total-emp-flex {
+    display: flex;
+    background: #ebf8ff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #bee3f8;
+}
+.total-count-box {
+    flex: 1.2;
+    padding: 20px 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.total-count-box h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    color: #2b6cb0;
+    font-weight: 900;
+}
+.active-now-box {
+    flex: 1;
+    background: #ffffff;
+    padding: 15px 10px;
+    text-align: center;
+    border-left: 1px solid #bee3f8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.active-now-box .label {
+    margin: 0;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: #22543d;
+}
+.active-now-box h2 {
+    margin: 4px 0 0 0;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #22543d;
+}

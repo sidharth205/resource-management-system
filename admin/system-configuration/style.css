@@ -1,1 +1,169 @@
-/* Local styles for Admin - System Configuration */
+/* =========================================
+   BASE LAYOUT & SIDEBAR 
+========================================= */
+body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; overflow-x: hidden; }
+.app-container { display: flex; height: 100vh; }
+.sidebar { width: 250px; background-color: #A8C0FF; display: flex; flex-direction: column; padding-top: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+.profile-section { display: flex; align-items: center; padding: 20px; background-color: #8daaf0; margin-bottom: 20px; border-radius: 0 25px 25px 0; width: 90%; }
+.avatar { font-size: 24px; background: #553c9a; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+.welcome-text { font-size: 0.8rem; font-weight: bold; color: #333; }
+.nav-menu { flex: 1; display: flex; flex-direction: column; padding: 0 10px; }
+.nav-item { text-decoration: none; color: #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: background 0.2s; }
+.nav-item:hover { background-color: rgba(255, 255, 255, 0.3); }
+.nav-item.active { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.logout-btn { margin: 20px; padding: 15px; background: transparent; border: none; text-align: left; font-weight: bold; cursor: pointer; font-size: 1rem; }
+
+.main-content { flex: 1; display: flex; flex-direction: column; padding: 20px 40px; overflow-y: auto; }
+.top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }
+.top-header h2 { margin: 0; color: #333; }
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.header-search input { padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; width: 250px; outline: none; }
+.bell-icon { font-size: 1.5rem; cursor: pointer; }
+
+/* =========================================
+   SYSTEM CONFIGURATION SPECIFIC STYLES
+========================================= */
+.config-layout { display: flex; flex-direction: column; gap: 20px; padding-bottom: 40px; }
+.section-title h3 { margin: 0; font-size: 1rem; color: #2d3748; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+
+/* Dark Container Panels */
+.dark-card {
+    background-color: #2d3748;
+    border-radius: 10px;
+    padding: 25px;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tabs */
+.active-roles-tabs h4 { margin: 0 0 15px 0; font-size: 0.85rem; color: #a0aec0; letter-spacing: 0.5px; }
+.tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+.tab {
+    background-color: #4a5568;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tab:hover { background-color: #718096; }
+.tab.create-role { background-color: #3182ce; color: white; }
+.tab.create-role:hover { background-color: #2b6cb0; }
+
+/* Role Permission Modules */
+.roles-container { display: flex; flex-direction: column; gap: 20px; }
+.empty-roles-state { padding: 20px; border: 1px dashed #4a5568; border-radius: 8px; color: #a0aec0; text-align: center; font-size: 0.9rem; }
+
+.role-card {
+    background-color: #f7fafc; /* White/Light Grey like AFD */
+    color: #2d3748;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.role-card h4 { margin: 0 0 12px 0; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
+.section-label { font-size: 0.75rem; font-weight: 700; color: #718096; margin-bottom: 12px; letter-spacing: 0.5px; }
+.permissions-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.pill {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #4a5568;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+/* Card Buttons matching AFD */
+.role-card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+.role-actions { display: flex; gap: 10px; }
+.role-actions button {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.75rem;
+    transition: opacity 0.2s;
+}
+.role-actions button:hover { opacity: 0.9; }
+.btn-edit { background-color: #4a5568; } /* Dark slate */
+.btn-clone { background-color: #3182ce; } /* Blue */
+.btn-archive { background-color: #e53e3e; } /* Red */
+.role-meta { text-align: right; font-size: 0.7rem; color: #718096; line-height: 1.5; font-weight: 600; text-transform: uppercase; }
+
+/* Security Policies and Inputs */
+.config-forms { display: flex; flex-direction: column; gap: 30px; }
+.policy-group { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 30px; }
+.policy-group:last-child { border-bottom: none; padding-bottom: 0; }
+.policy-group h4 { margin-top: 0; margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 0.5px; color: #e2e8f0; }
+
+.policy-row {
+    background-color: #4a5568;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #f7fafc;
+}
+
+/* Custom Editable Inputs */
+.editable-input {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e0;
+    color: #2d3748;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    width: 80px;
+    text-align: center;
+    outline: none;
+}
+.editable-input:focus { border-color: #3182ce; box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.5); }
+
+/* Stepper Controls */
+.stepper { display: flex; align-items: center; gap: 12px; }
+.stepper button {
+    background: #edf2f7; border: none; width: 26px; height: 26px;
+    border-radius: 4px; cursor: pointer; font-weight: 800; color: #2d3748;
+    display: flex; align-items: center; justify-content: center;
+}
+.stepper button:hover { background: #ffffff; }
+.stepper-val { min-width: 20px; text-align: center; font-size: 0.9rem; }
+
+/* Save Button */
+.btn-save {
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    display: block;
+    margin-left: auto;
+    margin-top: 15px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8rem;
+    transition: background 0.2s;
+}
+.btn-save:hover { background-color: #2b6cb0; }
+
+/* Toggle Switch */
+.switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e0; transition: .3s; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; }
+input:checked + .slider { background-color: #48bb78; }
+input:checked + .slider:before { transform: translateX(22px); }
+.slider.round { border-radius: 22px; }
+.slider.round:before { border-radius: 50%; }

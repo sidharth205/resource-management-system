@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS | Create Role</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
+                <a href="../user-management/index.html" class="nav-item">USER MANAGEMENT</a>
+                <a href="../system-configuration/index.html" class="nav-item active">SYSTEM CONFIGURATION</a>
+                <a href="../audit-monitoring/index.html" class="nav-item">AUDIT & MONITORING</a>
+                <a href="../reports/index.html" class="nav-item">REPORTS</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2>CREATE NEW ROLE ✏️</h2>
+                <div class="header-actions">
+                    <span class="bell-icon">🔔</span>
+                    <span class="header-profile">👤 <span id="headerName">Admin</span></span>
+                </div>
+            </header>
+
+            <div class="role-creation-layout">
+                <div class="card dark-card">
+                    <form id="createRoleForm">
+                        <div class="input-group">
+                            <label>ROLE NAME</label>
+                            <input type="text" id="roleName" required placeholder="e.g., Senior Developer, HR Lead" autocomplete="off">
+                        </div>
+
+                        <div class="permissions-section">
+                            <label>ASSIGN PERMISSIONS</label>
+                            <div class="permissions-grid">
+                                
+                                <!-- User & System Management -->
+                                <div class="permission-category">
+                                    <h4>USER MANAGEMENT</h4>
+                                    <label class="checkbox-label"><input type="checkbox" value="view_users"> View Employee List</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="create_users"> Create Employees</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="edit_users"> Edit Employees</label>
+                                </div>
+
+                                <!-- Projects & Tasks -->
+                                <div class="permission-category">
+                                    <h4>PROJECTS & TASKS</h4>
+                                    <label class="checkbox-label"><input type="checkbox" value="view_projects"> View Projects</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="manage_projects"> Manage Projects (Create/Assign)</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="view_tasks"> View Tasks</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="manage_tasks"> Manage Tasks</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="update_task_status"> Update Task Status</label>
+                                </div>
+
+                                <!-- Timesheets -->
+                                <div class="permission-category">
+                                    <h4>TIMESHEETS</h4>
+                                    <label class="checkbox-label"><input type="checkbox" value="submit_timesheets"> Submit Timesheets</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="view_timesheets"> View Timesheets</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="approve_timesheets"> Approve/Reject Timesheets</label>
+                                </div>
+
+                                <!-- System & Reports -->
+                                <div class="permission-category">
+                                    <h4>SYSTEM & REPORTS</h4>
+                                    <label class="checkbox-label"><input type="checkbox" value="view_reports"> View Utilization Reports</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="view_audit_logs"> View Audit Logs</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="manage_system"> Manage System Config</label>
+                                    <label class="checkbox-label"><input type="checkbox" value="all" id="adminOverride"> Full Admin Access (Override)</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" id="btnCancel">CANCEL</button>
+                            <button type="submit" class="btn-save" id="btnSaveRole">SAVE ROLE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

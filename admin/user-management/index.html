@@ -1,16 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Admin - User Management</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS | User Management</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Admin / User Management</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
+                <a href="#" class="nav-item active">USER MANAGEMENT</a>
+                <a href="../system-configuration/index.html" class="nav-item">SYSTEM CONFIGURATION</a>
+                <a href="../audit-monitoring/index.html" class="nav-item">AUDIT & MONITORING</a>
+                <a href="../reports/index.html" class="nav-item">REPORTS</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2>USER MANAGEMENT</h2>
+                <div class="header-actions">
+                    <span class="bell-icon">🔔</span>
+                    <span class="header-profile">👤 <span id="headerName">Admin</span></span>
+                </div>
+            </header>
+
+            <div class="user-management-layout">
+                <div class="left-column">
+                    <!-- Create Employee Form -->
+                    <div class="card create-employee-card">
+                        <div class="card-header">
+                            <h3>CREATE EMPLOYEE <span>☑️</span></h3>
+                        </div>
+                        <form id="createEmployeeForm">
+                            <div class="form-columns">
+                                <!-- Personal Details -->
+                                <div class="form-section">
+                                    <h4>PERSONAL DETAILS</h4>
+                                    <div class="input-group">
+                                        <label>FULL NAME</label>
+                                        <input type="text" id="fullName" required placeholder="John Doe">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>OFFICIAL EMAIL ID</label>
+                                        <input type="email" id="email" required placeholder="john@company.com">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>TEMPORARY PASSWORD</label>
+                                        <input type="password" id="tempPassword" required placeholder="Min 6 characters">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>EMPLOYEE ID (Auto-Generated)</label>
+                                        <input type="text" id="empId" readonly style="background-color: #e2e8f0; cursor: not-allowed;">
+                                    </div>
+                                </div>
+                                <!-- Joining Details -->
+                                <div class="form-section">
+                                    <h4>JOINING DETAILS</h4>
+                                    <div class="input-group">
+                                        <label>DEPARTMENT</label>
+                                        <select id="department" required>
+                                            <option value="">Select Department</option>
+                                            <option value="Engineering">Engineering</option>
+                                            <option value="Design">Design</option>
+                                            <option value="Marketing">Marketing</option>
+                                            <option value="HR">Human Resources</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>ASSIGN ROLE</label>
+                                        <select id="roleSelect" required>
+                                            <option value="">Loading roles...</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>EMPLOYMENT TYPE</label>
+                                        <select id="employmentType" required>
+                                            <option value="">Select Type</option>
+                                            <option value="Full-Time">Full-Time</option>
+                                            <option value="Part-Time">Part-Time</option>
+                                            <option value="Contract">Contract</option>
+                                            <option value="Intern">Intern</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>JOINING DATE</label>
+                                        <input type="date" id="joiningDate" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-add">ADD EMPLOYEE</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Search and View Employees -->
+                    <div class="card search-view-card">
+                        <div class="search-header">
+                            <h3>SEARCH AND VIEW EMPLOYEES 🔍</h3>
+                            <div class="filters">
+                                <input type="text" id="searchEmployeeInput" placeholder="Search by name or EMP ID..." class="search-input">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>EMP ID</th>
+                                        <th>Name</th>
+                                        <th>Department</th>
+                                        <th>Role</th>
+                                        <th>Employment Type</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr><td colspan="6" style="text-align: center;">Loading employees...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <!-- Employee Activity -->
+                    <div class="card activity-card">
+                        <h3>EMPLOYEE ACTIVITY 💻</h3>
+                        <div class="activity-feed" id="activityFeed">
+                            <div class="activity-item"><p>Loading recent activities...</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Import Employees -->
+                    <div class="card import-card">
+                        <h3>IMPORT EMPLOYEES 📥</h3>
+                        <div class="drop-zone">
+                            <p>DROP CSV FILE OR <a href="#">BROWSE FILE</a></p>
+                        </div>
+                        <button class="btn-import">IMPORT</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

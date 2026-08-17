@@ -1,16 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Admin - Dashboard</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS | Admin Dashboard</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Admin / Dashboard</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">DASHBOARD</a>
+                <a href="../user-management/index.html" class="nav-item">USER MANAGEMENT</a>
+                <a href="../system-configuration/index.html" class="nav-item">SYSTEM CONFIGURATION</a>
+                <a href="../audit-monitoring/index.html" class="nav-item">AUDIT & MONITORING</a>
+                <a href="../reports/index.html" class="nav-item">REPORTS</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2>DASHBOARD</h2>
+                <div class="header-actions">
+                    <span class="bell-icon">🔔</span>
+                    <span class="header-profile">👤 <span id="headerName">&lt;Name&gt;</span></span>
+                </div>
+            </header>
+
+            <div class="dashboard-grid-layout">
+                
+                <!-- 1. Active Users Today Card -->
+                <div class="dash-card active-users-card">
+                    <div class="card-title-bar">
+                        <span>💻 ACTIVE USERS TODAY</span>
+                    </div>
+                    <div class="card-content-list" id="activeUsersList">
+                        <!-- Populated dynamically via JS. Shows '--' if empty -->
+                    </div>
+                </div>
+
+                <!-- 2. Active Projects Card -->
+                <div class="dash-card active-projects-card">
+                    <div class="card-title-bar">
+                        <span>ACTIVE PROJECTS</span>
+                    </div>
+                    <div class="project-header-stat">
+                        <h1 id="statActiveProjectsCount">--</h1>
+                        <p>ONGOING PROJECTS</p>
+                    </div>
+                    <div class="card-content-list" id="projectsProgressList">
+                        <!-- Populated dynamically via JS. Shows '--' if empty -->
+                    </div>
+                </div>
+
+                <!-- 3. System Notifications Card -->
+                <div class="dash-card notifications-card">
+                    <div class="card-title-bar">
+                        <span>SYSTEM NOTIFICATIONS</span>
+                    </div>
+                    <div class="card-content-list" id="systemNotificationsList">
+                        <!-- Populated dynamically via JS. Shows '--' if empty -->
+                    </div>
+                </div>
+
+                <!-- 4. Total Employees Card -->
+                <div class="dash-card total-employees-card">
+                    <div class="card-title-bar">
+                        <span>👥 TOTAL EMPLOYEES</span>
+                    </div>
+                    <div class="total-emp-flex">
+                        <div class="total-count-box">
+                            <h1 id="statTotalEmployees">--</h1>
+                        </div>
+                        <div class="active-now-box">
+                            <p class="label">ACTIVE NOW</p>
+                            <h2 id="statActiveNow">--</h2>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

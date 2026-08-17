@@ -1,16 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Admin - Login</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS | Login</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Admin / Login</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="login-container">
+        <div class="branding">
+            <h1>RESOURCE MANAGEMENT SYSTEM</h1>
+            <p>ONE PLATFORM. COMPLETE PROJECT VISIBILITY.</p>
+            <p class="subtitle">Manage projects, teams, resources, and workflows through a unified dashboard that keeps everyone aligned from project initiation to successful delivery.</p>
+        </div>
+        
+        <div class="login-card">
+            <h2>LOGIN</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">EMAIL ID</label>
+                    <input type="email" id="email" required placeholder="admin@example.com">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">PASSWORD</label>
+                    <input type="password" id="password" required>
+                </div>
+
+                <div class="help-text">
+                    New Employee? <br>
+                    <a href="#">Click here</a> to request login credentials
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="btn-primary" id="loginBtn">LOGIN</button>
+                </div>
+            </form>
+            <div id="errorMessage" class="error-msg"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

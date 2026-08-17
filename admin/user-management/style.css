@@ -1,1 +1,62 @@
-/* Local styles for Admin - User Management */
+/* =========================================
+   BASE LAYOUT & SIDEBAR 
+========================================= */
+body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; overflow-x: hidden; }
+.app-container { display: flex; height: 100vh; }
+.sidebar { width: 250px; background-color: #A8C0FF; display: flex; flex-direction: column; padding-top: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+.profile-section { display: flex; align-items: center; padding: 20px; background-color: #8daaf0; margin-bottom: 20px; border-radius: 0 25px 25px 0; width: 90%; }
+.avatar { font-size: 24px; background: #553c9a; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+.welcome-text { font-size: 0.8rem; font-weight: bold; color: #333; }
+.nav-menu { flex: 1; display: flex; flex-direction: column; padding: 0 10px; }
+.nav-item { text-decoration: none; color: #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: background 0.2s; }
+.nav-item:hover { background-color: rgba(255, 255, 255, 0.3); }
+.nav-item.active { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.logout-btn { margin: 20px; padding: 15px; background: transparent; border: none; text-align: left; font-weight: bold; cursor: pointer; font-size: 1rem; }
+
+.main-content { flex: 1; display: flex; flex-direction: column; padding: 20px 40px; overflow-y: auto; }
+.top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }
+.top-header h2 { margin: 0; color: #333; }
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.bell-icon { font-size: 1.5rem; cursor: pointer; }
+
+/* =========================================
+   USER MANAGEMENT SPECIFIC STYLES
+========================================= */
+.user-management-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; padding-bottom: 30px; }
+.left-column, .right-column { display: flex; flex-direction: column; gap: 20px; }
+
+.card { background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+.card h3 { margin-top: 0; font-size: 1rem; color: #2c3e50; border-bottom: 2px solid #edf2f7; padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+
+.form-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
+.form-section h4 { font-size: 0.8rem; color: #718096; letter-spacing: 0.5px; margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+
+.input-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+.input-group label { font-size: 0.75rem; font-weight: 700; color: #4a5568; margin-bottom: 6px; }
+.input-group input, .input-group select { padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.85rem; background-color: #f8fafc; }
+.input-group input:focus, .input-group select:focus { outline: none; border-color: #3182ce; background-color: #fff; }
+
+.form-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
+.btn-add { background-color: #3182ce; color: white; border: none; padding: 10px 25px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+.btn-add:hover { background-color: #2b6cb0; }
+
+.search-header { display: flex; flex-direction: column; gap: 12px; }
+.filters { display: flex; gap: 10px; align-items: center; }
+.search-input { flex: 1; padding: 8px 14px; border: 1px solid #cbd5e0; border-radius: 20px; font-size: 0.8rem; background-color: #f8fafc; }
+
+.data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.data-table th, .data-table td { padding: 12px 14px; text-align: left; font-size: 0.85rem; border-bottom: 1px solid #edf2f7; }
+.data-table th { background-color: #f7fafc; color: #4a5568; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; }
+.data-table tr:hover { background-color: #f8fafc; }
+
+.status-badge { padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
+.status-active { background-color: #d4edda; color: #155724; }
+
+.activity-feed { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.activity-item { background-color: #f7fafc; border-left: 4px solid #48bb78; padding: 10px 12px; border-radius: 0 6px 6px 0; font-size: 0.8rem; }
+.activity-item .time { display: block; font-size: 0.7rem; color: #a0aec0; margin-top: 4px; }
+
+.drop-zone { border: 2px dashed #cbd5e0; border-radius: 8px; padding: 20px 15px; text-align: center; background-color: #f8fafc; margin-top: 10px; cursor: pointer; }
+.drop-zone p { margin: 0; font-size: 0.8rem; color: #718096; }
+.drop-zone a { color: #3182ce; text-decoration: none; font-weight: 600; }
+.btn-import { width: 100%; background-color: #2d3748; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; margin-top: 12px; cursor: pointer; }

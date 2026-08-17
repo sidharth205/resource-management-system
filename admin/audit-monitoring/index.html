@@ -1,16 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Admin - Audit Monitoring</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS | Audit & Monitoring</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Admin / Audit Monitoring</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="app-container">
+        <!-- Sidebar Navigation[cite: 1] -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
+                <a href="../user-management/index.html" class="nav-item">USER MANAGEMENT</a>
+                <a href="../system-configuration/index.html" class="nav-item">SYSTEM CONFIGURATION</a>
+                <a href="#" class="nav-item active">AUDIT & MONITORING</a>
+                <a href="../reports/index.html" class="nav-item">REPORTS</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
+        </aside>
+
+        <!-- Main Content[cite: 1] -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2>AUDIT & MONITORING</h2>
+                <div class="header-actions">
+                    <span class="bell-icon">🔔</span>
+                    <span class="header-profile">👤 <span id="headerName">Admin</span></span>
+                </div>
+            </header>
+
+            <div class="card audit-card">
+                <div class="audit-header">
+                    <div class="audit-title">
+                        <h3>AUDIT LOGS 📋</h3>
+                    </div>
+                    
+                    <!-- Filtering Controls[cite: 1] -->
+                    <div class="audit-controls">
+                        <div class="date-filters">
+                            <label>From</label>
+                            <input type="date" id="dateFrom">
+                            <label>Till</label>
+                            <input type="date" id="dateTill">
+                        </div>
+                        
+                        <div class="search-filters">
+                            <input type="text" id="searchLogs" placeholder="Search Logs 🔍" class="search-input">
+                            <div class="filter-pills">
+                                <span class="filter-icon">Funnel</span>
+                                <button class="filter-btn">Employee</button>
+                                <button class="filter-btn">Module</button>
+                            </div>
+                            <button class="btn-export" id="btnExport">Export Logs 📥</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table[cite: 1] -->
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>LOG ID</th>
+                                <th>TIMESTAMP</th>
+                                <th>USER ID</th>
+                                <th>MODULE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTableBody">
+                            <!-- Populated by JS -->
+                            <tr>
+                                <td colspan="5" style="text-align: center;">Loading logs...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

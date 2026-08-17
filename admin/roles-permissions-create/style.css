@@ -1,0 +1,152 @@
+/* =========================================
+   BASE LAYOUT & SIDEBAR 
+========================================= */
+body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; overflow-x: hidden; }
+.app-container { display: flex; height: 100vh; }
+.sidebar { width: 250px; background-color: #A8C0FF; display: flex; flex-direction: column; padding-top: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+.profile-section { display: flex; align-items: center; padding: 20px; background-color: #8daaf0; margin-bottom: 20px; border-radius: 0 25px 25px 0; width: 90%; }
+.avatar { font-size: 24px; background: #553c9a; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+.welcome-text { font-size: 0.8rem; font-weight: bold; color: #333; }
+.nav-menu { flex: 1; display: flex; flex-direction: column; padding: 0 10px; }
+.nav-item { text-decoration: none; color: #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: background 0.2s; }
+.nav-item:hover { background-color: rgba(255, 255, 255, 0.3); }
+.nav-item.active { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.logout-btn { margin: 20px; padding: 15px; background: transparent; border: none; text-align: left; font-weight: bold; cursor: pointer; font-size: 1rem; }
+.main-content { flex: 1; display: flex; flex-direction: column; padding: 20px 40px; overflow-y: auto; }
+.top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }
+.top-header h2 { margin: 0; color: #333; font-size: 1.2rem; }
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.bell-icon { font-size: 1.5rem; cursor: pointer; }
+
+/* =========================================
+   CREATE ROLE SPECIFIC STYLES
+========================================= */
+.role-creation-layout {
+    display: flex;
+    flex-direction: column;
+    max-width: 900px;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark-card {
+    background-color: #2d3748;
+    color: #ffffff;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #cbd5e0;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.input-group input[type="text"] {
+    padding: 12px 15px;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #1a202c;
+    color: white;
+    transition: all 0.2s;
+}
+
+.input-group input[type="text"]:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+}
+
+.permissions-section > label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #cbd5e0;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #4a5568;
+    padding-bottom: 10px;
+}
+
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.permission-category h4 {
+    margin: 0 0 15px 0;
+    font-size: 0.8rem;
+    color: #a0aec0;
+    text-transform: uppercase;
+    border-bottom: 1px solid #4a5568;
+    padding-bottom: 5px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #3182ce;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    border-top: 1px solid #4a5568;
+    padding-top: 20px;
+}
+
+.form-actions button {
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    background-color: transparent;
+    color: #cbd5e0;
+    border: 1px solid #718096;
+}
+
+.btn-cancel:hover {
+    background-color: #4a5568;
+    color: white;
+}
+
+.btn-save {
+    background-color: #3182ce;
+    color: white;
+    border: none;
+}
+
+.btn-save:hover {
+    background-color: #2b6cb0;
+}

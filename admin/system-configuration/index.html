@@ -1,16 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Admin - System Configuration</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS | System Configuration</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Admin / System Configuration</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
+                <a href="../user-management/index.html" class="nav-item">USER MANAGEMENT</a>
+                <a href="#" class="nav-item active">SYSTEM CONFIGURATION</a>
+                <a href="../audit-monitoring/index.html" class="nav-item">AUDIT & MONITORING</a>
+                <a href="../reports/index.html" class="nav-item">REPORTS</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h2>SYSTEM CONFIGURATION</h2>
+                <div class="header-search">
+                    <input type="text" placeholder="Search Settings">
+                </div>
+                <div class="header-actions">
+                    <span class="bell-icon">🔔</span>
+                    <span class="header-profile">👤 <span id="headerName">Admin</span></span>
+                </div>
+            </header>
+
+            <div class="config-layout">
+                <!-- Roles and Permissions Section -->
+                <div class="section-title">
+                    <h3>ROLES AND PERMISSIONS 🔒</h3>
+                </div>
+                <div class="dark-card">
+                    <div class="active-roles-tabs">
+                        <h4>ACTIVE ROLES</h4>
+                        <!-- Container for dynamic tabs populated by JS -->
+                        <div class="tabs" id="dynamicRolesTabs">
+                            <span>Loading roles...</span>
+                        </div>
+                    </div>
+
+                    <!-- Container for dynamic permission cards populated by JS -->
+                    <div id="dynamicRolesCards" class="roles-container">
+                        <!-- Role Cards will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Authentication & Security Section -->
+                <div class="section-title" style="margin-top: 30px;">
+                    <h3>AUTHENTICATION & SECURITY 🛡️</h3>
+                </div>
+                <div class="dark-card config-forms">
+                    
+                    <!-- Password Policy -->
+                    <div class="policy-group">
+                        <h4>PASSWORD POLICY</h4>
+                        <div class="policy-row">
+                            <span>MINIMUM PASSWORD LENGTH</span>
+                            <div class="stepper">
+                                <button class="btn-minus">-</button> 
+                                <span id="pp-length" class="stepper-val">8</span> 
+                                <button class="btn-plus">+</button>
+                            </div>
+                        </div>
+                        <div class="policy-row">
+                            <span>UPPERCASE REQUIRED</span>
+                            <label class="switch"><input type="checkbox" id="pp-uppercase" checked><span class="slider round"></span></label>
+                        </div>
+                        <div class="policy-row">
+                            <span>NUMBERS REQUIRED</span>
+                            <label class="switch"><input type="checkbox" id="pp-numbers" checked><span class="slider round"></span></label>
+                        </div>
+                        <div class="policy-row">
+                            <span>SPECIAL CHARACTERS REQUIRED</span>
+                            <label class="switch"><input type="checkbox" id="pp-special"><span class="slider round"></span></label>
+                        </div>
+                        <div class="policy-row">
+                            <span>PASSWORD EXPIRY (DAYS)</span>
+                            <!-- Made editable -->
+                            <input type="number" id="pp-expiry" class="editable-input" value="90" min="1">
+                        </div>
+                        <button class="btn-save" id="btnSavePasswordPolicy">SAVE</button>
+                    </div>
+
+                    <!-- Access Policy -->
+                    <div class="policy-group">
+                        <h4>ACCESS POLICY</h4>
+                        <div class="policy-row">
+                            <span>MAXIMUM LOGIN ATTEMPTS</span>
+                            <div class="stepper">
+                                <button class="btn-minus">-</button> 
+                                <span id="ap-attempts" class="stepper-val">5</span> 
+                                <button class="btn-plus">+</button>
+                            </div>
+                        </div>
+                        <div class="policy-row">
+                            <span>ALLOW MULTIPLE SESSIONS</span>
+                            <label class="switch"><input type="checkbox" id="ap-multiple"><span class="slider round"></span></label>
+                        </div>
+                        <div class="policy-row">
+                            <span>ALLOW PASSWORD RESET</span>
+                            <label class="switch"><input type="checkbox" id="ap-reset" checked><span class="slider round"></span></label>
+                        </div>
+                        <div class="policy-row">
+                            <span>SESSION TIMEOUT (MINS)</span>
+                            <!-- Made editable -->
+                            <input type="number" id="ap-timeout" class="editable-input" value="30" min="1">
+                        </div>
+                        <button class="btn-save" id="btnSaveAccessPolicy">SAVE</button>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
