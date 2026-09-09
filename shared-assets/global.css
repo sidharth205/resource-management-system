@@ -1,14 +1,142 @@
-/* Universal CSS Variables and Resets */
+/* =========================================
+   BASE LAYOUT & SIDEBAR STRUCTURE
+========================================= */
 :root {
   --primary-color: #4A90E2;
-  --bg-color: #F5F7FA;
+  --bg-color: #E6EAF8;
   --text-color: #333333;
 }
-* { box-sizing: border-box; }
-html, body, #app { height: 100%; }
+
+* { 
+  box-sizing: border-box; 
+}
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  overflow-x: hidden;
+}
+
 body {
-  margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
+}
+
+.app-container { 
+  display: flex; 
+  height: 100vh; 
+  width: 100vw;
+}
+
+.sidebar { 
+  width: 250px; 
+  background-color: #A8C0FF; 
+  display: flex; 
+  flex-direction: column; 
+  padding-top: 20px; 
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1); 
+  flex-shrink: 0;
+}
+
+.profile-section { 
+  display: flex; 
+  align-items: center; 
+  padding: 20px; 
+  background-color: #8daaf0; 
+  margin-bottom: 20px; 
+  border-radius: 0 25px 25px 0; 
+  width: 90%; 
+}
+
+.avatar { 
+  font-size: 24px; 
+  background: #553c9a; 
+  color: white; 
+  border-radius: 50%; 
+  width: 40px; 
+  height: 40px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  margin-right: 10px; 
+}
+
+.welcome-text { 
+  font-size: 0.8rem; 
+  font-weight: bold; 
+  color: #333; 
+}
+
+.nav-menu { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  padding: 0 10px; 
+}
+
+.nav-item { 
+  text-decoration: none; 
+  color: #333; 
+  padding: 15px; 
+  margin-bottom: 10px; 
+  border-radius: 8px; 
+  font-size: 0.85rem; 
+  font-weight: bold; 
+  transition: background 0.2s; 
+}
+
+.nav-item:hover { 
+  background-color: rgba(255, 255, 255, 0.3); 
+}
+
+.nav-item.active { 
+  background-color: white; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+.logout-btn { 
+  margin: 20px; 
+  padding: 15px; 
+  background: transparent; 
+  border: none; 
+  text-align: left; 
+  font-weight: bold; 
+  cursor: pointer; 
+  font-size: 1rem; 
+}
+
+.main-content { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  padding: 20px 40px; 
+  overflow-y: auto; 
+  box-sizing: border-box;
+}
+
+.top-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  border-bottom: 2px solid #ccc; 
+  padding-bottom: 10px; 
+  margin-bottom: 20px; 
+}
+
+.top-header h2 { 
+  margin: 0; 
+  color: #333; 
+  font-size: 1.3rem;
+}
+
+.header-actions { 
+  display: flex; 
+  align-items: center; 
+  gap: 20px; 
+}
+
+.bell-icon { 
+  font-size: 1.4rem; 
+  cursor: pointer; 
 }

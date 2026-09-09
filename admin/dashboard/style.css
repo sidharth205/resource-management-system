@@ -1,27 +1,5 @@
 /* =========================================
-   BASE LAYOUT & SIDEBAR 
-========================================= */
-body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; overflow-x: hidden; }
-.app-container { display: flex; height: 100vh; }
-.sidebar { width: 250px; background-color: #A8C0FF; display: flex; flex-direction: column; padding-top: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
-.profile-section { display: flex; align-items: center; padding: 20px; background-color: #8daaf0; margin-bottom: 20px; border-radius: 0 25px 25px 0; width: 90%; }
-.avatar { font-size: 24px; background: #553c9a; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
-.welcome-text { font-size: 0.8rem; font-weight: bold; color: #333; }
-.nav-menu { flex: 1; display: flex; flex-direction: column; padding: 0 10px; }
-.nav-item { text-decoration: none; color: #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: background 0.2s; }
-.nav-item:hover { background-color: rgba(255, 255, 255, 0.3); }
-.nav-item.active { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.logout-btn { margin: 20px; padding: 15px; background: transparent; border: none; text-align: left; font-weight: bold; cursor: pointer; font-size: 1rem; }
-
-.main-content { flex: 1; display: flex; flex-direction: column; padding: 20px 40px; overflow-y: auto; }
-.top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }
-.top-header h2 { margin: 0; color: #333; font-size: 1.3rem; letter-spacing: 0.5px; }
-.header-actions { display: flex; align-items: center; gap: 20px; }
-.bell-icon { font-size: 1.4rem; cursor: pointer; }
-.header-profile { font-weight: bold; color: #2d3748; font-size: 0.9rem; }
-
-/* =========================================
-   AFD DASHBOARD GRID & CARDS
+   ADMIN DASHBOARD SPECIFIC STYLES
 ========================================= */
 .dashboard-grid-layout {
     display: grid;
@@ -57,7 +35,7 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
 
 /* 1. Active Users Today */
 .user-pill-row {
-    background-color: #c6f6d5; /* Soft green from mockup */
+    background-color: #c6f6d5;
     padding: 10px 14px;
     border-radius: 6px;
     display: flex;
@@ -77,7 +55,7 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
 .project-header-stat h1 {
     margin: 0;
     font-size: 2.2rem;
-    color: #553c9a; /* Deep purple from mockup */
+    color: #553c9a;
     font-weight: 900;
 }
 .project-header-stat p {
@@ -89,7 +67,7 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
 }
 
 .project-progress-row {
-    background-color: #f3e8ff; /* Soft pastel purple container */
+    background-color: #f3e8ff;
     padding: 8px 12px;
     border-radius: 6px;
     display: flex;
@@ -127,7 +105,7 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
 
 /* 3. System Notifications */
 .notif-bar {
-    background-color: #fbd38d; /* Soft peach/tan color from mockup */
+    background-color: #fbd38d;
     height: 38px;
     border-radius: 6px;
     width: 100%;

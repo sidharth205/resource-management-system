@@ -1,16 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Employee - Dashboard</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMPLOYEE Dashboard</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Employee / Dashboard</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item active">DASHBOARD</a>
+                <a href="../assigned-tasks/index.html" class="nav-item">ASSIGNED TASK</a>
+                <a href="../projects/index.html" class="nav-item">PROJECTS</a>
+                <a href="../notifications/index.html" class="nav-item">NOTIFICATION</a>
+                <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn">
+                <span class="logout-icon">🚪</span> Logout
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-spacer"></div>
+                <div class="header-actions">
+                    <span class="bell-icon" title="Notifications">🔔</span>
+                    <div class="header-profile-tag">
+                        <span class="profile-icon-small">👤</span>
+                        <span id="headerName">Name</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Greeting Banner -->
+            <div class="greeting-banner">
+                <h1>Good Morning, <span id="empWelcomeName">Name</span>!</h1>
+                <p>Here is your work overview for today</p>
+            </div>
+
+            <!-- Top 3 Stat Cards Grid -->
+            <div class="stats-grid">
+                <div class="stat-box card-blue">
+                    <div class="stat-icon-wrapper blue-bg">📄</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="statAssignedCount">0</span>
+                        <span class="stat-label">Assigned Tasks</span>
+                        <span class="stat-sub">All your tasks</span>
+                    </div>
+                </div>
+                <div class="stat-box card-pink">
+                    <div class="stat-icon-wrapper pink-bg">📅</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="statDueCount">0</span>
+                        <span class="stat-label">Due Today</span>
+                        <span class="stat-sub">Need attention</span>
+                    </div>
+                </div>
+                <div class="stat-box card-green">
+                    <div class="stat-icon-wrapper green-bg">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="statCompletedCount">0</span>
+                        <span class="stat-label">Completed</span>
+                        <span class="stat-sub">Great Work</span>
+                    </div>
+                </div>
+            </div>
+
+                <<!-- My Tasks Section Card -->
+            <div class="section-card">
+                <h3>My Tasks</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Start Date</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTasksTable">
+                            <!-- Dynamically populated via script.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Notifications & Recent Activity -->
+            <!-- Bottom Row: Notifications & Recent Activity -->
+            <div class="bottom-grid">
+                <div class="section-card">
+                    <div class="card-header-flex">
+                        <h3>Notifications</h3>
+                        <a href="../notifications/index.html" class="view-all-link">View All</a>
+                    </div>
+                    <div class="notification-list" id="employeeNotificationsList">
+                        <p style="color: #64748b; font-size: 0.8rem;">Loading notifications...</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-timeline" id="employeeActivityList">
+                        <p style="color: #64748b; font-size: 0.8rem;">Loading activities...</p>
+                    </div>
+                </div>
+            </div>
+
+    <script src="../../shared-assets/breadcrumb.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

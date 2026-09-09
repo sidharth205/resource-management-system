@@ -406,10 +406,29 @@ app.get('/api/dashboard/admin-stats', authenticateUser, requirePermission('view_
         res.status(500).json({ error: err.message });
     }
 });
+// Employee Tasks API Route
+app.get('/api/employee/tasks', async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        if (!authHeader) {
+            return res.status(401).json({ error: 'No authorization token provided' });
+        }
+
+        // Query Supabase for tasks
+        const { data, error } = await supabase
+            .from('tasks')
+            .select('*');
+
+        if (error) throw error;
+        res.json(data || []);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 // ==========================================
 // SERVER INITIALIZATION
 // ==========================================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🚀 Complete API Server running on port ${PORT} with EMP ID architecture`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
 });

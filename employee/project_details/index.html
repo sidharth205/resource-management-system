@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMPLOYEE Project Details</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
+                <a href="../assigned-tasks/index.html" class="nav-item">ASSIGNED TASK</a>
+                <a href="../projects/index.html" class="nav-item active">PROJECTS</a>
+                <a href="../notifications/index.html" class="nav-item">NOTIFICATION</a>
+                <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn">
+                <span class="logout-icon">🚪</span> Logout
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-spacer"></div>
+                <div class="header-actions">
+                    <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
+                        <span class="bell-icon" title="Notifications">🔔</span>
+                    </a>
+                    <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
+                        <span class="profile-icon-small">👤</span>
+                        <span id="headerName">Name</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Back Link to Projects -->
+            <div class="back-link-row">
+                <a href="../projects/index.html" class="back-projects-link">← Projects</a>
+            </div>
+
+            <!-- Project Main Info Banner -->
+            <div class="project-info-banner">
+                <h1 id="projectTitle">Loading Project...</h1>
+                <p id="projectDescription">Please wait while project details are fetched.</p>
+            </div>
+
+            <!-- Top 3 Metric Cards Grid -->
+            <div class="stats-grid-details">
+                <div class="stat-box">
+                    <div class="stat-icon-wrapper blue-bg">📅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Start Date</span>
+                        <span class="stat-value" id="projectStartDate">-</span>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon-wrapper blue-bg">📅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Due Date</span>
+                        <span class="stat-value" id="projectDueDate">-</span>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon-wrapper blue-bg">👥</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Members</span>
+                        <span class="stat-value" id="projectMembersCount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Section: Team & Recent Activity -->
+            <div class="details-grid-two">
+                <!-- Left Column: Team List -->
+                <div class="section-card">
+                    <h3>Team</h3>
+                    <div id="teamMembersList" class="team-list">
+                        <p style="font-size: 0.75rem; color: #64748b;">No team members assigned.</p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Recent Activity -->
+                <div class="section-card">
+                    <h3>Recent Activity</h3>
+                    <div id="projectActivityList" class="activity-list">
+                        <p style="font-size: 0.75rem; color: #64748b;">No recent activity recorded.</p>
+                    </div>
+                    <div class="table-footer-link" style="margin-top: 15px;">
+                        <a href="#" id="viewAllActivityLink">View All Activity</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section: Project Documents -->
+            <div class="section-card documents-card">
+                <h3>Project Documents</h3>
+                <div id="projectDocumentsList" class="documents-row">
+                    <p style="font-size: 0.75rem; color: #64748b;">No documents available.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../shared-assets/breadcrumb.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

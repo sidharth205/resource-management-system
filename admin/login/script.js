@@ -1,4 +1,4 @@
-// JavaScript for Admin - Login
+// JavaScript for Admin/User Login - Updated
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const loginBtn = document.getElementById('loginBtn');
@@ -29,12 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.error || 'Login failed');
             }
 
-            // Save the token and role for future requests
-            localStorage.setItem('access_token', data.session.access_token);
-            localStorage.setItem('user_role', data.role);
-            localStorage.setItem('user_id', data.session.user.id);
+            // Safely extract user name from whichever format the backend returns
+            const userName = data.user?.name || 
+                             data.session?.user?.user_metadata?.name || 
+                             data.name || 
+                             'Employee';
 
-            // Redirect based on role[cite: 2]
+            // Save the token and profile details safely for future requests
+            localStorage.setItem('access_token', data.session?.access_token || data.access_token);
+            localStorage.setItem('user_role', data.role || 'employee');
+            localStorage.setItem('user_id', data.session?.user?.id || data.user?.id || '');
+            localStorage.setItem('user_name', userName);
+
+            // Redirect based on role
             if (data.role === 'admin') {
                 window.location.href = '../dashboard/index.html';
             } else if (data.role === 'manager') {

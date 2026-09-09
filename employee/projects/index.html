@@ -1,16 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Employee - Projects</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMPLOYEE Projects</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Employee / Projects</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
+                <a href="../assigned-tasks/index.html" class="nav-item">ASSIGNED TASK</a>
+                <a href="index.html" class="nav-item active">PROJECTS</a>
+                <a href="../notifications/index.html" class="nav-item">NOTIFICATION</a>
+                <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn">
+                <span class="logout-icon">🚪</span> Logout
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-spacer"></div>
+                <div class="header-actions">
+                    <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
+                        <span class="bell-icon" title="Notifications">🔔</span>
+                    </a>
+                    <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
+                        <span class="profile-icon-small">👤</span>
+                        <span id="headerName">Name</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Projects Header Banner -->
+            <div class="projects-banner">
+                <h1>Projects</h1>
+                <p>Track and manage all your assigned projects</p>
+            </div>
+
+            <!-- Top 2 Stat Cards Grid -->
+            <div class="stats-grid-projects">
+                <div class="stat-box card-blue">
+                    <div class="stat-icon-wrapper blue-bg">📄</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="statTotalProjects">0</span>
+                        <span class="stat-label">Total projects</span>
+                    </div>
+                </div>
+                <div class="stat-box card-green">
+                    <div class="stat-icon-wrapper green-bg">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="statCompletedProjects">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Table Section Card -->
+            <div class="section-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Owner</th>
+                                <th>Start Date</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeProjectsTable">
+                            <tr><td colspan="4" style="text-align: center; color: #64748b; padding: 20px;">Loading projects...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer-link">
+                    <a href="#" id="viewAllProjectsLink">View All Projects →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../shared-assets/breadcrumb.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
