@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer');
 require('dotenv').config();
 
 const { supabase, createNotification, logAudit } = require('./helpers');
@@ -9,17 +10,54 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Update your multer configuration to accept documents
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    fileFilter: (req, file, cb) => {
+        // Accept images, pdfs, and word documents
+        const allowedMimeTypes = [
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+            'application/msword', // .doc
+            'application/pdf',
+            'image/jpeg',
+            'image/png',
+            'text/plain'
+        ];
+        
+        if (allowedMimeTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only .docx, .doc, .pdf, txt, and images are allowed.'), false);
+        }
+    }
+});
 // ==========================================
 // 1. AUTHENTICATION
 // ==========================================
 app.post('/api/auth/login', async (req, res) => {
-    const { email, password } = req.body;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return res.status(401).json({ error: error.message });
+    try {
+        const { email, password } = req.body;
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) return res.status(401).json({ error: error.message });
 
-    // FIX: Look up the profile using auth_id instead of id
-    const { data: profile } = await supabase.from('profiles').select('role').eq('auth_id', data.user.id).single();
-    res.json({ session: data.session, role: profile?.role });
+        const session = data.session;
+        const user = data.user;
+
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('name, role')
+            .eq('auth_id', user.id)
+            .single();
+
+        res.json({
+            session,
+            role: profile?.role || 'employee',
+            name: profile?.name || 'User'
+        });
+    } catch (err) {
+        console.error("Login Error:", err.message);
+        res.status(500).json({ error: 'Internal server error during login' });
+    }
 });
 
 app.post('/api/auth/logout', authenticateUser, async (req, res) => {
@@ -60,7 +98,7 @@ app.patch('/api/settings/:key', authenticateUser, requirePermission('manage_syst
 
     const formattedKey = key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     await logAudit({ 
-        empId: req.user.id, 
+        empId: req.user.empId || req.user.id, 
         module: 'System Configuration', 
         action: `Updated the ${formattedKey}`, 
         recordId: key, 
@@ -86,7 +124,7 @@ app.post('/api/roles', authenticateUser, requirePermission('manage_system'), asy
     if (error) return res.status(500).json({ error: error.message });
 
     await logAudit({ 
-        empId: req.user.id, 
+        empId: req.user.empId || req.user.id, 
         module: 'System Configuration', 
         action: `Created a new role: ${name}`, 
         recordId: data[0].id, 
@@ -112,6 +150,7 @@ app.get('/api/users', authenticateUser, requirePermission('view_users'), async (
     }
     res.json(data);
 });
+
 app.get('/api/users/:empId', authenticateUser, async (req, res) => {
     const { empId } = req.params;
     
@@ -124,13 +163,13 @@ app.get('/api/users/:empId', authenticateUser, async (req, res) => {
     if (error || !data) return res.status(404).json({ error: 'Employee profile not found' });
     res.json(data);
 });
+
 app.post('/api/users', authenticateUser, requirePermission('create_users'), async (req, res) => {
     const { 
         name, email, role, password, 
         empId, department, employmentType, joiningDate 
     } = req.body;
 
-    // 1. Fetch Password Policy from system_settings
     const { data: policyData } = await supabase
         .from('system_settings')
         .select('value')
@@ -139,7 +178,6 @@ app.post('/api/users', authenticateUser, requirePermission('create_users'), asyn
 
     const policy = policyData ? policyData.value : { minLength: 6, requireUppercase: true, requireNumbers: true };
 
-    // 2. Validate Password against Policy
     if (password.length < (policy.minLength || 6)) {
         return res.status(400).json({ error: `Password must be at least ${policy.minLength} characters long.` });
     }
@@ -150,7 +188,6 @@ app.post('/api/users', authenticateUser, requirePermission('create_users'), asyn
         return res.status(400).json({ error: 'Password must contain at least one number.' });
     }
 
-    // 3. Create the Auth account
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
         email: email,
         password: password,
@@ -159,7 +196,6 @@ app.post('/api/users', authenticateUser, requirePermission('create_users'), asyn
 
     if (authError) return res.status(400).json({ error: authError.message });
 
-    // 4. Insert into profiles with emp_id as primary key
     const { data, error } = await supabase.from('profiles').insert([{ 
         emp_id: empId,
         auth_id: authData.user.id,
@@ -171,7 +207,11 @@ app.post('/api/users', authenticateUser, requirePermission('create_users'), asyn
     if (error) return res.status(500).json({ error: error.message });
 
     await logAudit({ 
-        empId: req.user.id, module: 'User Management', action: `Created new user: ${name}`, recordId: empId, newValue: { role, department } 
+        empId: req.user.empId || req.user.id, 
+        module: 'User Management', 
+        action: `Created new user: ${name}`, 
+        recordId: empId, 
+        newValue: { role, department } 
     });
 
     res.status(201).json(data[0]);
@@ -204,11 +244,10 @@ app.get('/api/projects', authenticateUser, requirePermission('view_projects'), a
     let query = supabase.from('projects').select('id, name, description, manager_id, start_date, end_date, status, progress');
     
     if (req.user.role.toLowerCase() === 'manager') {
-        query = query.eq('manager_id', req.user.id);
+        query = query.eq('manager_id', req.user.empId || req.user.id);
     } else if (req.user.role.toLowerCase() === 'employee') {
-        // FIX: Check project_members using emp_id
-        const { data: memberships } = await supabase.from('project_members').select('project_id').eq('emp_id', req.user.id);
-        const projectIds = memberships.map(m => m.project_id);
+        const { data: memberships } = await supabase.from('project_members').select('project_id').eq('emp_id', req.user.empId || req.user.id);
+        const projectIds = memberships ? memberships.map(m => m.project_id) : [];
         if (projectIds.length > 0) query = query.in('id', projectIds);
         else return res.json([]);
     }
@@ -221,7 +260,7 @@ app.get('/api/projects', authenticateUser, requirePermission('view_projects'), a
 app.post('/api/projects', authenticateUser, requirePermission('manage_projects'), async (req, res) => {
     const { name, description, startDate, endDate } = req.body;
     const { data, error } = await supabase.from('projects')
-        .insert([{ name, description, start_date: startDate, end_date: endDate, manager_id: req.user.id }])
+        .insert([{ name, description, start_date: startDate, end_date: endDate, manager_id: req.user.empId || req.user.id }])
         .select();
     
     if (error) return res.status(500).json({ error: error.message });
@@ -230,14 +269,12 @@ app.post('/api/projects', authenticateUser, requirePermission('manage_projects')
 
 app.post('/api/projects/:id/members', authenticateUser, requirePermission('manage_projects'), async (req, res) => {
     const { empId, roleOnProject } = req.body;
-    // FIX: Insert using emp_id
     const { data, error } = await supabase.from('project_members').insert([{ project_id: req.params.id, emp_id: empId, role_on_project: roleOnProject }]).select();
     if (error) return res.status(500).json({ error: error.message });
     res.status(201).json(data[0]);
 });
 
 app.delete('/api/projects/:id/members/:empId', authenticateUser, requirePermission('manage_projects'), async (req, res) => {
-    // FIX: Delete using emp_id
     const { error } = await supabase.from('project_members').delete().eq('project_id', req.params.id).eq('emp_id', req.params.empId);
     if (error) return res.status(500).json({ error: error.message });
     res.json({ message: 'Member removed' });
@@ -250,7 +287,7 @@ app.get('/api/tasks', authenticateUser, requirePermission('view_tasks'), async (
     const { projectId, status, priority } = req.query;
     let query = supabase.from('tasks').select('*');
     
-    if (req.user.role.toLowerCase() === 'employee') query = query.eq('assigned_to', req.user.id);
+    if (req.user.role.toLowerCase() === 'employee') query = query.eq('assigned_to', req.user.empId || req.user.id);
     if (projectId) query = query.eq('project_id', projectId);
     if (status) query = query.eq('status', status);
 
@@ -276,7 +313,7 @@ app.patch('/api/tasks/:id', authenticateUser, requirePermission('update_task_sta
     const { data, error } = await supabase.from('tasks').update(updateData).eq('id', taskId).select();
     if (error) return res.status(500).json({ error: error.message });
 
-    await logAudit({ empId: req.user.id, module: 'Tasks', action: 'Update Task', recordId: taskId, newValue: updateData });
+    await logAudit({ empId: req.user.empId || req.user.id, module: 'Tasks', action: 'Update Task', recordId: taskId, newValue: updateData });
     res.json(data[0]);
 });
 
@@ -287,7 +324,7 @@ app.get('/api/timesheets', authenticateUser, requirePermission('view_timesheets'
     const { status, projectId } = req.query;
     let query = supabase.from('timesheets').select('*');
     
-    if (req.user.role.toLowerCase() === 'employee') query = query.eq('employee_id', req.user.id);
+    if (req.user.role.toLowerCase() === 'employee') query = query.eq('employee_id', req.user.empId || req.user.id);
     if (status) query = query.eq('status', status);
     if (projectId) query = query.eq('project_id', projectId);
     
@@ -299,7 +336,7 @@ app.get('/api/timesheets', authenticateUser, requirePermission('view_timesheets'
 app.post('/api/timesheets', authenticateUser, requirePermission('submit_timesheets'), async (req, res) => {
     const { projectId, taskId, date, hours, remarks } = req.body;
     const { data, error } = await supabase.from('timesheets')
-        .insert([{ project_id: projectId, task_id: taskId, date, hours, remarks, employee_id: req.user.id }])
+        .insert([{ project_id: projectId, task_id: taskId, date, hours, remarks, employee_id: req.user.empId || req.user.id }])
         .select();
     
     if (error) return res.status(500).json({ error: error.message });
@@ -309,13 +346,13 @@ app.post('/api/timesheets', authenticateUser, requirePermission('submit_timeshee
 app.patch('/api/timesheets/:id', authenticateUser, requirePermission('approve_timesheets'), async (req, res) => {
     const { status, remarks } = req.body;
     const { data, error } = await supabase.from('timesheets')
-        .update({ status, remarks, approved_by: req.user.id, approved_at: new Date() })
+        .update({ status, remarks, approved_by: req.user.empId || req.user.id, approved_at: new Date() })
         .eq('id', req.params.id).select();
 
     if (error) return res.status(500).json({ error: error.message });
 
     await createNotification({ empId: data[0].employee_id, title: 'Timesheet Updated', message: `Timesheet status: ${status}`, type: 'timesheet' });
-    await logAudit({ empId: req.user.id, module: 'Timesheets', action: 'Status Update', recordId: req.params.id, newValue: { status } });
+    await logAudit({ empId: req.user.empId || req.user.id, module: 'Timesheets', action: 'Status Update', recordId: req.params.id, newValue: { status } });
     
     res.json(data[0]);
 });
@@ -324,14 +361,13 @@ app.patch('/api/timesheets/:id', authenticateUser, requirePermission('approve_ti
 // 8. NOTIFICATIONS & ACTIVITIES
 // ==========================================
 app.get('/api/notifications', authenticateUser, async (req, res) => {
-    // FIX: Query by emp_id
-    const { data, error } = await supabase.from('notifications').select('*').eq('emp_id', req.user.id);
+    const { data, error } = await supabase.from('notifications').select('*').eq('emp_id', req.user.empId || req.user.id);
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
 });
 
 app.patch('/api/notifications/:id/read', authenticateUser, async (req, res) => {
-    const { data, error } = await supabase.from('notifications').update({ is_read: true }).eq('id', req.params.id).eq('emp_id', req.user.id).select();
+    const { data, error } = await supabase.from('notifications').update({ is_read: true }).eq('id', req.params.id).eq('emp_id', req.user.empId || req.user.id).select();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data[0]);
 });
@@ -349,7 +385,7 @@ app.get('/api/activities', authenticateUser, requirePermission('view_users'), as
 // ==========================================
 app.get('/api/reports/project-progress', authenticateUser, requirePermission('view_reports'), async (req, res) => {
     let query = supabase.from('projects').select('id, name, progress');
-    if (req.user.role.toLowerCase() === 'manager') query = query.eq('manager_id', req.user.id);
+    if (req.user.role.toLowerCase() === 'manager') query = query.eq('manager_id', req.user.empId || req.user.id);
     
     const { data, error } = await query;
     if (error) return res.status(500).json({ error: error.message });
@@ -359,7 +395,6 @@ app.get('/api/reports/project-progress', authenticateUser, requirePermission('vi
 app.get('/api/audit-logs', authenticateUser, requirePermission('view_audit_logs'), async (req, res) => {
     const { module, empId, dateRange } = req.query;
     
-    // Join with the profiles table to get the user's name
     let query = supabase.from('audit_logs')
         .select('*, profiles(name)')
         .order('created_at', { ascending: false });
@@ -374,27 +409,23 @@ app.get('/api/audit-logs', authenticateUser, requirePermission('view_audit_logs'
 
 app.get('/api/dashboard/admin-stats', authenticateUser, requirePermission('view_reports'), async (req, res) => {
     try {
-        // 1. Count ALL profiles in the system (Admin + Employees)
-        const { count: totalEmployees, error: empError } = await supabase
+        const { count: totalEmployees } = await supabase
             .from('profiles')
             .select('*', { count: 'exact', head: true });
 
-        // 2. Count active projects
-        const { count: activeProjects, error: projError } = await supabase
+        const { count: activeProjects } = await supabase
             .from('projects')
             .select('*', { count: 'exact', head: true })
             .eq('status', 'active');
 
-        // 3. Count unique active users today from audit logs (using date check)
         const todayStr = new Date().toISOString().split('T')[0];
-        const { data: activeLogs, error: logError } = await supabase
+        const { data: activeLogs } = await supabase
             .from('audit_logs')
             .select('emp_id')
             .gte('created_at', todayStr);
 
-        // Calculate unique active users today, defaulting to at least 1 if you are logged in
         const uniqueActiveUsers = activeLogs ? new Set(activeLogs.map(l => l.emp_id)).size : 0;
-        const finalActiveToday = uniqueActiveUsers > 0 ? uniqueActiveUsers : 1; // Fallback to current admin session
+        const finalActiveToday = uniqueActiveUsers > 0 ? uniqueActiveUsers : 1;
 
         res.json({ 
             totalEmployees: totalEmployees ?? 2, 
@@ -406,25 +437,360 @@ app.get('/api/dashboard/admin-stats', authenticateUser, requirePermission('view_
         res.status(500).json({ error: err.message });
     }
 });
-// Employee Tasks API Route
-app.get('/api/employee/tasks', async (req, res) => {
-    try {
-        const authHeader = req.headers['authorization'];
-        if (!authHeader) {
-            return res.status(401).json({ error: 'No authorization token provided' });
-        }
 
-        // Query Supabase for tasks
+// ==========================================
+// 10. EMPLOYEE API ENDPOINTS
+// ==========================================
+
+// Get logged-in employee profile
+// Get logged-in employee profile joined with designation/department details if applicable
+app.get('/api/employee/profile', authenticateUser, async (req, res) => {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('*, designations(name)')
+        .eq('auth_id', req.user.id)
+        .single();
+        
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
+});
+
+// Update employee password securely via Supabase Auth
+app.put('/api/employee/profile/update-password', authenticateUser, async (req, res) => {
+    const { password } = req.body;
+    if (!password) return res.status(400).json({ error: 'Password is required' });
+
+    const { error } = await supabase.auth.admin.updateUserById(req.user.id, { password });
+    if (error) {
+        // Fallback to standard user update if admin method isn't configured
+        const { error: userError } = await supabase.auth.updateUser({ password });
+        if (userError) return res.status(400).json({ error: userError.message });
+    }
+    
+    res.json({ success: true, message: 'Password updated successfully' });
+});
+// Get employee tasks (Single clean definition)
+// Get employee tasks (Fixed with robust custom EMP-ID resolution)
+app.get('/api/employee/tasks', authenticateUser, async (req, res) => {
+    try {
+        // 1. Resolve the user's custom employee ID from profiles using their auth UUID
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('emp_id')
+            .eq('auth_id', req.user.id)
+            .single();
+
+        const empId = profile?.emp_id || req.user.empId || req.user.id;
+
+        // 2. Query tasks checking both custom emp_id and auth UUID to ensure a match
         const { data, error } = await supabase
             .from('tasks')
-            .select('*');
-
+            .select('*, projects(name, id), assigned_by_profile:profiles!tasks_assigned_by_fkey(name)')
+            .or(`assigned_to.eq.${empId},assigned_to.eq.${req.user.id}`);
+        
         if (error) throw error;
-        res.json(data || []);
+        
+        // 3. Map fields consistently for the dashboard and other views
+        const mapped = (data || []).map(t => ({
+            ...t,
+            task_name: t.title,
+            project_name: t.projects?.name,
+            project_id: t.project_id || t.projects?.id,
+            assigned_by: t.assigned_by_profile?.name || 'Manager'
+        }));
+        
+        res.json(mapped);
     } catch (err) {
+        console.error("Error fetching employee tasks:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
+app.put('/api/employee/tasks/:id', authenticateUser, async (req, res) => {
+    const taskId = req.params.id;
+    const updates = req.body; // e.g., status, description, title
+    
+    try {
+        const { data: profile } = await supabase.from('profiles').select('emp_id').eq('auth_id', req.user.id).single();
+        const empId = profile?.emp_id || req.user.empId || req.user.id;
+
+        // Fetch original task for comparison
+        const { data: oldTask } = await supabase.from('tasks').select('*').eq('id', taskId).single();
+        if (!oldTask) return res.status(404).json({ error: 'Task not found' });
+
+        // Perform update
+        const { data: updatedTask, error } = await supabase
+            .from('tasks')
+            .update(updates)
+            .eq('id', taskId)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        // Log the change in audit_logs
+        await supabase.from('audit_logs').insert([{
+            emp_id: empId,
+            module: 'Tasks',
+            action: `updated task "${oldTask.title}"`,
+            record_id: taskId,
+            previous_value: oldTask,
+            new_value: updatedTask
+        }]);
+
+        res.json({ success: true, task: updatedTask });
+    } catch (err) {
+        console.error("Task update error:", err.message);
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.get('/api/projects/:projectId/activity', authenticateUser, async (req, res) => {
+    const projectId = req.params.projectId;
+
+    try {
+        const { data: profile } = await supabase.from('profiles').select('emp_id').eq('auth_id', req.user.id).single();
+        const empId = profile?.emp_id || req.user.empId || req.user.id;
+
+        // 1. Verify project membership for security
+        const { data: membership } = await supabase
+            .from('project_members')
+            .select('*')
+            .eq('project_id', projectId)
+            .eq('emp_id', empId)
+            .single();
+
+        if (!membership) {
+            return res.status(403).json({ error: 'Unauthorized access to project activity' });
+        }
+
+        // 2. Fetch all task IDs belonging to this project
+        const { data: projectTasks } = await supabase
+            .from('tasks')
+            .select('id')
+            .eq('project_id', projectId);
+
+        const taskIds = (projectTasks || []).map(t => t.id);
+        if (taskIds.length === 0) return res.json([]);
+
+        // 3. Fetch audit logs matching these tasks, including the profile name of who made the change
+        const { data: logs, error } = await supabase
+            .from('audit_logs')
+            .select('id, module, action, created_at, profiles(name)')
+            .in('record_id', taskIds)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const formatted = (logs || []).map(item => ({
+            icon: item.module === 'Tasks' ? '📌' : '⚡',
+            description: `${item.profiles?.name || 'A team member'} ${item.action}`,
+            time_ago: new Date(item.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })
+        }));
+
+        res.json(formatted);
+    } catch (err) {
+        console.error("Error fetching project activity:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get current active tasks
+// Get current active tasks (Robust lookup for both Dashboard and Assigned Tasks)
+app.get('/api/employee/tasks/current', authenticateUser, async (req, res) => {
+    try {
+        // 1. Try to fetch the employee's custom 'emp_id' using their auth UUID
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('emp_id')
+            .eq('auth_id', req.user.id)
+            .single();
+
+        const empId = profile?.emp_id || req.user.empId || req.user.id; 
+
+        // 2. Query tasks checking both custom emp_id and auth id to guarantee a match
+        const { data, error } = await supabase
+            .from('tasks')
+            .select('*, projects(name, id)')
+            .or(`assigned_to.eq.${empId},assigned_to.eq.${req.user.id}`);
+        
+        if (error) throw error;
+        
+        // 3. Map fields precisely to what your dashboard and task templates expect
+        const mappedTasks = (data || []).map(t => ({
+            ...t,
+            task_name: t.title,
+            project_name: t.projects?.name,
+            project_id: t.project_id || t.projects?.id,
+            description: t.description
+        }));
+
+        res.json(mappedTasks);
+    } catch (error) {
+        console.error("Error fetching tasks for dashboard/assigned tasks:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Log work hours (Timesheets submission & hours reduction)
+app.post('/api/employee/tasks/log', authenticateUser, async (req, res) => {
+    const { task_id, project_id, hours, remarks } = req.body;
+
+    try {
+        const empId = req.user.empId || req.user.id;
+
+        const { error: tsError } = await supabase
+            .from('timesheets')
+            .insert([{
+                task_id, 
+                project_id, 
+                employee_id: empId, 
+                date: new Date().toISOString().split('T')[0],
+                hours, 
+                remarks, 
+                status: 'Pending'
+            }]);
+        
+        if (tsError) throw tsError;
+
+        const { data: task } = await supabase.from('tasks').select('estimated_hours').eq('id', task_id).single();
+        
+        if (task && task.estimated_hours !== null) {
+            const newHours = Math.max(0, parseFloat(task.estimated_hours) - parseFloat(hours));
+            await supabase.from('tasks').update({ estimated_hours: newHours }).eq('id', task_id);
+        }
+
+        res.json({ success: true });
+        // After successful timesheet insert
+await logAudit(empId, 'Tasks', `Logged ${hours} hrs: ${remarks || 'Work completed'}`, task_id);
+    } catch (error) {
+        console.error("Timesheet error:", error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// File upload endpoint for tasks
+app.post('/api/employee/tasks/upload', authenticateUser, upload.single('file'), async (req, res) => {
+    const file = req.file;
+    const { task_id } = req.body;
+
+    if (!file) return res.status(400).json({ error: 'No file provided' });
+
+    try {
+        const empId = req.user.empId || req.user.id;
+        const fileName = `${task_id}/${Date.now()}_${file.originalname.replace(/\s+/g, '_')}`;
+        
+        const { error: uploadError } = await supabase
+            .storage
+            .from('task-files')
+            .upload(fileName, file.buffer, { contentType: file.mimetype });
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = supabase.storage.from('task-files').getPublicUrl(fileName);
+        const fileUrl = publicUrlData.publicUrl;
+
+        const { error: dbError } = await supabase
+            .from('task_attachments')
+            .insert([{
+                task_id,
+                emp_id: empId,
+                file_url: fileUrl
+            }]);
+
+        if (dbError) throw dbError;
+
+        res.json({ success: true, file_url: fileUrl });
+        // After successful file upload insert
+await logAudit(empId, 'Tasks', `Uploaded attachment: ${file.originalname}`, task_id);
+    } catch (error) {
+        console.error("Upload error:", error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Get employee projects
+app.get('/api/employee/projects', authenticateUser, async (req, res) => {
+    const empId = req.user.empId || req.user.id;
+    const { data, error } = await supabase
+        .from('project_members')
+        .select('projects(*)')
+        .eq('emp_id', empId);
+        
+    if (error) return res.status(400).json({ error: error.message });
+    res.json((data || []).map(item => item.projects));
+});
+
+// Get specific project details
+app.get('/api/employee/projects/:id', authenticateUser, async (req, res) => {
+    const { id } = req.params;
+    const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', id)
+        .single();
+        
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
+});
+
+// Get employee notifications
+app.get('/api/employee/notifications', authenticateUser, async (req, res) => {
+    const empId = req.user.empId || req.user.id;
+    const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('emp_id', empId)
+        .order('created_at', { ascending: false });
+        
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
+});
+
+// Mark all notifications as read
+app.post('/api/employee/notifications/mark-all-read', authenticateUser, async (req, res) => {
+    const empId = req.user.empId || req.user.id;
+    const { error } = await supabase
+        .from('notifications')
+        .update({ is_read: true })
+        .eq('emp_id', empId);
+        
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ success: true });
+});
+
+// Employee activity log
+app.get('/api/employee/activity', authenticateUser, async (req, res) => {
+    try {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('emp_id')
+            .eq('auth_id', req.user.id)
+            .single();
+
+        const empId = profile?.emp_id || req.user.empId || req.user.id;
+
+        const { data, error } = await supabase
+            .from('audit_logs')
+            .select('action, module, created_at')
+            .eq('emp_id', empId)
+            .order('created_at', { ascending: false })
+            .limit(10);
+
+        if (error) throw error;
+
+        const formatted = (data || []).map(item => ({
+            icon: item.module === 'Tasks' ? '📌' : '⚡',
+            description: item.action,
+            time_ago: new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }));
+
+        res.json(formatted);
+    } catch (err) {
+        console.error("Error fetching activity timeline:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ==========================================
 // SERVER INITIALIZATION
 // ==========================================
