@@ -1,1 +1,349 @@
-/* Local styles for Employee - Profile */
+/* =========================================
+   EMPLOYEE PROFILE PAGE STYLING
+========================================= */
+
+body {
+    background-color: #dbeafe;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
+}
+
+/* Sidebar Layout */
+.sidebar {
+    width: 240px;
+    background: #c2d9ff;
+    display: flex;
+    flex-direction: column;
+    padding-top: 15px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    background-color: #93c5fd;
+    padding: 12px 15px;
+    margin: 10px 10px 20px 10px;
+    border-radius: 30px;
+}
+
+.avatar {
+    font-size: 20px;
+    background: #4f46e5;
+    color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.welcome-text {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    line-height: 1.2;
+}
+
+.nav-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #334155;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.nav-item.active {
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    color: #0f172a;
+}
+
+.logout-btn {
+    margin: 15px;
+    padding: 12px;
+    background: #818cf8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-align: left;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 35px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding-bottom: 40px;
+}
+
+.top-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-page-header h1 {
+    margin: 0 0 15px 0;
+    font-size: 1.4rem;
+    color: #0f172a;
+    font-weight: 800;
+}
+
+/* Top Profile Banner */
+.profile-top-banner {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    margin-bottom: 15px;
+}
+
+.profile-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.large-avatar {
+    font-size: 50px;
+    background: #cbd5e1;
+    color: #475569;
+    border-radius: 50%;
+    width: 85px;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-main-info h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #0f172a;
+    font-weight: 800;
+}
+
+.profile-main-info p {
+    margin: 3px 0;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.status-badge {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #16a34a;
+}
+
+.profile-banner-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-left: 2px solid #f1f5f9;
+    padding-left: 30px;
+    min-width: 280px;
+}
+
+.meta-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #475569;
+}
+
+.meta-line strong {
+    color: #0f172a;
+}
+
+/* Subtabs Row */
+.profile-subtabs {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 8px;
+}
+
+.subtab {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.subtab.active {
+    color: #2563eb;
+    position: relative;
+}
+
+.subtab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #2563eb;
+}
+
+/* Grid Bottom */
+.profile-grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.profile-right-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dash-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.card-title-edit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.card-title-edit h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 800;
+}
+
+.btn-edit {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-primary-small {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.details-form-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 8px 0;
+    border-bottom: 1px solid #f8fafc;
+    color: #64748b;
+}
+
+.details-form-row strong {
+    color: #1e293b;
+}
+
+.address-row {
+    align-items: flex-start;
+}
+
+/* Password Form */
+.password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.password-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.password-row label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.pass-input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #fff;
+    padding: 0 8px;
+}
+
+.pass-input-wrap input {
+    flex: 1;
+    border: none;
+    padding: 7px 0;
+    font-size: 0.8rem;
+    outline: none;
+}
+
+.eye-icon {
+    cursor: pointer;
+    font-size: 0.8rem;
+}

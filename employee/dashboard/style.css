@@ -17,7 +17,6 @@ body {
 /* Sidebar Layout matching mockup */
 .sidebar {
     width: 240px;
-    background-color: #bbf7d0; /* Soft green/blue container style */
     background: #c2d9ff;
     display: flex;
     flex-direction: column;
@@ -246,7 +245,7 @@ body {
     font-weight: 800;
 }
 
-/* Tables matching mockup */
+/* Tables */
 .table-container table {
     width: 100%;
     border-collapse: collapse;
@@ -275,11 +274,6 @@ body {
 .task-sub-text {
     font-size: 0.7rem;
     color: #64748b;
-}
-
-.due-today-tag {
-    color: #ef4444;
-    font-weight: 700;
 }
 
 /* Bottom Grid for Notifications & Activity */

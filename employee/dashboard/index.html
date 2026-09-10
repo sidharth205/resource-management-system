@@ -33,8 +33,12 @@
             <header class="top-header">
                 <div class="header-spacer"></div>
                 <div class="header-actions">
-                    <span class="bell-icon" title="Notifications">🔔</span>
-                    <div class="header-profile-tag">
+                    <!-- Notification / Bell icon navigates to notification page -->
+                    <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
+                        <span class="bell-icon" title="Notifications">🔔</span>
+                    </a>
+                    <!-- Profile area navigates to profile page -->
+                    <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
                         <span class="profile-icon-small">👤</span>
                         <span id="headerName">Name</span>
                     </div>
@@ -60,7 +64,7 @@
                 <div class="stat-box card-pink">
                     <div class="stat-icon-wrapper pink-bg">📅</div>
                     <div class="stat-info">
-                        <span class="stat-number" id="statDueCount">0</span>
+                        <span class="stat-number" id="statDueCount">03</span>
                         <span class="stat-label">Due Today</span>
                         <span class="stat-sub">Need attention</span>
                     </div>
@@ -68,14 +72,14 @@
                 <div class="stat-box card-green">
                     <div class="stat-icon-wrapper green-bg">✅</div>
                     <div class="stat-info">
-                        <span class="stat-number" id="statCompletedCount">0</span>
+                        <span class="stat-number" id="statCompletedCount">12</span>
                         <span class="stat-label">Completed</span>
                         <span class="stat-sub">Great Work</span>
                     </div>
                 </div>
             </div>
 
-                <<!-- My Tasks Section Card -->
+            <!-- My Tasks Section Card -->
             <div class="section-card">
                 <h3>My Tasks</h3>
                 <div class="table-container">
@@ -88,13 +92,12 @@
                             </tr>
                         </thead>
                         <tbody id="employeeTasksTable">
-                            <!-- Dynamically populated via script.js -->
+                            <tr><td colspan="3" style="text-align: center; color: #64748b; padding: 20px;">Loading tasks...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Bottom Row: Notifications & Recent Activity -->
             <!-- Bottom Row: Notifications & Recent Activity -->
             <div class="bottom-grid">
                 <div class="section-card">
@@ -114,6 +117,8 @@
                     </div>
                 </div>
             </div>
+        </main>
+    </div>
 
     <script src="../../shared-assets/breadcrumb.js"></script>
     <script src="script.js"></script>

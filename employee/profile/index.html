@@ -1,16 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RMS | Employee - Profile</title>
-  <link rel="stylesheet" href="../../shared-assets/global.css">
-  <link rel="stylesheet" href="style.css">
- </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMPLOYEE Profile</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div id="app">
-    <h1>Employee / Profile</h1>
-  </div>
-  <script src="script.js"></script>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar">👤</div>
+                <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
+                <a href="../assigned-tasks/index.html" class="nav-item">ASSIGNED TASK</a>
+                <a href="../projects/index.html" class="nav-item">PROJECTS</a>
+                <a href="../notifications/index.html" class="nav-item">NOTIFICATION</a>
+                <a href="index.html" class="nav-item active">MY PROFILE</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn">
+                <span class="logout-icon">🚪</span> Logout
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-spacer"></div>
+                <div class="header-actions">
+                    <a href="../notifications/index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; font-weight: bold; font-size: 0.8rem; color: #312e81;">
+                        <span class="bell-icon" title="Notifications">🔔</span> NOTIFICATIONS
+                    </a>
+                </div>
+            </header>
+
+            <!-- Profile Page Header -->
+            <div class="profile-page-header">
+                <h1>My Profile</h1>
+            </div>
+
+            <!-- Top Profile Card Banner -->
+            <div class="profile-top-banner">
+                <div class="profile-banner-left">
+                    <div class="large-avatar">👤</div>
+                    <div class="profile-main-info">
+                        <h2 id="profileFullName">Loading Name...</h2>
+                        <p id="profileEmail">--</p>
+                        <p id="profilePhone">--</p>
+                        <p id="profileJoined">--</p>
+                        <span class="status-badge" id="profileStatus">Active</span>
+                    </div>
+                </div>
+                <div class="profile-banner-right">
+                    <div class="meta-line"><span>Employee ID</span> <strong id="profileEmpId">-</strong></div>
+                    <div class="meta-line"><span>Department</span> <strong id="profileDepartment">-</strong></div>
+                    <div class="meta-line"><span>Reporting to</span> <strong id="profileReporting">-</strong></div>
+                    <div class="meta-line"><span>Role</span> <strong>Employee</strong></div>
+                </div>
+            </div>
+
+            <!-- Sub-Navigation Tabs Row -->
+            <div class="profile-subtabs">
+                <span class="subtab active">Profile</span>
+                <span class="subtab">Security</span>
+                <span class="subtab">Account Settings</span>
+            </div>
+
+            <!-- Bottom Two-Column Grid: Personal Details & Settings/Password -->
+            <div class="profile-grid-bottom">
+                <!-- Left Column: Personal Details -->
+                <div class="dash-card">
+                    <div class="card-title-edit">
+                        <h3>Personal Details</h3>
+                        <button class="btn-edit" id="editPersonalBtn">Edit</button>
+                    </div>
+                    <div class="details-form-row"><span>Full Name :</span> <strong id="detFullName">-</strong></div>
+                    <div class="details-form-row"><span>Date of Birth :</span> <strong id="detDob">-</strong></div>
+                    <div class="details-form-row"><span>Gender :</span> <strong id="detGender">-</strong></div>
+                    <div class="details-form-row address-row"><span>Address :</span> <strong id="detAddress">-</strong></div>
+                    <div class="details-form-row"><span>Email Address :</span> <strong id="detEmail">-</strong></div>
+                    <div class="details-form-row"><span>Phone No. :</span> <strong id="detPhone">-</strong></div>
+                </div>
+
+                <!-- Right Column Stack -->
+                <div class="profile-right-stack">
+                    <!-- Account Settings Card -->
+                    <div class="dash-card">
+                        <div class="card-title-edit">
+                            <h3>Account Settings</h3>
+                            <button class="btn-edit" id="editSettingsBtn">Edit</button>
+                        </div>
+                        <div class="details-form-row"><span>Time Zone :</span> <strong id="settingsTimezone">-</strong></div>
+                        <div class="details-form-row"><span>Language :</span> <strong id="settingsLanguage">-</strong></div>
+                        <div class="details-form-row"><span>Theme :</span> <strong>Light</strong></div>
+                    </div>
+
+                    <!-- Change Password Card -->
+                    <div class="dash-card">
+                        <div class="card-title-edit">
+                            <h3>Change Password</h3>
+                            <button class="btn-primary-small" id="updatePasswordBtn">Update Password</button>
+                        </div>
+                        <form id="changePasswordForm" class="password-form">
+                            <div class="password-row">
+                                <label>Current Password :</label>
+                                <div class="pass-input-wrap">
+                                    <input type="password" id="currentPass" required>
+                                    <span class="eye-icon">👁️</span>
+                                </div>
+                            </div>
+                            <div class="password-row">
+                                <label>New Password :</label>
+                                <div class="pass-input-wrap">
+                                    <input type="password" id="newPass" required>
+                                    <span class="eye-icon">👁️</span>
+                                </div>
+                            </div>
+                            <div class="password-row">
+                                <label>Confirm New Password :</label>
+                                <div class="pass-input-wrap">
+                                    <input type="password" id="confirmPass" required>
+                                    <span class="eye-icon">👁️</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../shared-assets/breadcrumb.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
