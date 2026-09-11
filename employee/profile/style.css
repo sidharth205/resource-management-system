@@ -1,7 +1,6 @@
 /* =========================================
-   EMPLOYEE PROFILE PAGE STYLING
+   BASE LAYOUT & SIDEBAR 
 ========================================= */
-
 body {
     background-color: #dbeafe;
     margin: 0;
@@ -14,7 +13,7 @@ body {
     background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
 }
 
-/* Sidebar Layout */
+/* Sidebar Layout matching mockup */
 .sidebar {
     width: 240px;
     background: #c2d9ff;
@@ -100,7 +99,7 @@ body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Main Content Area */
+/* Main Content area */
 .main-content {
     flex: 1;
     display: flex;
@@ -108,14 +107,13 @@ body {
     padding: 20px 35px;
     overflow-y: auto;
     box-sizing: border-box;
-    padding-bottom: 40px;
 }
 
 .top-header {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .header-actions {
@@ -124,226 +122,91 @@ body {
     gap: 20px;
 }
 
-.profile-page-header h1 {
-    margin: 0 0 15px 0;
-    font-size: 1.4rem;
-    color: #0f172a;
-    font-weight: 800;
+.bell-icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #312e81;
 }
 
-/* Top Profile Banner */
-.profile-top-banner {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-    margin-bottom: 15px;
-}
-
-.profile-banner-left {
+.header-profile-tag {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 8px;
+    font-weight: bold;
+    color: #1e1b4b;
+    font-size: 0.85rem;
 }
 
-.large-avatar {
-    font-size: 50px;
-    background: #cbd5e1;
-    color: #475569;
+.profile-icon-small {
+    background: #4f46e5;
+    color: white;
+    padding: 4px;
     border-radius: 50%;
-    width: 85px;
-    height: 85px;
+    font-size: 0.8rem;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
 }
 
-.profile-main-info h2 {
+/* Greeting Banner */
+.greeting-banner {
+    margin-bottom: 20px;
+}
+
+.greeting-banner h1 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: #0f172a;
     font-weight: 800;
 }
 
-.profile-main-info p {
-    margin: 3px 0;
-    font-size: 0.75rem;
-    color: #64748b;
-}
-
-.status-badge {
-    display: inline-block;
-    margin-top: 4px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #16a34a;
-}
-
-.profile-banner-right {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    border-left: 2px solid #f1f5f9;
-    padding-left: 30px;
-    min-width: 280px;
-}
-
-.meta-line {
-    display: flex;
-    justify-content: space-between;
+.greeting-banner p {
+    margin: 4px 0 0 0;
     font-size: 0.8rem;
     color: #475569;
+    font-weight: 500;
 }
 
-.meta-line strong {
-    color: #0f172a;
-}
+.header-actions { display: flex; align-items: center; gap: 20px; }
 
-/* Subtabs Row */
-.profile-subtabs {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #cbd5e1;
-    padding-bottom: 8px;
-}
+/* =========================================
+   UNIVERSAL PROFILE AFD LAYOUT
+========================================= */
+.profile-page-container { display: flex; flex-direction: column; gap: 20px; padding-bottom: 40px; }
+.card { background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-.subtab {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #64748b;
-    cursor: pointer;
-}
+/* Top Banner */
+.top-banner-card { display: flex; justify-content: space-between; align-items: center; padding: 30px; }
+.banner-left { display: flex; align-items: center; gap: 30px; }
+.large-avatar { font-size: 50px; background: #e2e8f0; color: #4a5568; border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; border: 3px solid #cbd5e0; }
+.banner-text-info h2 { margin: 0 0 8px 0; color: #2d3748; font-size: 1.5rem; }
+.banner-text-info p { margin: 3px 0; font-size: 0.85rem; color: #4a5568; }
+.joined-date { color: #718096 !important; font-size: 0.8rem !important; margin-top: 6px !important; }
+.status-active-text { color: #38a169 !important; font-weight: bold; font-size: 0.85rem !important; }
 
-.subtab.active {
-    color: #2563eb;
-    position: relative;
-}
+.banner-right { border-left: 2px solid #edf2f7; padding-left: 40px; display: flex; flex-direction: column; gap: 10px; min-width: 320px; }
+.meta-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: #4a5568; }
+.meta-row strong { color: #2d3748; }
 
-.subtab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -9px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #2563eb;
-}
+/* Bottom Grid */
+.bottom-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+.right-stack { display: flex; flex-direction: column; gap: 20px; }
 
-/* Grid Bottom */
-.profile-grid-bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
+.card-title-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; }
+.card-title-row h3, .password-card h3 { margin: 0; font-size: 1rem; color: #2d3748; }
+.btn-edit { background: #3182ce; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
 
-.profile-right-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+.details-form-list { display: flex; flex-direction: column; gap: 12px; }
+.field-row { display: flex; justify-content: space-between; font-size: 0.85rem; border-bottom: 1px dashed #edf2f7; padding-bottom: 8px; }
+.field-row label { color: #718096; font-weight: bold; }
+.field-row span { color: #2d3748; font-weight: 600; }
 
-.dash-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-}
-
-.card-title-edit {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.card-title-edit h3 {
-    margin: 0;
-    font-size: 0.95rem;
-    color: #1e293b;
-    font-weight: 800;
-}
-
-.btn-edit {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.btn-primary-small {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.details-form-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    padding: 8px 0;
-    border-bottom: 1px solid #f8fafc;
-    color: #64748b;
-}
-
-.details-form-row strong {
-    color: #1e293b;
-}
-
-.address-row {
-    align-items: flex-start;
-}
-
-/* Password Form */
-.password-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.password-row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.password-row label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #64748b;
-}
-
-.pass-input-wrap {
-    display: flex;
-    align-items: center;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    background: #fff;
-    padding: 0 8px;
-}
-
-.pass-input-wrap input {
-    flex: 1;
-    border: none;
-    padding: 7px 0;
-    font-size: 0.8rem;
-    outline: none;
-}
-
-.eye-icon {
-    cursor: pointer;
-    font-size: 0.8rem;
-}
+/* Change Password Form */
+.password-card { display: flex; flex-direction: column; gap: 15px; }
+.pwd-input-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.pwd-input-group label { font-size: 0.75rem; font-weight: bold; color: #4a5568; }
+.pwd-input-group input { padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 6px; background: #f8fafc; font-size: 0.8rem; }
+.btn-update-pwd { background: #3182ce; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.85rem; }
+.btn-update-pwd:hover { background: #2b6cb0; }

@@ -1,77 +1,113 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Immediate token validation & route protection
     const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
         return;
     }
 
-    // Retrieve name dynamically from localStorage set during login
+    // 2. Dynamic user name binding for whoever is logged in
     const storedName = localStorage.getItem('user_name') || 'Employee';
     const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1);
 
-    // Populate all name fields across the dashboard layout
-    document.getElementById('userName').textContent = formattedName.toUpperCase();
-    document.getElementById('headerName').textContent = formattedName;
-    document.getElementById('empWelcomeName').textContent = formattedName;
+    const userNameEl = document.getElementById('userName');
+    const headerNameEl = document.getElementById('headerName');
+    const empWelcomeNameEl = document.getElementById('empWelcomeName');
 
-    // Load live backend modules safely
+    if (userNameEl) userNameEl.textContent = formattedName.toUpperCase();
+    if (headerNameEl) headerNameEl.textContent = formattedName;
+    if (empWelcomeNameEl) empWelcomeNameEl.textContent = formattedName;
+
+    // 3. Load live backend database elements
     await loadEmployeeDashboardTasks(token);
     await loadEmployeeNotifications(token);
     await loadEmployeeActivity(token);
 
-    // Logout handling redirects to login/signup page
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        localStorage.clear();
-        window.location.href = '../login/index.html';
-    });
+    // 4. Secure Logout handling (replaces history state to block back-button access)
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.replace('../login/index.html');
+        });
+    }
+});
+
+// Prevent back-button caching mechanism after logout
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted || (performance.getEntriesByType("navigation")[0] && performance.getEntriesByType("navigation")[0].type === 'back_forward')) {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.replace('../login/index.html');
+        }
+    }
 });
 
 async function loadEmployeeDashboardTasks(token) {
+    const tbody = document.getElementById('employeeTasksTable');
+    if (!tbody) return;
+
     try {
-        const res = await fetch('http://localhost:3000/api/employee/tasks', {
+        // Fetch from the correct endpoint that resolves custom employee IDs
+        const res = await fetch('http://localhost:3000/api/employee/tasks/current', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        const tbody = document.getElementById('employeeTasksTable');
         if (!res.ok) {
-            tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #64748b; padding: 20px;">No tasks found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #64748b; padding: 20px;">No tasks found.</td></tr>`;
             return;
         }
 
         const tasks = await res.json();
+        const countEl = document.getElementById('statAssignedCount');
+        if (countEl) countEl.textContent = tasks ? tasks.length : '0';
+
         if (!tasks || tasks.length === 0) {
-            document.getElementById('statAssignedCount').textContent = '0';
-            tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #64748b; padding: 20px;">No active tasks assigned.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #64748b; padding: 20px;">No active tasks assigned.</td></tr>`;
             return;
         }
 
-        document.getElementById('statAssignedCount').textContent = tasks.length;
         tbody.innerHTML = '';
         
         tasks.forEach(t => {
             const tr = document.createElement('tr');
+            
+            // Make the row clickable and route to the specific task using the hash anchor
+            tr.style.cursor = 'pointer';
+            tr.onclick = () => {
+                window.location.href = `../assigned-tasks/index.html#${t.id}`;
+            };
+
+            const taskTitle = t.title || t.task_name || t.name || t.description || 'Task Assignment';
+            const projectName = t.project_name || t.projects?.name || 'General Project';
+            const dueDate = t.due_date || 'Pending';
+
             tr.innerHTML = `
                 <td>
-                    <strong class="task-title-text">${t.task_name || t.description || 'Task Assignment'}</strong><br>
-                    <span class="task-sub-text">${t.project_name || 'General Project'}</span>
+                    <strong class="task-title-text">${taskTitle}</strong>
+                    <span class="task-sub-text" style="display: block; font-size: 0.75rem; color: #64748b;">${projectName}</span>
                 </td>
-                <td>${t.start_date || 'N/A'}</td>
-                <td><span style="color: #3b82f6; font-weight: 700;">${t.due_date || 'Pending'}</span></td>
+                <td><span style="color: #3b82f6; font-weight: 700;">${dueDate}</span></td>
             `;
             tbody.appendChild(tr);
         });
     } catch (err) {
         console.error("Error loading tasks:", err);
-        document.getElementById('employeeTasksTable').innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ef4444; padding: 20px;">Server connection error. Make sure backend is running.</td></tr>`;
+        const tbody = document.getElementById('employeeTasksTable');
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #ef4444; padding: 20px;">Server connection error. Make sure backend is running.</td></tr>`;
+        }
     }
 }
-
 async function loadEmployeeNotifications(token) {
+    const container = document.getElementById('employeeNotificationsList');
+    if (!container) return;
+
     try {
         const res = await fetch('http://localhost:3000/api/employee/notifications', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        const container = document.getElementById('employeeNotificationsList');
         
         if (!res.ok) {
             container.innerHTML = `<p style="color: #64748b; font-size: 0.8rem;">No new notifications.</p>`;
@@ -98,16 +134,18 @@ async function loadEmployeeNotifications(token) {
             `;
         });
     } catch (err) {
-        document.getElementById('employeeNotificationsList').innerHTML = `<p style="color: #64748b; font-size: 0.8rem;">Unable to load notifications.</p>`;
+        container.innerHTML = `<p style="color: #64748b; font-size: 0.8rem;">Unable to load notifications.</p>`;
     }
 }
 
 async function loadEmployeeActivity(token) {
+    const container = document.getElementById('employeeActivityList');
+    if (!container) return;
+
     try {
         const res = await fetch('http://localhost:3000/api/employee/activity', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        const container = document.getElementById('employeeActivityList');
         
         if (!res.ok) {
             container.innerHTML = `<p style="color: #64748b; font-size: 0.8rem;">No recent activities.</p>`;
@@ -133,6 +171,6 @@ async function loadEmployeeActivity(token) {
             `;
         });
     } catch (err) {
-        document.getElementById('employeeActivityList').innerHTML = `<p style="color: #64748b; font-size: 0.8rem;">Unable to load activities.</p>`;
+        container.innerHTML = `<p style="color: #64748b; font-size: 0.8rem;">Unable to load activities.</p>`;
     }
 }

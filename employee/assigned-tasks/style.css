@@ -6,17 +6,20 @@ body {
     background-color: #dbeafe;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden; /* Locks outer body scrolling */
 }
 
 .app-container {
     display: flex;
     height: 100vh;
+    overflow: hidden;
     background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
 }
 
-/* Sidebar Styling */
+/* Sidebar Styling (Stays fixed and intact) */
 .sidebar {
     width: 240px;
+    height: 100vh;
     background: #c2d9ff;
     display: flex;
     flex-direction: column;
@@ -100,14 +103,15 @@ body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Main Content */
+/* Main Content Area (Scrollable Window) */
 .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     padding: 20px 35px;
-    overflow-y: auto;
+    height: 100vh;
     box-sizing: border-box;
+    overflow-y: auto; /* Enables inner scrolling without moving sidebar */
 }
 
 .top-header {
@@ -115,6 +119,7 @@ body {
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .header-actions {
@@ -157,6 +162,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .task-page-header-row h1 {
@@ -412,4 +418,41 @@ body {
     font-weight: 700;
     font-size: 0.75rem;
     cursor: pointer;
+}
+/* =========================================
+   NEW STYLES FOR MULTIPLE TASKS
+========================================= */
+
+.tasks-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Space between different tasks */
+    padding-bottom: 40px;
+}
+
+.individual-task-block {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.task-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #93c5fd;
+}
+
+.task-block-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #1e1b4b;
+}
+
+/* Ensure the grid doesn't have bottom padding if it's inside a block */
+.individual-task-block .task-grid-layout {
+    padding-bottom: 0;
 }

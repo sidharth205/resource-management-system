@@ -3,21 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMPLOYEE Assigned Task</title>
+    <title>Assigned Tasks</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Ensures body and outer app container lock the viewport height */
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #dbeafe;
+        }
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
+        }
+        /* Fixed Left Sidebar */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: #c2d9ff;
+            display: flex;
+            flex-direction: column;
+            padding-top: 15px;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+        /* Main Content Scrollable Wrapper */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px 35px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .scrollable-task-window {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 6px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation (Stays fixed and intact) -->
         <aside class="sidebar">
             <div class="profile-section">
                 <div class="avatar">👤</div>
-                <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
+                <div class="welcome-text">WELCOME <br><span id="userName">-</span></div>
             </div>
             <nav class="nav-menu">
                 <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
-                <a href="index.html" class="nav-item active">ASSIGNED TASK</a>
+                <a href="index.html" class="nav-item active">ASSIGNED TASKS</a>
                 <a href="../projects/index.html" class="nav-item">PROJECTS</a>
                 <a href="../notifications/index.html" class="nav-item">NOTIFICATION</a>
                 <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
@@ -38,106 +80,22 @@
                     </a>
                     <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
                         <span class="profile-icon-small">👤</span>
-                        <span id="headerName">Name</span>
+                        <span id="headerName">-</span>
                     </div>
                 </div>
             </header>
 
-            <!-- Task Name Header & Top Save Button -->
+            <!-- Page Title -->
             <div class="task-page-header-row">
-                <h1 id="taskNameHeader"></h1>
-                <button class="btn-primary-small" id="topSaveBtn">Save Changes</button>
+                <h1>My Assigned Tasks</h1>
             </div>
 
-            <!-- Two-Column Layout Grid -->
-            <div class="task-grid-layout">
-                <!-- Left Column -->
-                <div class="task-col-left">
-                    <!-- Task Details Card -->
-                    <div class="dash-card">
-                        <div class="card-title-bar green-bar">Task Details</div>
-                        <div class="meta-row">
-                            <span>📅 Due Date</span>
-                            <strong id="taskDueDate"></strong>
-                        </div>
-                        <div class="meta-row">
-                            <span>👤 Assigned By</span>
-                            <strong id="taskAssignedBy"></strong>
-                        </div>
-                        <div class="meta-row">
-                            <span>📅 Created</span>
-                            <strong id="taskCreatedDate"></strong>
-                        </div>
-                        <div class="meta-row">
-                            <span>⏱️ Estimated Hours</span>
-                            <strong id="taskEstimatedHours"></strong>
-                        </div>
-                    </div>
-
-                    <!-- Attachments Card -->
-                    <div class="dash-card">
-                        <div class="card-title-bar brown-bar">Attachments</div>
-                        <div id="attachmentsList" class="attachments-list">
-                            <!-- Populated dynamically from database -->
-                        </div>
-                        <div class="upload-dropzone">
-                            <p>☁️ <strong>Upload Attachment</strong></p>
-                            <span>Drag and drop files here or click to browse</span>
-                            <input type="file" id="fileUploadInput" style="display: none;">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Column -->
-                <div class="task-col-right">
-                    <!-- Description Card -->
-                    <div class="dash-card">
-                        <div class="card-title-bar blue-bar">Description</div>
-                        <p id="taskDescriptionText" class="description-text">
-                            <!-- Populated dynamically from database -->
-                        </p>
-                    </div>
-
-                    <!-- Log Work Hours Card -->
-                    <div class="dash-card">
-                        <div class="card-title-bar blue-bar">Log Work Hours</div>
-                        <form id="logHoursForm" class="log-hours-form">
-                            <div class="form-group">
-                                <label>Hours</label>
-                                <div class="input-with-suffix">
-                                    <input type="number" id="logHoursInput" placeholder="4" min="1" max="24" required>
-                                    <span>hrs</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea id="logDescInput" placeholder="Describe work completed..." rows="3" required></textarea>
-                            </div>
-                            <button type="submit" class="btn-submit-blue">Submit</button>
-                        </form>
-                    </div>
-
-                    <!-- Activity Timeline Card -->
-                    <div class="dash-card">
-                        <div class="card-title-bar blue-bar">Activity Timeline</div>
-                        <div id="activityTimelineList" class="timeline-container">
-                            <!-- Populated dynamically from database -->
-                        </div>
-                    </div>
-                </div>
+            <!-- Scrollable Content Window: JS will inject multiple tasks here -->
+            <!-- The timeline IDs and form inputs are created dynamically by your script.js inside this container -->
+            <div class="scrollable-task-window" id="tasksContainer">
+                <p>Loading tasks...</p>
             </div>
 
-            <!-- Confirmation Pop-up Modal (Triggered by upper right Save Changes) -->
-            <div id="saveConfirmModal" class="modal-overlay" style="display: none;">
-                <div class="modal-card">
-                    <h3>Confirm Changes</h3>
-                    <p>Are you sure you want to save changes to this task?</p>
-                    <div class="modal-actions">
-                        <button id="modalConfirmBtn" class="btn-save-blue">Confirm</button>
-                        <button id="modalCancelBtn" class="btn-cancel-gray">Cancel</button>
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
 

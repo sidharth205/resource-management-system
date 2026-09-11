@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMPLOYEE Dashboard</title>
+    <title>Employee Dashboard</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -33,11 +33,9 @@
             <header class="top-header">
                 <div class="header-spacer"></div>
                 <div class="header-actions">
-                    <!-- Notification / Bell icon navigates to notification page -->
                     <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
                         <span class="bell-icon" title="Notifications">🔔</span>
                     </a>
-                    <!-- Profile area navigates to profile page -->
                     <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
                         <span class="profile-icon-small">👤</span>
                         <span id="headerName">Name</span>
@@ -51,7 +49,7 @@
                 <p>Here is your work overview for today</p>
             </div>
 
-            <!-- Top 3 Stat Cards Grid -->
+            <!-- Top Stat Cards Grid -->
             <div class="stats-grid">
                 <div class="stat-box card-blue">
                     <div class="stat-icon-wrapper blue-bg">📄</div>
@@ -64,7 +62,7 @@
                 <div class="stat-box card-pink">
                     <div class="stat-icon-wrapper pink-bg">📅</div>
                     <div class="stat-info">
-                        <span class="stat-number" id="statDueCount">03</span>
+                        <span class="stat-number" id="statDueCount">0</span>
                         <span class="stat-label">Due Today</span>
                         <span class="stat-sub">Need attention</span>
                     </div>
@@ -72,7 +70,7 @@
                 <div class="stat-box card-green">
                     <div class="stat-icon-wrapper green-bg">✅</div>
                     <div class="stat-info">
-                        <span class="stat-number" id="statCompletedCount">12</span>
+                        <span class="stat-number" id="statCompletedCount">0</span>
                         <span class="stat-label">Completed</span>
                         <span class="stat-sub">Great Work</span>
                     </div>
@@ -87,12 +85,11 @@
                         <thead>
                             <tr>
                                 <th>Task</th>
-                                <th>Start Date</th>
                                 <th>Due Date</th>
                             </tr>
                         </thead>
                         <tbody id="employeeTasksTable">
-                            <tr><td colspan="3" style="text-align: center; color: #64748b; padding: 20px;">Loading tasks...</td></tr>
+                            <tr><td colspan="2" style="text-align: center; color: #64748b; padding: 20px;">Loading tasks...</td></tr>
                         </tbody>
                     </table>
                 </div>

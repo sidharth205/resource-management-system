@@ -71,3 +71,39 @@ async function loadEmployeeProjects(token) {
         document.getElementById('employeeProjectsTable').innerHTML = `<tr><td colspan="4" style="text-align: center; color: #ef4444; padding: 20px;">Server connection error. Make sure backend is running.</td></tr>`;
     }
 }
+async function loadProjectActivity(projectId, token) {
+    const container = document.getElementById('projectActivityList');
+    if (!container) return;
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/projects/${projectId}/activity`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!res.ok) {
+            container.innerHTML = '<p style="color: #64748b; font-size: 0.8rem;">Unable to load project activity.</p>';
+            return;
+        }
+
+        const logs = await res.json();
+        if (!logs || logs.length === 0) {
+            container.innerHTML = '<p style="color: #64748b; font-size: 0.8rem;">No project activity recorded yet.</p>';
+            return;
+        }
+
+        container.innerHTML = '';
+        logs.forEach(l => {
+            container.innerHTML += `
+                <div class="timeline-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                    <div class="tl-icon-box" style="background: #e0e7ff; padding: 8px; border-radius: 8px;">${l.icon}</div>
+                    <div class="tl-content" style="flex: 1;">
+                        <p style="margin: 0; font-size: 0.9rem; color: #1e1b4b;">${l.description}</p>
+                        <span class="time-ago" style="font-size: 0.75rem; color: #64748b;">${l.time_ago}</span>
+                    </div>
+                </div>
+            `;
+        });
+    } catch (err) {
+        console.error("Error loading project activity:", err);
+    }
+}

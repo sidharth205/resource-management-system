@@ -7,13 +7,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Set dynamic profile names from localStorage
     const storedName = localStorage.getItem('user_name') || 'Employee';
     const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1);
     document.getElementById('userName').textContent = formattedName.toUpperCase();
     document.getElementById('headerName').textContent = formattedName;
 
-    // Load notifications from database
     await loadNotifications(token);
 
     // Tab filter event listeners
@@ -27,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Mark all as read button
     const markAllBtn = document.getElementById('markAllReadBtn');
     if (markAllBtn) {
         markAllBtn.addEventListener('click', async () => {
@@ -35,7 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Handle logout button navigation
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -62,7 +58,7 @@ async function loadNotifications(token) {
         renderNotifications('all');
     } catch (err) {
         console.error("Error loading notifications:", err);
-        document.getElementById('notificationsContainer').innerHTML = `<p style="color: #ef4444; font-size: 0.8rem; text-align: center; padding: 20px;">Server connection error. Make sure backend is running.</p>`;
+        document.getElementById('notificationsContainer').innerHTML = `<p style="color: #ef4444; font-size: 0.8rem; text-align: center; padding: 20px;">Server connection error.</p>`;
     }
 }
 
@@ -71,9 +67,9 @@ function renderNotifications(filter) {
     
     let filtered = allNotifications;
     if (filter === 'unread') {
-        filtered = allNotifications.filter(n => !n.is_read && n.unread);
+        filtered = allNotifications.filter(n => !n.is_read);
     } else if (filter === 'read') {
-        filtered = allNotifications.filter(n => n.is_read || !n.unread);
+        filtered = allNotifications.filter(n => n.is_read);
     }
 
     if (!filtered || filtered.length === 0) {
@@ -90,30 +86,46 @@ function renderNotifications(filter) {
         if (type.includes('task') || type.includes('assigned')) {
             iconClass = 'icon-orange';
             emoji = '👥';
-        } else if (type.includes('comment')) {
+        } else if (type.includes('hours') || type.includes('timesheet')) {
             iconClass = 'icon-blue';
-            emoji = '💬';
-        } else if (type.includes('status') || type.includes('update')) {
+            emoji = '⏱️';
+        } else if (type.includes('attachment') || type.includes('file')) {
             iconClass = 'icon-green';
-            emoji = '✅';
+            emoji = '📄';
         } else if (type.includes('reminder') || type.includes('due')) {
             iconClass = 'icon-pink';
             emoji = '⏰';
         }
 
+        const timeFormatted = n.created_at ? new Date(n.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Recently';
+        const redirectUrl = `../assigned-tasks/index.html`;
+
         container.innerHTML += `
-            <div class="notif-card">
-                <div class="notif-card-left">
+            <div class="notif-card" onclick="handleNotificationClick('${n.id}', '${redirectUrl}')" style="cursor: pointer; ${!n.is_read ? 'background: #f8fafc; border-left: 3px solid #3b82f6;' : 'background: #ffffff;'}; padding: 12px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
                     <div class="notif-icon-box ${iconClass}">${emoji}</div>
                     <div class="notif-text-content">
-                        <h4>${n.title || n.subject || 'Notification'}</h4>
-                        <p>${n.message || n.text || ''}</p>
+                        <h4 style="margin: 0 0 4px 0; font-size: 0.85rem; color: #1e293b;">${n.title || 'Notification'}</h4>
+                        <p style="margin: 0; font-size: 0.8rem; color: #475569;">${n.message || ''}</p>
                     </div>
                 </div>
-                <div class="notif-time">${n.time_ago || 'Recently'}</div>
+                <div class="notif-time" style="font-size: 0.75rem; color: #94a3b8; white-space: nowrap;">${timeFormatted}</div>
             </div>
         `;
     });
+}
+
+async function handleNotificationClick(notifId, redirectUrl) {
+    const token = localStorage.getItem('access_token');
+    try {
+        await fetch(`http://localhost:3000/api/employee/notifications/${notifId}/read`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    } catch (err) {
+        console.error("Failed to mark notification read:", err);
+    }
+    window.location.href = redirectUrl;
 }
 
 async function markAllAsRead(token) {
@@ -123,8 +135,9 @@ async function markAllAsRead(token) {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
-            allNotifications.forEach(n => { n.is_read = true; n.unread = false; });
-            renderNotifications('all');
+            allNotifications.forEach(n => { n.is_read = true; });
+            const activeFilter = document.querySelector('.tab-btn.active').getAttribute('data-filter');
+            renderNotifications(activeFilter);
         }
     } catch (err) {
         console.error("Error marking notifications as read:", err);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMPLOYEE Profile</title>
+    <title>RMS | Employee Profile</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,7 +13,7 @@
         <aside class="sidebar">
             <div class="profile-section">
                 <div class="avatar">👤</div>
-                <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
+                <div class="welcome-text">WELCOME <span id="sidebarUserName">EMPLOYEE</span></div>
             </div>
             <nav class="nav-menu">
                 <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
@@ -22,120 +22,100 @@
                 <a href="../notifications/index.html" class="nav-item">NOTIFICATION</a>
                 <a href="index.html" class="nav-item active">MY PROFILE</a>
             </nav>
-            <button id="logoutBtn" class="logout-btn">
-                <span class="logout-icon">🚪</span> Logout
-            </button>
+            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
         </aside>
 
-        <!-- Main Content Area -->
+        <!-- Main Content -->
         <main class="main-content">
-            <!-- Top Header Bar -->
             <header class="top-header">
-                <div class="header-spacer"></div>
                 <div class="header-actions">
-                    <a href="../notifications/index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; font-weight: bold; font-size: 0.8rem; color: #312e81;">
-                        <span class="bell-icon" title="Notifications">🔔</span> NOTIFICATIONS
-                    </a>
+                    <span class="bell-icon" onclick="window.location.href='../notifications/index.html'" style="cursor: pointer;">🔔</span>
+                    <span class="header-profile">👤 <span id="headerName">Employee</span></span>
                 </div>
             </header>
 
-            <!-- Profile Page Header -->
-            <div class="profile-page-header">
-                <h1>My Profile</h1>
-            </div>
-
-            <!-- Top Profile Card Banner -->
-            <div class="profile-top-banner">
-                <div class="profile-banner-left">
-                    <div class="large-avatar">👤</div>
-                    <div class="profile-main-info">
-                        <h2 id="profileFullName">Loading Name...</h2>
-                        <p id="profileEmail">--</p>
-                        <p id="profilePhone">--</p>
-                        <p id="profileJoined">--</p>
-                        <span class="status-badge" id="profileStatus">Active</span>
-                    </div>
-                </div>
-                <div class="profile-banner-right">
-                    <div class="meta-line"><span>Employee ID</span> <strong id="profileEmpId">-</strong></div>
-                    <div class="meta-line"><span>Department</span> <strong id="profileDepartment">-</strong></div>
-                    <div class="meta-line"><span>Reporting to</span> <strong id="profileReporting">-</strong></div>
-                    <div class="meta-line"><span>Role</span> <strong>Employee</strong></div>
-                </div>
-            </div>
-
-            <!-- Sub-Navigation Tabs Row -->
-            <div class="profile-subtabs">
-                <span class="subtab active">Profile</span>
-                <span class="subtab">Security</span>
-                <span class="subtab">Account Settings</span>
-            </div>
-
-            <!-- Bottom Two-Column Grid: Personal Details & Settings/Password -->
-            <div class="profile-grid-bottom">
-                <!-- Left Column: Personal Details -->
-                <div class="dash-card">
-                    <div class="card-title-edit">
-                        <h3>Personal Details</h3>
-                        <button class="btn-edit" id="editPersonalBtn">Edit</button>
-                    </div>
-                    <div class="details-form-row"><span>Full Name :</span> <strong id="detFullName">-</strong></div>
-                    <div class="details-form-row"><span>Date of Birth :</span> <strong id="detDob">-</strong></div>
-                    <div class="details-form-row"><span>Gender :</span> <strong id="detGender">-</strong></div>
-                    <div class="details-form-row address-row"><span>Address :</span> <strong id="detAddress">-</strong></div>
-                    <div class="details-form-row"><span>Email Address :</span> <strong id="detEmail">-</strong></div>
-                    <div class="details-form-row"><span>Phone No. :</span> <strong id="detPhone">-</strong></div>
-                </div>
-
-                <!-- Right Column Stack -->
-                <div class="profile-right-stack">
-                    <!-- Account Settings Card -->
-                    <div class="dash-card">
-                        <div class="card-title-edit">
-                            <h3>Account Settings</h3>
-                            <button class="btn-edit" id="editSettingsBtn">Edit</button>
+            <div class="profile-page-container">
+                
+                <!-- Top Card: Summary Banner -->
+                <div class="card top-banner-card">
+                    <div class="banner-left">
+                        <div class="large-avatar">👤</div>
+                        <div class="banner-text-info">
+                            <h2 id="bannerName">Employee Name</h2>
+                            <p id="bannerEmail">Gmail</p>
+                            <p id="bannerPhone">Phone No.</p>
+                            <p class="joined-date">Joined on <span id="bannerJoiningDate">--/--/----</span></p>
+                            <p class="status-active-text" id="bannerStatus">Active</p>
                         </div>
-                        <div class="details-form-row"><span>Time Zone :</span> <strong id="settingsTimezone">-</strong></div>
-                        <div class="details-form-row"><span>Language :</span> <strong id="settingsLanguage">-</strong></div>
-                        <div class="details-form-row"><span>Theme :</span> <strong>Light</strong></div>
+                    </div>
+                    <div class="banner-right">
+                        <div class="meta-row"><span>Employee ID</span> <strong id="metaEmpId">--</strong></div>
+                        <div class="meta-row"><span>Department</span> <strong id="metaDepartment">--</strong></div>
+                        <div class="meta-row"><span>Reporting to</span> <strong id="metaReporting">--</strong></div>
+                        <div class="meta-row"><span>Role</span> <strong id="metaRole">Employee</strong></div>
+                    </div>
+                </div>
+
+                <!-- Bottom Grid Section -->
+                <div class="bottom-grid">
+                    
+                    <!-- Left: Personal Details -->
+                    <div class="card details-card">
+                        <div class="card-title-row">
+                            <h3>Personal Details</h3>
+                            <button class="btn-edit">✏️ Edit</button>
+                        </div>
+                        <div class="details-form-list">
+                            <div class="field-row"><label>Full Name :</label> <span id="detFullName">--</span></div>
+                            <div class="field-row"><label>Date of Birth :</label> <span id="detDob">--</span></div>
+                            <div class="field-row"><label>Gender :</label> <span id="detGender">--</span></div>
+                            <div class="field-row"><label>Address :</label> <span id="detAddress">--</span></div>
+                            <div class="field-row"><label>Email Address :</label> <span id="detEmail">--</span></div>
+                            <div class="field-row"><label>Phone No. :</label> <span id="detPhone">--</span></div>
+                        </div>
                     </div>
 
-                    <!-- Change Password Card -->
-                    <div class="dash-card">
-                        <div class="card-title-edit">
+                    <!-- Right Column: Account Settings & Password -->
+                    <div class="right-stack">
+                        <!-- Account Settings -->
+                        <div class="card settings-card">
+                            <div class="card-title-row">
+                               <h3>Account Settings</h3>
+                               <button class="btn-edit">✏️ Edit</button>
+                            </div>
+                            <div class="details-form-list">
+                                <div class="field-row"><label>Time Zone :</label> <span>IST (UTC+5:30)</span></div>
+                                <div class="field-row"><label>Language :</label> <span>English (UK)</span></div>
+                                <div class="field-row"><label>Theme :</label> <span>Light</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Change Password Box -->
+                        <div class="card password-card">
                             <h3>Change Password</h3>
-                            <button class="btn-primary-small" id="updatePasswordBtn">Update Password</button>
+                            <form id="changePasswordForm">
+                                <div class="pwd-input-group">
+                                    <label>Current Password :</label>
+                                    <input type="password" id="currentPassword" required placeholder="••••••••">
+                                </div>
+                                <div class="pwd-input-group">
+                                    <label>New Password :</label>
+                                    <input type="password" id="newPassword" required placeholder="••••••••">
+                                </div>
+                                <div class="pwd-input-group">
+                                    <label>Confirm New Password :</label>
+                                    <input type="password" id="confirmPassword" required placeholder="••••••••">
+                                </div>
+                                <button type="submit" class="btn-update-pwd">Update Password</button>
+                            </form>
                         </div>
-                        <form id="changePasswordForm" class="password-form">
-                            <div class="password-row">
-                                <label>Current Password :</label>
-                                <div class="pass-input-wrap">
-                                    <input type="password" id="currentPass" required>
-                                    <span class="eye-icon">👁️</span>
-                                </div>
-                            </div>
-                            <div class="password-row">
-                                <label>New Password :</label>
-                                <div class="pass-input-wrap">
-                                    <input type="password" id="newPass" required>
-                                    <span class="eye-icon">👁️</span>
-                                </div>
-                            </div>
-                            <div class="password-row">
-                                <label>Confirm New Password :</label>
-                                <div class="pass-input-wrap">
-                                    <input type="password" id="confirmPass" required>
-                                    <span class="eye-icon">👁️</span>
-                                </div>
-                            </div>
-                        </form>
                     </div>
+
                 </div>
+
             </div>
         </main>
     </div>
-
-    <script src="../../shared-assets/breadcrumb.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

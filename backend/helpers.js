@@ -17,19 +17,21 @@ async function createNotification({ empId, title, message, type }) {
 }
 
 // Log audit using the new emp_id column
-async function logAudit({ empId, module, action, recordId, newValue, previousValue = null }) {
+async function logAudit(empId, module, action, recordId = null) {
     try {
         await supabase.from('audit_logs').insert([{
-            emp_id: empId, 
-            module,
-            action,
-            record_id: recordId,
-            previous_value: previousValue,
-            new_value: newValue
+            emp_id: empId,
+            module: module,
+            action: action,
+            record_id: recordId
         }]);
     } catch (err) {
-        console.error("Failed to log audit:", err);
+        console.error("Audit log failed:", err);
     }
 }
 
-module.exports = { supabase, createNotification, logAudit };
+module.exports = {
+    supabase,
+    createNotification,
+    logAudit
+};

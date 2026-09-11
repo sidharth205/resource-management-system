@@ -5,102 +5,100 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Set dynamic profile names
-    const storedName = localStorage.getItem('user_name') || 'Employee';
-    const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1);
-    document.getElementById('userName').textContent = formattedName.toUpperCase();
+    try {
+        // Step 1: Discover the logged-in user's emp_id via the auth session
+        const authRes = await fetch('http://localhost:3000/api/auth/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const authData = await authRes.json();
+        if (!authRes.ok || !authData.emp_id) {
+            throw new Error(authData.error || 'Could not resolve user identity');
+        }
 
-    // Load profile data dynamically from database
-    await loadEmployeeProfile(token);
+        const empId = authData.emp_id;
 
-    // Password Update Trigger
-    const updatePassBtn = document.getElementById('updatePasswordBtn');
-    if (updatePassBtn) {
-        updatePassBtn.addEventListener('click', async () => {
-            await updatePassword(token);
+        // Step 2: Fetch full profile data using your generic user endpoint
+        const profileRes = await fetch(`http://localhost:3000/api/users/${empId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const emp = await profileRes.json();
+
+        if (!profileRes.ok) throw new Error(emp.error || 'Failed to load profile details');
+
+        // Populate Banner & Meta Info
+        document.getElementById('bannerName').textContent = emp.name || 'N/A';
+        document.getElementById('bannerEmail').textContent = emp.email || 'N/A';
+        document.getElementById('bannerPhone').textContent = emp.phone || 'Phone not provided';
+        document.getElementById('bannerJoiningDate').textContent = emp.joining_date || 'N/A';
+        document.getElementById('bannerStatus').textContent = (emp.status || 'Active').toUpperCase();
+        
+        document.getElementById('metaEmpId').textContent = emp.emp_id || '--';
+        document.getElementById('metaDepartment').textContent = emp.department || 'Project Management';
+        document.getElementById('metaReporting').textContent = emp.manager_id || '--';
+        document.getElementById('metaRole').textContent = (emp.role || 'Employee').toUpperCase();
+
+        // Populate Personal Details View
+        document.getElementById('detFullName').textContent = emp.name || '--';
+        document.getElementById('detDob').textContent = emp.dob || '--';
+        document.getElementById('detGender').textContent = emp.gender || '--';
+        document.getElementById('detAddress').textContent = emp.address || '--';
+        document.getElementById('detEmail').textContent = emp.email || '--';
+        document.getElementById('detPhone').textContent = emp.phone || '--';
+
+        // Header and Sidebar Name Updates
+        document.getElementById('headerName').textContent = emp.name || 'User';
+        const firstName = (emp.name || 'User').split(' ')[0];
+        const sidebarUserElem = document.getElementById('sidebarUserName');
+        if (sidebarUserElem) {
+            sidebarUserElem.textContent = firstName.toUpperCase();
+        }
+
+    } catch (err) {
+        console.error("Error loading profile:", err);
+        alert("Error loading profile details: " + err.message);
+    }
+
+    // Handle Password Update Form Submission
+    const passwordForm = document.getElementById('changePasswordForm');
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match.');
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:3000/api/auth/change-password', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to update password');
+
+                alert('Password updated successfully!');
+                passwordForm.reset();
+            } catch (ex) {
+                alert("Error: " + ex.message);
+            }
         });
     }
 
-    // Handle logout button navigation
+    // Handle Logout
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
+        logoutBtn.addEventListener('click', () => {
             localStorage.clear();
             window.location.href = '../login/index.html';
         });
     }
 });
-
-async function loadEmployeeProfile(token) {
-    try {
-        const res = await fetch('http://localhost:3000/api/employee/profile', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!res.ok) return;
-        const profile = await res.json();
-
-        if (profile) {
-            const fullName = profile.full_name || profile.name || 'Employee Name';
-            document.getElementById('profileFullName').textContent = fullName;
-            document.getElementById('profileEmail').textContent = profile.email || '';
-            document.getElementById('profilePhone').textContent = profile.phone || '';
-            document.getElementById('profileJoined').textContent = profile.joined_date ? `Joined on ${profile.joined_date}` : '';
-            
-            document.getElementById('profileEmpId').textContent = profile.employee_id || '-';
-            document.getElementById('profileDepartment').textContent = profile.department || 'Project Management';
-            document.getElementById('profileReporting').textContent = profile.reporting_to || '-';
-
-            // Personal details card
-            document.getElementById('detFullName').textContent = fullName;
-            document.getElementById('detDob').textContent = profile.dob || '-';
-            document.getElementById('detGender').textContent = profile.gender || '-';
-            document.getElementById('detAddress').textContent = profile.address || '-';
-            document.getElementById('detEmail').textContent = profile.email || '-';
-            document.getElementById('detPhone').textContent = profile.phone || '-';
-
-            // Account settings card
-            document.getElementById('settingsTimezone').textContent = profile.timezone || '-';
-            document.getElementById('settingsLanguage').textContent = profile.language || '-';
-        }
-    } catch (err) {
-        console.error("Error loading profile data from database:", err);
-    }
-}
-
-async function updatePassword(token) {
-    const currentPassword = document.getElementById('currentPass').value;
-    const newPassword = document.getElementById('newPass').value;
-    const confirmPassword = document.getElementById('confirmPass').value;
-
-    if (!currentPassword || !newPassword || !confirmPassword) {
-        alert('Please fill out all password fields.');
-        return;
-    }
-
-    if (newPassword !== confirmPassword) {
-        alert('New passwords do not match.');
-        return;
-    }
-
-    try {
-        const res = await fetch('http://localhost:3000/api/employee/profile/update-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ currentPassword, newPassword })
-        });
-
-        if (res.ok) {
-            alert('Password updated successfully!');
-            document.getElementById('changePasswordForm').reset();
-        } else {
-            alert('Failed to update password.');
-        }
-    } catch (err) {
-        console.error("Password update error:", err);
-    }
-}
