@@ -2,15 +2,152 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RMS | Manager - Timesheets</title>
   <link rel="stylesheet" href="../../shared-assets/global.css">
   <link rel="stylesheet" href="style.css">
- </head>
+</head>
 <body>
-  <div id="app">
-    <h1>Manager / Timesheets</h1>
+  <div class="app-container">
+    <aside class="sidebar" id="sidebar">
+      <div class="profile-section">
+        <div class="avatar" id="sidebarAvatar">M</div>
+        <div class="welcome-text">WELCOME <br><span id="userName">MANAGER</span></div>
+      </div>
+      <nav class="nav-menu">
+        <a href="../dashboard/index.html" class="nav-item">📊 Dashboard</a>
+        <a href="../projects/index.html" class="nav-item">📁 Projects</a>
+        <a href="../tasks/index.html" class="nav-item">✓ Tasks</a>
+        <a href="../timesheets/index.html" class="nav-item active">⏱ Timesheets</a>
+        <a href="../employees/index.html" class="nav-item">👥 Employees</a>
+        <a href="../reports/index.html" class="nav-item">📈 Reports</a>
+        <a href="../notifications/index.html" class="nav-item">🔔 Notifications <span class="nav-badge" id="navNotifBadge"></span></a>
+        <a href="../profile/index.html" class="nav-item">👤 My Profile</a>
+      </nav>
+      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+    </aside>
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation">☰</button>
+          <h2>TIMESHEETS</h2>
+        </div>
+        <div class="header-actions">
+          <a href="../notifications/index.html" class="bell-link" title="Notifications">
+            <span class="bell-icon">🔔</span>
+            <span class="bell-badge" id="bellBadge"></span>
+          </a>
+          <a href="../profile/index.html" class="profile-chip" id="profileChip">
+            <span class="chip-avatar" id="headerAvatar">M</span>
+            <span class="chip-name" id="headerName">Manager</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="timesheets-scrollable">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon stat-amber">⏳</div>
+            <div class="stat-info">
+              <span class="stat-label">PENDING APPROVAL</span>
+              <h2 id="statPending">--</h2>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-blue">⏱</div>
+            <div class="stat-info">
+              <span class="stat-label">TOTAL HOURS LOGGED</span>
+              <h2 id="statTotalHours">--</h2>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-green">✓</div>
+            <div class="stat-info">
+              <span class="stat-label">APPROVED TIMESHEETS</span>
+              <h2 id="statApproved">--</h2>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-red">✕</div>
+            <div class="stat-info">
+              <span class="stat-label">REJECTED TIMESHEETS</span>
+              <h2 id="statRejected">--</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="toolbar-card">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="timesheetSearch" placeholder="Search by employee, project or remarks...">
+          </div>
+          <div class="filter-group-row">
+            <div class="date-filter-group">
+              <label>From:</label>
+              <input type="date" id="dateFrom" class="glass-date-input">
+              <label>To:</label>
+              <input type="date" id="dateTo" class="glass-date-input">
+            </div>
+            <select id="statusFilter" class="glass-select">
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <select id="projectFilter" class="glass-select">
+              <option value="all">All Projects</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="glass-card table-card">
+          <div class="table-responsive">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>EMPLOYEE</th>
+                  <th>PROJECT</th>
+                  <th>TASK / DATE</th>
+                  <th>HOURS</th>
+                  <th>REMARKS</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="timesheetsTableBody">
+                <tr>
+                  <td colspan="7" class="loading-cell"><div class="skeleton-row"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
+
+  <div class="modal-backdrop" id="rejectModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Reject Timesheet</h3>
+        <button class="modal-close-btn" id="closeRejectModalBtn">×</button>
+      </div>
+      <form id="rejectForm" class="modal-form">
+        <input type="hidden" id="rejectTimesheetId" value="">
+        <div class="form-group">
+          <label for="rejectReason">Reason for Rejection *</label>
+          <textarea id="rejectReason" required rows="3" placeholder="Explain why this timesheet cannot be approved..." class="glass-input"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" id="cancelRejectModalBtn">Cancel</button>
+          <button type="submit" class="danger-btn" id="confirmRejectBtn">Reject Timesheet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="../../shared-assets/breadcrumb.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -2,15 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RMS | Manager - Projects</title>
   <link rel="stylesheet" href="../../shared-assets/global.css">
   <link rel="stylesheet" href="style.css">
- </head>
+</head>
 <body>
-  <div id="app">
-    <h1>Manager / Projects</h1>
+  <div class="app-container">
+    <aside class="sidebar" id="sidebar">
+      <div class="profile-section">
+        <div class="avatar" id="sidebarAvatar">M</div>
+        <div class="welcome-text">WELCOME <br><span id="userName">MANAGER</span></div>
+      </div>
+      <nav class="nav-menu">
+        <a href="../dashboard/index.html" class="nav-item">📊 Dashboard</a>
+        <a href="../projects/index.html" class="nav-item active">📁 Projects</a>
+        <a href="../tasks/index.html" class="nav-item">✓ Tasks</a>
+        <a href="../timesheets/index.html" class="nav-item">⏱ Timesheets</a>
+        <a href="../employees/index.html" class="nav-item">👥 Employees</a>
+        <a href="../reports/index.html" class="nav-item">📈 Reports</a>
+        <a href="../notifications/index.html" class="nav-item">🔔 Notifications <span class="nav-badge" id="navNotifBadge"></span></a>
+        <a href="../profile/index.html" class="nav-item">👤 My Profile</a>
+      </nav>
+      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+    </aside>
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation">☰</button>
+          <h2>PROJECTS</h2>
+        </div>
+        <div class="header-actions">
+          <a href="../notifications/index.html" class="bell-link" title="Notifications">
+            <span class="bell-icon">🔔</span>
+            <span class="bell-badge" id="bellBadge"></span>
+          </a>
+          <a href="../profile/index.html" class="profile-chip" id="profileChip">
+            <span class="chip-avatar" id="headerAvatar">M</span>
+            <span class="chip-name" id="headerName">Manager</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="page-body">
+        <div class="toolbar-card">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search projects by name or description...">
+          </div>
+          <div class="filter-actions">
+            <select id="statusFilter" class="glass-select">
+              <option value="all">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+            </select>
+            <button class="primary-btn" id="openNewProjectBtn">+ New Project</button>
+          </div>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+      </div>
+    </main>
   </div>
+
+  <div class="modal-backdrop" id="projectModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Create New Project</h3>
+        <button class="modal-close-btn" id="closeModalBtn">×</button>
+      </div>
+      <form id="projectForm" class="modal-form">
+        <div class="form-group">
+          <label for="projectName">Project Name *</label>
+          <input type="text" id="projectName" required placeholder="e.g. Cloud Migration Platform">
+        </div>
+        <div class="form-group">
+          <label for="projectDesc">Description</label>
+          <textarea id="projectDesc" rows="3" placeholder="Brief project scope and goals..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate">
+          </div>
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" id="endDate">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" id="cancelModalBtn">Cancel</button>
+          <button type="submit" class="primary-btn" id="submitProjectBtn">Create Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="../../shared-assets/breadcrumb.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

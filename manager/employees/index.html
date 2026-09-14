@@ -2,15 +2,186 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RMS | Manager - Employees</title>
   <link rel="stylesheet" href="../../shared-assets/global.css">
   <link rel="stylesheet" href="style.css">
- </head>
+</head>
 <body>
-  <div id="app">
-    <h1>Manager / Employees</h1>
+  <div class="app-container">
+    <aside class="sidebar" id="sidebar">
+      <div class="profile-section">
+        <div class="avatar" id="sidebarAvatar">M</div>
+        <div class="welcome-text">WELCOME <br><span id="userName">MANAGER</span></div>
+      </div>
+      <nav class="nav-menu">
+        <a href="../dashboard/index.html" class="nav-item">📊 Dashboard</a>
+        <a href="../projects/index.html" class="nav-item">📁 Projects</a>
+        <a href="../tasks/index.html" class="nav-item">✓ Tasks</a>
+        <a href="../timesheets/index.html" class="nav-item">⏱ Timesheets</a>
+        <a href="../employees/index.html" class="nav-item active">👥 Employees</a>
+        <a href="../reports/index.html" class="nav-item">📈 Reports</a>
+        <a href="../notifications/index.html" class="nav-item">🔔 Notifications <span class="nav-badge" id="navNotifBadge"></span></a>
+        <a href="../profile/index.html" class="nav-item">👤 My Profile</a>
+      </nav>
+      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+    </aside>
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation">☰</button>
+          <h2>EMPLOYEES DIRECTORY</h2>
+        </div>
+        <div class="header-actions">
+          <a href="../notifications/index.html" class="bell-link" title="Notifications">
+            <span class="bell-icon">🔔</span>
+            <span class="bell-badge" id="bellBadge"></span>
+          </a>
+          <a href="../profile/index.html" class="profile-chip" id="profileChip">
+            <span class="chip-avatar" id="headerAvatar">M</span>
+            <span class="chip-name" id="headerName">Manager</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="employees-scrollable">
+        <div class="stat-pills-row">
+          <div class="stat-pill">
+            <span class="pill-dot dot-blue"></span>
+            <span class="pill-title">Total Staff:</span>
+            <strong id="pillTotal">--</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="pill-dot dot-green"></span>
+            <span class="pill-title">Permanent Employees:</span>
+            <strong id="pillPermanent">--</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="pill-dot dot-amber"></span>
+            <span class="pill-title">Interns / Trainees:</span>
+            <strong id="pillInterns">--</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="pill-dot dot-purple"></span>
+            <span class="pill-title">Active Now:</span>
+            <strong id="pillActiveNow">--</strong>
+          </div>
+        </div>
+
+        <div class="toolbar-card">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="empSearchInput" placeholder="Search by name, EMP ID or department...">
+          </div>
+          <div class="filter-actions">
+            <select id="departmentFilter" class="glass-select">
+              <option value="all">All Departments</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="glass-card table-section">
+          <div class="card-header-bar">
+            <div>
+              <h3 class="card-title">Permanent Staff</h3>
+              <span class="card-subtitle">Full-time team members and senior personnel</span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>EMPLOYEE</th>
+                  <th>EMP ID</th>
+                  <th>DEPARTMENT</th>
+                  <th>JOINING DATE</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="permTableBody">
+                <tr>
+                  <td colspan="6" class="loading-cell"><div class="skeleton-row"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-card table-section">
+          <div class="card-header-bar">
+            <div>
+              <h3 class="card-title">Interns & Trainees</h3>
+              <span class="card-subtitle">Early-career talent and internship cohort</span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>INTERN NAME</th>
+                  <th>EMP ID</th>
+                  <th>DEPARTMENT</th>
+                  <th>JOINING DATE</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="internTableBody">
+                <tr>
+                  <td colspan="6" class="loading-cell"><div class="skeleton-row"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
+
+  <div class="modal-backdrop" id="empModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Employee Profile</h3>
+        <button class="modal-close-btn" id="closeEmpModalBtn">×</button>
+      </div>
+      <div class="emp-modal-body" id="empModalBody">
+        <div class="emp-profile-head">
+          <div class="emp-large-avatar" id="modalAvatar">E</div>
+          <div class="emp-head-info">
+            <h4 id="modalName">Employee Name</h4>
+            <span class="emp-modal-role" id="modalRole">Designation</span>
+            <span class="status-badge status-active" id="modalStatus">Active</span>
+          </div>
+        </div>
+        <div class="emp-details-grid">
+          <div class="detail-row">
+            <span class="detail-label">Employee ID:</span>
+            <strong id="modalEmpId">--</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <strong id="modalEmail">--</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Department:</span>
+            <strong id="modalDept">--</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Employment Type:</span>
+            <strong id="modalType">--</strong>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Joining Date:</span>
+            <strong id="modalJoiningDate">--</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="../../shared-assets/breadcrumb.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

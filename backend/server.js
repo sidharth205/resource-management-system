@@ -10,6 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// TEMPORARY: Serves static frontend files for local testing. Remove before real deployment.
+const path = require('path');
+app.use(express.static(path.join(__dirname, '..')));
+
 // Update your multer configuration to accept documents
 const upload = multer({ 
     storage: multer.memoryStorage(),
