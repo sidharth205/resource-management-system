@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResourceHub</title>
+<style>
+  :root{--accent:#3b6cf0;--dark:#1a1c25;--muted:#767a8a;--card:#ffffff;--line:#e8e9ee;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Segoe UI',Arial,sans-serif;color:var(--dark);}
+
+  .hero-wrap{background:#f4f5f8;background-image:radial-gradient(#d7d9e2 1px,transparent 1px);background-size:22px 22px;
+    border-radius:0 0 28px 28px;overflow:hidden;position:relative;padding-bottom:60px;}
+
+  header{display:flex;justify-content:space-between;align-items:center;padding:24px 60px;position:relative;z-index:2;}
+  .logo{display:flex;align-items:center;gap:8px;font-size:19px;font-weight:700;}
+  .logo .dots{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+  .logo .dots span{width:8px;height:8px;border-radius:50%;background:var(--dark);}
+  .logo .dots span:first-child{background:var(--accent);}
+  nav a{margin:0 16px;text-decoration:none;color:var(--muted);font-size:14px;}
+  .login-btn{background:var(--accent);color:#fff;padding:11px 24px;border-radius:24px;text-decoration:none;font-weight:600;font-size:14px;box-shadow:0 8px 20px rgba(59,108,240,.3);transition:.2s;display:inline-block;}
+  .login-btn:hover{transform:translateY(-2px);}
+
+  .hero{max-width:640px;margin:70px auto 0;text-align:center;position:relative;z-index:2;}
+  .reveal{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.2,.7,.3,1);}
+  .reveal.show{opacity:1;transform:translateY(0);}
+  .badge{width:56px;height:56px;background:#fff;border-radius:14px;box-shadow:0 10px 24px rgba(0,0,0,.1);display:grid;grid-template-columns:1fr 1fr;gap:5px;place-items:center;margin:0 auto 26px;padding:12px;}
+  .badge span{width:11px;height:11px;border-radius:50%;background:var(--dark);}
+  .badge span:first-child{background:var(--accent);}
+  h1{font-size:46px;line-height:1.2;font-weight:700;}
+  h1 .fade{color:#c3c5d1;}
+  .hero p{color:var(--muted);font-size:16px;margin:20px 0 30px;}
+
+  /* floating cards */
+  .float-card{position:absolute;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 40px rgba(20,22,40,.08);padding:14px 16px;font-size:12.5px;z-index:1;animation:drift 6s ease-in-out infinite;}
+  @keyframes drift{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-12px) rotate(var(--r,0deg));}}
+  .fc1{top:60px;left:6%;--r:-6deg;width:180px;background:#fdf3b8;border:none;padding:18px 16px 34px;font-family:Georgia,serif;font-style:italic;color:#6b5d10;font-size:13px;line-height:1.5;}
+  .fc1 .pin{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:16px;height:16px;stroke:#d94848;}
+  .fc1-check{position:absolute;bottom:-16px;left:16px;width:38px;height:38px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px rgba(59,108,240,.35);}
+  .fc1-check svg{width:18px;height:18px;stroke:#fff;stroke-width:3;}
+  .fc2{top:60px;right:6%;--r:5deg;width:190px;animation-delay:-3s;}
+  .fc3{bottom:20px;left:8%;--r:-3deg;width:200px;animation-delay:-2s;}
+  .fc4{bottom:20px;right:7%;--r:4deg;width:180px;animation-delay:-4s;}
+  .fc-title{color:var(--muted);font-size:11px;margin-bottom:8px;}
+  .task-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+  .task-row .tag{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;margin-right:6px;}
+  .bar{height:4px;background:#eef0f5;border-radius:3px;margin-top:6px;overflow:hidden;}
+  .bar i{display:block;height:100%;background:var(--accent);}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:#f4f5f8;border-radius:8px;padding:6px 8px;margin-top:6px;font-size:11px;}
+  .ico{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;vertical-align:-2px;}
+  .icon svg{width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;}
+  @media(max-width:900px){.float-card{display:none;}h1{font-size:32px;}}
+
+  .features{max-width:1000px;margin:80px auto;padding:0 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .feature{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;transition:.25s;}
+  .feature:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(20,22,40,.08);}
+  .feature .icon{font-size:22px;margin-bottom:10px;}
+  .feature h4{font-size:15px;margin-bottom:6px;}
+  .feature p{font-size:13.5px;color:var(--muted);line-height:1.55;}
+
+  footer{text-align:center;padding:26px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);}
+  @media(max-width:768px){header{padding:18px 24px;}nav{display:none;}.features{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="hero-wrap">
+  <header>
+    <div class="logo"><span class="dots"><span></span><span></span><span></span><span></span></span> ResourceHub</div>
+    <nav><a href="#features">Features</a><a href="#about">About</a></nav>
+  </header>
+
+  <div class="hero reveal">
+    <div class="badge"><span></span><span></span><span></span><span></span></div>
+    <h1>Manage your team,<br><span class="fade">track everything with ease</span></h1>
+    <p>One dashboard for employees, projects, tasks and performance — built for admins, managers, and teams.</p>
+    <a class="login-btn" href="admin/login/index.html">Login to Dashboard</a>
+  </div>
+
+  <div class="float-card fc1" style="animation-delay:-1s;">
+    <svg class="pin" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v6M12 22v-6M5 12h2M17 12h2M7 7l1.5 1.5M15.5 15.5L17 17M17 7l-1.5 1.5M8.5 15.5L7 17"/><circle cx="12" cy="12" r="3"/></svg>
+    Take notes to keep track of crucial details, and accomplish more tasks with ease.
+    <div class="fc1-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+  </div>
+
+  <div class="float-card fc2">
+    <div class="fc-title"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg> Notifications</div>
+    <b>Task Assigned</b>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Due 2:00 PM Today</div>
+  </div>
+
+  <div class="float-card fc3">
+    <div class="fc-title">Today's Tasks</div>
+    <div class="task-row"><span><span class="tag">A</span>Design Review</span><span>60%</span></div>
+    <div class="bar"><i style="width:60%"></i></div>
+    <div class="task-row" style="margin-top:12px;"><span><span class="tag" style="background:#2ecc71">B</span>Sprint Report</span><span>90%</span></div>
+    <div class="bar"><i style="width:90%"></i></div>
+  </div>
+
+  <div class="float-card fc4">
+    <div class="fc-title"><svg class="ico" viewBox="0 0 24 24"><path d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="8" r="3.2"/><path d="M21 20v-2a4 4 0 0 0-3-3.87"/><path d="M15.5 4.2a3.2 3.2 0 0 1 0 6.1"/></svg> Team</div>
+    <b>128 Active Employees</b>
+    <div class="chip">+12 this month</div>
+  </div>
+</div>
+
+<section class="features" id="features">
+  <div class="feature reveal"><div class="icon"><svg viewBox="0 0 24 24"><path d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="8" r="3.2"/><path d="M21 20v-2a4 4 0 0 0-3-3.87"/><path d="M15.5 4.2a3.2 3.2 0 0 1 0 6.1"/></svg></div><h4>Role-Based Access</h4><p>Separate, secure dashboards for Admins, Managers, and Employees.</p></div>
+  <div class="feature reveal"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/></svg></div><h4>Live Reporting</h4><p>Track tasks, timesheets, and project progress as it happens.</p></div>
+  <div class="feature reveal"><div class="icon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h4>Secure by Design</h4><p>Every account is authenticated and permission-controlled end to end.</p></div>
+</section>
+
+<footer id="about">© 2026 ResourceHub. All rights reserved.</footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('show', e.isIntersecting)), {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

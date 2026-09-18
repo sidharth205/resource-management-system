@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMS | Universal Profile</title>
+    <title>RMS | Employee Profile</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,26 +12,27 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="profile-section">
-                <div class="avatar">👤</div>
-                <div class="welcome-text">WELCOME <span id="sidebarUserName">ADMIN</span></div>
+                <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
             </div>
             <nav class="nav-menu">
                 <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
-                <a href="../user-management/index.html" class="nav-item active">USER MANAGEMENT</a>
+                <a href="../user-management/index.html" class="nav-item">USER MANAGEMENT</a>
                 <a href="../system-configuration/index.html" class="nav-item">SYSTEM CONFIGURATION</a>
                 <a href="../audit-monitoring/index.html" class="nav-item">AUDIT & MONITORING</a>
                 <a href="../reports/index.html" class="nav-item">REPORTS</a>
+                <a href="#" class="nav-item active">MY PROFILE</a>
             </nav>
-            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
+            <button id="logoutBtn" class="logout-btn"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout</button>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <header class="top-header">
-                <h2>My Profile</h2>
+                <h2>MY PROFILE</h2>
                 <div class="header-actions">
-                    <span class="bell-icon">🔔</span>
-                    <span class="header-profile">👤 <span id="headerName">Admin</span></span>
+                    <span class="bell-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
+                    <span class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">&lt;Name&gt;</span></span>
                 </div>
             </header>
 
@@ -40,9 +41,9 @@
                 <!-- Top Card: Summary Banner -->
                 <div class="card top-banner-card">
                     <div class="banner-left">
-                        <div class="large-avatar">👤</div>
+                        <div class="large-avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
                         <div class="banner-text-info">
-                            <h2 id="bannerName">Admin Name</h2>
+                            <h2 id="bannerName">Employee Name</h2>
                             <p id="bannerEmail">Gmail</p>
                             <p id="bannerPhone">Phone No.</p>
                             <p class="joined-date">Joined on <span id="bannerJoiningDate">--/--/----</span></p>
@@ -51,9 +52,9 @@
                     </div>
                     <div class="banner-right">
                         <div class="meta-row"><span>Employee ID</span> <strong id="metaEmpId">--</strong></div>
-                        <div class="meta-row"><span>Department</span> <strong id="metaDepartment">Project Management</strong></div>
+                        <div class="meta-row"><span>Department</span> <strong id="metaDepartment">--</strong></div>
                         <div class="meta-row"><span>Reporting to</span> <strong id="metaReporting">--</strong></div>
-                        <div class="meta-row"><span>Role</span> <strong id="metaRole">Admin</strong></div>
+                        <div class="meta-row"><span>Role</span> <strong id="metaRole">Employee</strong></div>
                     </div>
                 </div>
 
@@ -64,13 +65,9 @@
                     <div class="card details-card">
                         <div class="card-title-row">
                             <h3>Personal Details</h3>
-                            <button class="btn-edit">✏️ Edit</button>
                         </div>
                         <div class="details-form-list">
                             <div class="field-row"><label>Full Name :</label> <span id="detFullName">--</span></div>
-                            <div class="field-row"><label>Date of Birth :</label> <span id="detDob">--</span></div>
-                            <div class="field-row"><label>Gender :</label> <span id="detGender">--</span></div>
-                            <div class="field-row"><label>Address :</label> <span id="detAddress">--</span></div>
                             <div class="field-row"><label>Email Address :</label> <span id="detEmail">--</span></div>
                             <div class="field-row"><label>Phone No. :</label> <span id="detPhone">--</span></div>
                         </div>
@@ -82,7 +79,6 @@
                         <div class="card settings-card">
                             <div class="card-title-row">
                                <h3>Account Settings</h3>
-                               <button class="btn-edit">✏️ Edit</button>
                             </div>
                             <div class="details-form-list">
                                 <div class="field-row"><label>Time Zone :</label> <span>IST (UTC+5:30)</span></div>
@@ -98,16 +94,24 @@
                                 <div class="pwd-input-group">
                                     <label>Current Password :</label>
                                     <input type="password" id="currentPassword" required placeholder="••••••••">
+                                    <button type="button" class="btn-verify-password" id="verifyPasswordBtn">Verify</button>
                                 </div>
                                 <div class="pwd-input-group">
                                     <label>New Password :</label>
-                                    <input type="password" id="newPassword" required placeholder="••••••••">
+                                    <input type="password" id="newPassword" required placeholder="••••••••" disabled>
                                 </div>
+                                <ul class="password-rules" id="passwordRules" aria-label="Password requirements">
+                                    <li data-rule="length">Minimum length</li>
+                                    <li data-rule="uppercase">Uppercase letter</li>
+                                    <li data-rule="numbers">Number</li>
+                                    <li data-rule="special">Special character</li>
+                                </ul>
                                 <div class="pwd-input-group">
                                     <label>Confirm New Password :</label>
-                                    <input type="password" id="confirmPassword" required placeholder="••••••••">
+                                    <input type="password" id="confirmPassword" required placeholder="••••••••" disabled>
                                 </div>
-                                <button type="submit" class="btn-update-pwd">Update Password</button>
+                                <button type="submit" class="btn-update-pwd" id="updatePasswordBtn" disabled>Update Password</button>
+                                <p id="passwordMessage" class="password-message" role="status" aria-live="polite"></p>
                             </form>
                         </div>
                     </div>
@@ -117,6 +121,7 @@
             </div>
         </main>
     </div>
+    <script src="../../shared-assets/session-guard.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -8,6 +8,8 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.ui-icon { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+
 .app-container {
     display: flex;
     height: 100vh;
@@ -108,6 +110,7 @@ body {
     padding: 20px 35px;
     overflow-y: auto;
     box-sizing: border-box;
+    min-width: 0;
 }
 
 .top-header {
@@ -201,6 +204,8 @@ body {
     justify-content: center;
 }
 
+.stat-icon-wrapper .ui-icon { width: 24px; height: 24px; }
+
 .blue-bg { background: #eff6ff; }
 .pink-bg { background: #ffe4e6; }
 .green-bg { background: #dcfce7; }
@@ -236,7 +241,11 @@ body {
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     margin-bottom: 20px;
+    min-width: 0;
 }
+
+.section-card:has(#employeeTasksTable) { max-height: 390px; display: flex; flex-direction: column; }
+.section-card:has(#employeeNotificationsList), .section-card:has(#employeeActivityList) { min-height: 240px; max-height: 360px; display: flex; flex-direction: column; }
 
 .section-card h3 {
     margin: 0 0 12px 0;
@@ -251,6 +260,8 @@ body {
     border-collapse: collapse;
     font-size: 0.8rem;
 }
+
+.table-container { overflow: auto; min-height: 0; }
 
 .table-container th {
     text-align: left;
@@ -305,6 +316,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-y: auto;
+    min-height: 0;
+    padding-right: 4px;
 }
 
 .notif-item, .timeline-row {
@@ -349,4 +363,12 @@ body {
     padding: 6px;
     border-radius: 6px;
     font-size: 0.9rem;
+}
+
+.tl-icon-box .ui-icon { width: 16px; height: 16px; }
+.task-due-date { color: #3b82f6; font-weight: 700; }
+
+@media (max-width: 900px) {
+    .stats-grid, .bottom-grid { grid-template-columns: 1fr; }
+    .main-content { padding: 18px 20px; }
 }

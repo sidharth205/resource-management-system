@@ -3,17 +3,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const role = localStorage.getItem('user_role');
 
     if (!token || role !== 'admin') {
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
         return;
     }
-
+    document.getElementById('userName').textContent = (localStorage.getItem('user_name') || 'User').toUpperCase();
+document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
     // 1. Initialize Constraints & Auto-Generators
     setupFormConstraints();
 
     // 2. Load Dynamic Data
     await loadDynamicRolesDropdown();
     await loadLiveUsers();
-    await loadLiveActivityFeed();
+    await loadLiveActivityFeed('today');
 
     function setupFormConstraints() {
         // Auto-Generate Unique EMP ID
@@ -77,12 +78,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-async function loadLiveActivityFeed() {
+function getIstDate(value) {
+    let rawTime = value;
+    if (rawTime && !rawTime.endsWith('Z') && !rawTime.includes('+')) rawTime += 'Z';
+    const date = new Date(rawTime);
+    return Number.isNaN(date.getTime()) ? '' : new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(date);
+}
+
+async function loadLiveActivityFeed(range = 'today', fromDate = '', tillDate = '') {
     try {
         const res = await fetch('http://localhost:3000/api/activities', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        const activities = await res.json();
+        let activities = await res.json();
+        const today = getIstDate(new Date().toISOString());
+        if (range === 'today') {
+            activities = activities.filter(activity => getIstDate(activity.created_at) === today);
+        } else if (range === 'custom') {
+            activities = activities.filter(activity => {
+                const activityDate = getIstDate(activity.created_at);
+                return (!fromDate || activityDate >= fromDate) && (!tillDate || activityDate <= tillDate);
+            });
+        }
         const feedContainer = document.getElementById('activityFeed');
         
         if (!activities || activities.length === 0) {
@@ -122,6 +141,32 @@ async function loadLiveActivityFeed() {
         console.error("Error loading activities:", err);
     }
 }
+
+    const activityRange = document.getElementById('activityRange');
+    const customActivityDates = document.getElementById('customActivityDates');
+    const activityFrom = document.getElementById('activityFrom');
+    const activityTill = document.getElementById('activityTill');
+    const today = getIstDate(new Date().toISOString());
+    activityFrom.max = today;
+    activityTill.max = today;
+
+    function refreshActivityFeed() {
+        const isCustom = activityRange.value === 'custom';
+        customActivityDates.hidden = !isCustom;
+        if (isCustom && activityFrom.value && activityTill.value && activityFrom.value > activityTill.value) {
+            activityFrom.setCustomValidity('Start date must be on or before the end date.');
+            activityTill.setCustomValidity('End date must be on or after the start date.');
+            activityFrom.reportValidity();
+            return;
+        }
+        activityFrom.setCustomValidity('');
+        activityTill.setCustomValidity('');
+        loadLiveActivityFeed(activityRange.value, activityFrom.value, activityTill.value);
+    }
+
+    activityRange.addEventListener('change', refreshActivityFeed);
+    activityFrom.addEventListener('change', refreshActivityFeed);
+    activityTill.addEventListener('change', refreshActivityFeed);
 
     // Form Submission for Real Account Creation
     document.getElementById('createEmployeeForm').addEventListener('submit', async (e) => {
@@ -180,8 +225,12 @@ async function loadLiveActivityFeed() {
         });
     });
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await fetch('http://localhost:3000/api/auth/logout', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        }).catch(() => {});
         localStorage.clear();
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
     });
 });

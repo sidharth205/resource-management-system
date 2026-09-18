@@ -3,7 +3,7 @@ let allNotifications = [];
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
         return;
     }
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.clear();
-            window.location.href = '../login/index.html';
+            window.location.replace('../login/index.html');
         });
     }
 });

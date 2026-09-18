@@ -8,36 +8,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="branding">
-            <h1>RESOURCE MANAGEMENT SYSTEM</h1>
-            <p>ONE PLATFORM. COMPLETE PROJECT VISIBILITY.</p>
-            <p class="subtitle">Manage projects, teams, resources, and workflows through a unified dashboard that keeps everyone aligned from project initiation to successful delivery.</p>
-        </div>
-        
+    <div class="login-wrap">
+        <a class="back-link" href="../../landing.html">← Back to home</a>
+
         <div class="login-card">
-            <h2>LOGIN</h2>
+            <div class="badge"><span></span><span></span><span></span><span></span></div>
+            <h2>Welcome back</h2>
+            <p class="sub">Login to access your dashboard</p>
+
             <form id="loginForm">
                 <div class="input-group">
-                    <label for="email">EMAIL ID</label>
-                    <input type="email" id="email" required placeholder="admin@example.com">
-                </div>
-                
-                <div class="input-group">
-                    <label for="password">PASSWORD</label>
-                    <input type="password" id="password" required>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="you@example.com">
                 </div>
 
-                <div class="help-text">
-                    New Employee? <br>
-                    <a href="#">Click here</a> to request login credentials
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="••••••••">
                 </div>
-                
+
                 <div class="actions">
-                    <button type="submit" class="btn-primary" id="loginBtn">LOGIN</button>
+                    <button type="submit" class="btn-primary" id="loginBtn">Login</button>
                 </div>
             </form>
             <div id="errorMessage" class="error-msg"></div>
+            <div id="successMessage" class="success-msg" role="status" aria-live="polite"></div>
+
+            <div class="help-text">
+                New employee? <a href="#">Click here</a> to request login credentials
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

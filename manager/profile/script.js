@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const role = localStorage.getItem('user_role');
 
   if (!token || role !== 'manager') {
-    window.location.href = '../../admin/login/index.html';
+    window.location.replace('../../admin/login/index.html');
     return;
   }
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       } catch (e) {}
       localStorage.clear();
-      window.location.href = '../../admin/login/index.html';
+      window.location.replace('../../admin/login/index.html');
     });
   }
 

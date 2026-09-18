@@ -1,40 +1,38 @@
 /* =========================================
-   BASE LAYOUT & SIDEBAR 
-========================================= */
-body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; overflow-x: hidden; }
-.app-container { display: flex; height: 100vh; }
-.sidebar { width: 250px; background-color: #A8C0FF; display: flex; flex-direction: column; padding-top: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
-.profile-section { display: flex; align-items: center; padding: 20px; background-color: #8daaf0; margin-bottom: 20px; border-radius: 0 25px 25px 0; width: 90%; }
-.avatar { font-size: 24px; background: #553c9a; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
-.welcome-text { font-size: 0.8rem; font-weight: bold; color: #333; }
-.nav-menu { flex: 1; display: flex; flex-direction: column; padding: 0 10px; }
-.nav-item { text-decoration: none; color: #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: background 0.2s; }
-.nav-item:hover { background-color: rgba(255, 255, 255, 0.3); }
-.nav-item.active { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.logout-btn { margin: 20px; padding: 15px; background: transparent; border: none; text-align: left; font-weight: bold; cursor: pointer; font-size: 1rem; }
-.main-content { flex: 1; display: flex; flex-direction: column; padding: 20px 40px; overflow-y: auto; }
-.top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }
-.top-header h2 { margin: 0; color: #333; font-size: 1.2rem; }
-.header-actions { display: flex; align-items: center; gap: 20px; }
-.bell-icon { font-size: 1.5rem; cursor: pointer; }
-
-/* =========================================
    CREATE ROLE SPECIFIC STYLES
+   Base layout/sidebar now come from shared-assets/global.css
 ========================================= */
+
+.main-content { position: relative; overflow-x: hidden; overflow-y: auto; }
+.main-content::before, .main-content::after {
+    content: ""; position: absolute; border-radius: 50%; filter: blur(70px);
+    opacity: .2; z-index: 0; pointer-events: none; animation: pageFloat 11s ease-in-out infinite;
+}
+.main-content::before { width: 220px; height: 220px; background: #3b6cf0; top: -50px; right: 12%; }
+.main-content::after { width: 190px; height: 190px; background: #a6b3ff; bottom: -50px; left: 8%; animation-delay: -5s; }
+@keyframes pageFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-22px) scale(1.08); } }
+
+.top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
+@keyframes fadeIn { to { opacity: 1; } }
+
 .role-creation-layout {
     display: flex;
     flex-direction: column;
     max-width: 900px;
+    position: relative;
+    z-index: 1;
 }
 
 .card {
-    border-radius: 10px;
+    border-radius: 14px;
     padding: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 14px 30px rgba(20,22,40,0.1);
+    opacity: 0; transform: translateY(20px); animation: cardIn .55s cubic-bezier(.2,.7,.3,1) forwards;
 }
+@keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
 
 .dark-card {
-    background-color: #2d3748;
+    background-color: #1a1c25;
     color: #ffffff;
 }
 
@@ -47,35 +45,35 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
 .input-group label {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #cbd5e0;
+    color: #c3c5d1;
     margin-bottom: 8px;
     letter-spacing: 0.5px;
 }
 
 .input-group input[type="text"] {
     padding: 12px 15px;
-    border: 1px solid #4a5568;
-    border-radius: 6px;
+    border: 1px solid #3a3d52;
+    border-radius: 8px;
     font-size: 1rem;
-    background-color: #1a202c;
+    background-color: #12131f;
     color: white;
     transition: all 0.2s;
 }
 
 .input-group input[type="text"]:focus {
     outline: none;
-    border-color: #3182ce;
-    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+    border-color: #3b6cf0;
+    box-shadow: 0 0 0 3px rgba(59,108,240,0.25);
 }
 
 .permissions-section > label {
     display: block;
     font-size: 0.85rem;
     font-weight: 700;
-    color: #cbd5e0;
+    color: #c3c5d1;
     margin-bottom: 20px;
     letter-spacing: 0.5px;
-    border-bottom: 1px solid #4a5568;
+    border-bottom: 1px solid #3a3d52;
     padding-bottom: 10px;
 }
 
@@ -89,9 +87,9 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
 .permission-category h4 {
     margin: 0 0 15px 0;
     font-size: 0.8rem;
-    color: #a0aec0;
+    color: #a3a6b5;
     text-transform: uppercase;
-    border-bottom: 1px solid #4a5568;
+    border-bottom: 1px solid #3a3d52;
     padding-bottom: 5px;
 }
 
@@ -100,7 +98,7 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
     align-items: center;
     gap: 10px;
     font-size: 0.85rem;
-    color: #e2e8f0;
+    color: #e2e4ec;
     margin-bottom: 12px;
     cursor: pointer;
     font-weight: 600;
@@ -110,20 +108,20 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
     width: 16px;
     height: 16px;
     cursor: pointer;
-    accent-color: #3182ce;
+    accent-color: #3b6cf0;
 }
 
 .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 15px;
-    border-top: 1px solid #4a5568;
+    border-top: 1px solid #3a3d52;
     padding-top: 20px;
 }
 
 .form-actions button {
     padding: 10px 25px;
-    border-radius: 6px;
+    border-radius: 24px;
     font-weight: 700;
     font-size: 0.85rem;
     cursor: pointer;
@@ -132,21 +130,23 @@ body { margin: 0; font-family: Arial, sans-serif; background-color: #E6EAF8; ove
 
 .btn-cancel {
     background-color: transparent;
-    color: #cbd5e0;
-    border: 1px solid #718096;
+    color: #c3c5d1;
+    border: 1px solid #565875;
 }
 
 .btn-cancel:hover {
-    background-color: #4a5568;
+    background-color: #2b2e3f;
     color: white;
 }
 
 .btn-save {
-    background-color: #3182ce;
+    background-color: #3b6cf0;
     color: white;
     border: none;
+    box-shadow: 0 8px 18px rgba(59,108,240,.3);
 }
 
 .btn-save:hover {
-    background-color: #2b6cb0;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(59,108,240,.4);
 }

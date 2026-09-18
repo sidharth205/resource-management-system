@@ -16,15 +16,21 @@ async function createNotification({ empId, title, message, type }) {
     }
 }
 
-// Log audit using the new emp_id column
+// Log audit using either the legacy positional or the object call shape.
 async function logAudit(empId, module, action, recordId = null) {
     try {
-        await supabase.from('audit_logs').insert([{
-            emp_id: empId,
-            module: module,
-            action: action,
-            record_id: recordId
-        }]);
+        const entry = typeof empId === 'object'
+            ? empId
+            : { empId, module, action, recordId };
+        const auditRecord = {
+            emp_id: entry.empId,
+            module: entry.module,
+            action: entry.action,
+            record_id: entry.recordId ?? null
+        };
+        if (entry.previousValue !== undefined) auditRecord.previous_value = entry.previousValue;
+        if (entry.newValue !== undefined) auditRecord.new_value = entry.newValue;
+        await supabase.from('audit_logs').insert([auditRecord]);
     } catch (err) {
         console.error("Audit log failed:", err);
     }

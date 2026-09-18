@@ -12,7 +12,7 @@
         <!-- Sidebar Navigation[cite: 1] -->
         <aside class="sidebar">
             <div class="profile-section">
-                <div class="avatar">👤</div>
+                <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
                 <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
             </div>
             <nav class="nav-menu">
@@ -21,8 +21,9 @@
                 <a href="../system-configuration/index.html" class="nav-item">SYSTEM CONFIGURATION</a>
                 <a href="#" class="nav-item active">AUDIT & MONITORING</a>
                 <a href="../reports/index.html" class="nav-item">REPORTS</a>
+                <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
             </nav>
-            <button id="logoutBtn" class="logout-btn"><span class="icon">🚪</span> Logout</button>
+            <button id="logoutBtn" class="logout-btn"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout</button>
         </aside>
 
         <!-- Main Content[cite: 1] -->
@@ -30,15 +31,15 @@
             <header class="top-header">
                 <h2>AUDIT & MONITORING</h2>
                 <div class="header-actions">
-                    <span class="bell-icon">🔔</span>
-                    <span class="header-profile">👤 <span id="headerName">Admin</span></span>
+                    <span class="bell-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
+                    <span class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Admin</span></span>
                 </div>
             </header>
 
             <div class="card audit-card">
                 <div class="audit-header">
                     <div class="audit-title">
-                        <h3>AUDIT LOGS 📋</h3>
+                        <h3>AUDIT LOGS <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="16" rx="2"></rect><path d="M9 4V2h6v2M9 9h6M9 13h6M9 17h4"></path></svg></h3>
                     </div>
                     
                     <!-- Filtering Controls[cite: 1] -->
@@ -51,13 +52,22 @@
                         </div>
                         
                         <div class="search-filters">
-                            <input type="text" id="searchLogs" placeholder="Search Logs 🔍" class="search-input">
+                            <input type="text" id="searchLogs" placeholder="Search Logs" class="search-input">
                             <div class="filter-pills">
-                                <span class="filter-icon">Funnel</span>
-                                <button class="filter-btn">Employee</button>
-                                <button class="filter-btn">Module</button>
+                                <button type="button" class="filter-icon" id="filterToggle" aria-label="Show filters" aria-expanded="false">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                        <path d="M4 5h16l-6.5 7.2V18l-3 1v-6.8L4 5z"></path>
+                                    </svg>
+                                </button>
+                                <select class="filter-btn" id="employeeFilter" aria-label="Filter by employee">
+                                    <option value="">Employee</option>
+                                </select>
+                                <select class="filter-btn" id="moduleFilter" aria-label="Filter by module">
+                                    <option value="">Module</option>
+                                </select>
                             </div>
-                            <button class="btn-export" id="btnExport">Export Logs 📥</button>
+                            <button class="btn-export" id="btnExport"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg> Export CSV</button>
+                            <span class="export-status" id="exportStatus" role="status" aria-live="polite"></span>
                         </div>
                     </div>
                 </div>
@@ -85,6 +95,7 @@
             </div>
         </main>
     </div>
+    <script src="../../shared-assets/session-guard.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

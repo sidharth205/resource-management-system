@@ -1,128 +1,46 @@
-/* Local styles for Admin - Audit Monitoring */
-/* =========================================
-   BASE LAYOUT & SIDEBAR 
-========================================= */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #E6EAF8;
-    overflow-x: hidden;
-}
-
-.app-container {
-    display: flex;
-    height: 100vh;
-}
-
-.sidebar {
-    width: 250px;
-    background-color: #A8C0FF;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-}
-
-.profile-section {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background-color: #8daaf0;
-    margin-bottom: 20px;
-    border-radius: 0 25px 25px 0;
-    width: 90%;
-}
-
-.avatar {
-    font-size: 24px;
-    background: #553c9a;
-    color: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-}
-
-.welcome-text { font-size: 0.8rem; font-weight: bold; color: #333; }
-
-.nav-menu {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 0 10px;
-}
-
-.nav-item {
-    text-decoration: none;
-    color: #333;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    transition: background 0.2s;
-}
-
-.nav-item:hover { background-color: rgba(255, 255, 255, 0.3); }
-.nav-item.active { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-
-.logout-btn {
-    margin: 20px;
-    padding: 15px;
-    background: transparent;
-    border: none;
-    text-align: left;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 40px;
-    overflow-y: auto;
-}
-
-.top-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.top-header h2 { margin: 0; color: #333; }
-.header-actions { display: flex; align-items: center; gap: 20px; }
-.bell-icon { font-size: 1.5rem; cursor: pointer; }
-
 /* =========================================
    AUDIT & MONITORING SPECIFIC STYLES
+   Base layout/sidebar now come from shared-assets/global.css
 ========================================= */
+
+.main-content { position: relative; overflow-x: hidden; overflow-y: auto; }
+.main-content::before, .main-content::after {
+    content: ""; position: absolute; border-radius: 50%; filter: blur(70px);
+    opacity: .2; z-index: 0; pointer-events: none; animation: pageFloat 11s ease-in-out infinite;
+}
+.main-content::before { width: 240px; height: 240px; background: #3b6cf0; top: -50px; right: 10%; }
+.main-content::after { width: 200px; height: 200px; background: #7ce0c9; bottom: -50px; left: 6%; animation-delay: -5s; }
+@keyframes pageFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-22px) scale(1.08); } }
+
+.top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
+@keyframes fadeIn { to { opacity: 1; } }
+
 .card {
     background: #ffffff;
-    border-radius: 10px;
+    border: 1px solid #e8e9ee;
+    border-radius: 14px;
     padding: 25px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 24px rgba(20,22,40,0.06);
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: relative;
+    z-index: 1;
+    opacity: 0; transform: translateY(20px); animation: cardIn .55s cubic-bezier(.2,.7,.3,1) forwards;
 }
+@keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+.card:nth-of-type(1) { animation-delay: .05s; }
+.card:nth-of-type(2) { animation-delay: .2s; }
 
 .audit-card {
-    background-color: #e0f2f1; /* Soft teal background matching the wireframe */
-    border: 1px solid #b2dfdb;
+    background-color: #eefaf8;
+    border: 1px solid #cdeee7;
 }
 
 .audit-header h3 {
     margin: 0 0 15px 0;
     font-size: 1.1rem;
-    color: #2d3748;
+    color: #1a1c25;
 }
 
 /* Controls & Filters */
@@ -143,68 +61,132 @@ body {
 
 .date-filters input[type="date"] {
     padding: 6px 10px;
-    border: 1px solid #cbd5e0;
-    border-radius: 6px;
+    border: 1px solid #e8e9ee;
+    border-radius: 8px;
     font-family: inherit;
     background-color: white;
+}
+
+.date-filters input[type="date"]:invalid {
+    border-color: #d9534f;
+    outline: 2px solid rgba(217, 83, 79, 0.15);
 }
 
 .search-filters {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 15px;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 8px;
 }
 
 .search-input {
     flex: 1;
-    min-width: 250px;
+    min-width: 0;
     padding: 10px 15px;
-    border: 1px solid #cbd5e0;
+    border: 1px solid #e8e9ee;
     border-radius: 20px;
     font-size: 0.85rem;
     background-color: white;
 }
+.search-input:focus { outline: none; border-color: #3b6cf0; }
 
 .filter-pills {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
 .filter-btn {
-    background-color: #cbd5e0;
-    border: none;
-    padding: 6px 14px;
+    display: block;
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    max-width: 0;
+    padding: 6px 0;
+    overflow: hidden;
+    transform: translateX(-6px);
+    transition: opacity 0.25s ease, width 0.3s ease, max-width 0.3s ease, padding 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.filter-pills.filters-visible .filter-btn {
+    width: 112px;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    max-width: 112px;
+    padding-left: 10px;
+    padding-right: 24px;
+    transform: translateX(0);
+}
+
+.filter-icon {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+    background: transparent;
+    border: 1px solid #d9deea;
+    border-radius: 8px;
+    color: #4a5568;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.filter-icon:hover,
+.filter-icon[aria-expanded="true"] {
+    background-color: #eef0f5;
+    border-color: #c5ccdc;
+    color: #1a1c25;
+}
+
+.filter-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.filter-btn {
+    background-color: #eef0f5;
+    border: 1px solid transparent;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: bold;
-    color: #2d3748;
+    color: #1a1c25;
     cursor: pointer;
-    transition: background 0.2s;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #4a5568 50%), linear-gradient(135deg, #4a5568 50%, transparent 50%);
+    background-position: calc(100% - 12px) 50%, calc(100% - 8px) 50%;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat: no-repeat;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-.filter-btn:hover { background-color: #a0aec0; }
+.filter-btn:hover,
+.filter-btn:focus { background-color: #dce1ee; border-color: #c5ccdc; outline: none; }
 
 .btn-export {
-    background-color: #2d3748;
+    background-color: #1a1c25;
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: bold;
     font-size: 0.85rem;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-.btn-export:hover { background-color: #1a202c; }
+.btn-export:hover { background-color: #33364a; }
 
 /* Data Table */
 .table-responsive {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
@@ -218,11 +200,11 @@ body {
     padding: 15px;
     text-align: left;
     font-size: 0.85rem;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid #eef0f5;
 }
 
 .data-table th {
-    background-color: #f7fafc;
+    background-color: #f8f9fc;
     color: #4a5568;
     font-weight: bold;
     text-transform: uppercase;
@@ -234,6 +216,36 @@ body {
     border-bottom: none;
 }
 
+.data-table tr {
+    transition: background-color .15s;
+}
+
 .data-table tr:hover {
-    background-color: #f8fafc;
+    background-color: #f4f6fb;
+}
+
+.export-status {
+    align-self: center;
+    color: #2f855a;
+    font-size: 0.75rem;
+}
+
+.export-status.error {
+    color: #c53030;
+}
+
+.audit-employee-name {
+    font-weight: 600;
+    color: #1a1c25;
+}
+
+.audit-employee-id {
+    margin-top: 3px;
+    color: #94a3b8;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 700px) {
+    .search-filters { flex-wrap: wrap; }
+    .search-input { flex-basis: 100%; }
 }

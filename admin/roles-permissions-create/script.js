@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Auth Check
     if (!token || role !== 'admin') {
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
         return;
     }
 
     // Set UI Header
-    document.getElementById('userName').textContent = 'ADMIN';
-    document.getElementById('headerName').textContent = 'Admin';
+    document.getElementById('userName').textContent = (localStorage.getItem('user_name') || 'User').toUpperCase();
+document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
 
     // UI Helper: If "Full Admin Access" is checked, visually check everything else
     const adminOverride = document.getElementById('adminOverride');
@@ -82,8 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Logout Logic
-    document.getElementById('logoutBtn').addEventListener('click', () => {
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await fetch('http://localhost:3000/api/auth/logout', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        }).catch(() => {});
         localStorage.clear();
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
     });
 });

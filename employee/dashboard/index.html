@@ -12,7 +12,7 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="profile-section">
-                <div class="avatar">👤</div>
+                <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
                 <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
             </div>
             <nav class="nav-menu">
@@ -23,7 +23,7 @@
                 <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
             </nav>
             <button id="logoutBtn" class="logout-btn">
-                <span class="logout-icon">🚪</span> Logout
+                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout
             </button>
         </aside>
 
@@ -34,10 +34,10 @@
                 <div class="header-spacer"></div>
                 <div class="header-actions">
                     <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
-                        <span class="bell-icon" title="Notifications">🔔</span>
+                        <span class="bell-icon" title="Notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
                     </a>
                     <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
-                        <span class="profile-icon-small">👤</span>
+                        <span class="profile-icon-small"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
                         <span id="headerName">Name</span>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
             <!-- Top Stat Cards Grid -->
             <div class="stats-grid">
                 <div class="stat-box card-blue">
-                    <div class="stat-icon-wrapper blue-bg">📄</div>
+                    <div class="stat-icon-wrapper blue-bg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4M9 12h6M9 16h6"></path></svg></div>
                     <div class="stat-info">
                         <span class="stat-number" id="statAssignedCount">0</span>
                         <span class="stat-label">Assigned Tasks</span>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="stat-box card-pink">
-                    <div class="stat-icon-wrapper pink-bg">📅</div>
+                    <div class="stat-icon-wrapper pink-bg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></div>
                     <div class="stat-info">
                         <span class="stat-number" id="statDueCount">0</span>
                         <span class="stat-label">Due Today</span>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="stat-box card-green">
-                    <div class="stat-icon-wrapper green-bg">✅</div>
+                    <div class="stat-icon-wrapper green-bg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg></div>
                     <div class="stat-info">
                         <span class="stat-number" id="statCompletedCount">0</span>
                         <span class="stat-label">Completed</span>
@@ -118,6 +118,7 @@
     </div>
 
     <script src="../../shared-assets/breadcrumb.js"></script>
+    <script src="../../shared-assets/session-guard.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

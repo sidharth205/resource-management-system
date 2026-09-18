@@ -10,9 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// TEMPORARY: Serves static frontend files for local testing. Remove before real deployment.
-const path = require('path');
-app.use(express.static(path.join(__dirname, '..')));
+
 
 // Update your multer configuration to accept documents
 const upload = multer({ 
@@ -49,15 +47,14 @@ app.post('/api/auth/login', async (req, res) => {
 
         const { data: profile } = await supabase
             .from('profiles')
-            .select('name, role')
+            .select('name, role,emp_id')
             .eq('auth_id', user.id)
             .single();
 
-        res.json({
-            session,
-            role: profile?.role || 'employee',
-            name: profile?.name || 'User'
-        });
+        await supabase.from('profiles').update({ active: true }).eq('emp_id', profile.emp_id);
+        await logAudit(profile.emp_id, 'Authentication', 'Logged in');
+
+        res.json({ session: data.session, role: profile.role, name: profile.name, empId: profile.emp_id });
     } catch (err) {
         console.error("Login Error:", err.message);
         res.status(500).json({ error: 'Internal server error during login' });
@@ -65,15 +62,61 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.post('/api/auth/logout', authenticateUser, async (req, res) => {
+    await logAudit(req.user.empId || req.user.id, 'Authentication', 'Logged out');
+    await supabase.from('profiles').update({ active: false }).eq('emp_id', req.user.empId || req.user.id);
     await supabase.auth.signOut();
     res.json({ message: 'Logged out successfully' });
 });
 
 app.post('/api/auth/change-password', authenticateUser, async (req, res) => {
-    const { newPassword } = req.body;
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    if (error) return res.status(500).json({ error: error.message });
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: 'Current and new passwords are required.' });
+    }
+
+    const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('email, auth_id, emp_id')
+        .eq('emp_id', req.user.empId || req.user.id)
+        .single();
+    if (profileError || !profile) return res.status(404).json({ error: 'Profile not found.' });
+
+    const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: profile.email,
+        password: currentPassword
+    });
+    if (verifyError) return res.status(400).json({ error: 'Current password is incorrect.' });
+
+    const { data: policySetting } = await supabase.from('system_settings').select('value').eq('key', 'password_policy').single();
+    const policy = policySetting?.value || { minLength: 6, requireUppercase: true, requireNumbers: true, requireSpecial: false };
+    if (newPassword.length < (policy.minLength || 6)) return res.status(400).json({ error: `Password must be at least ${policy.minLength || 6} characters long.` });
+    if (policy.requireUppercase && !/[A-Z]/.test(newPassword)) return res.status(400).json({ error: 'Password must contain at least one uppercase letter.' });
+    if (policy.requireNumbers && !/[0-9]/.test(newPassword)) return res.status(400).json({ error: 'Password must contain at least one number.' });
+    if (policy.requireSpecial && !/[^A-Za-z0-9]/.test(newPassword)) return res.status(400).json({ error: 'Password must contain at least one special character.' });
+
+    const { error: updateError } = await supabase.auth.admin.updateUserById(profile.auth_id, { password: newPassword });
+    if (updateError) return res.status(500).json({ error: updateError.message });
+    await logAudit(profile.emp_id, 'Authentication', 'Changed password');
     res.json({ message: 'Password updated' });
+});
+
+app.post('/api/auth/verify-password', authenticateUser, async (req, res) => {
+    const { currentPassword } = req.body;
+    if (!currentPassword) return res.status(400).json({ error: 'Current password is required.' });
+
+    const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('emp_id', req.user.empId || req.user.id)
+        .single();
+    if (profileError || !profile) return res.status(404).json({ error: 'Profile not found.' });
+
+    const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: profile.email,
+        password: currentPassword
+    });
+    if (verifyError) return res.status(400).json({ error: 'Current password is incorrect.' });
+    res.json({ verified: true });
 });
 
 // ==========================================
@@ -87,7 +130,6 @@ app.get('/api/settings', authenticateUser, async (req, res) => {
     data.forEach(item => { config[item.key] = item.value; });
     res.json(config);
 });
-
 app.patch('/api/settings/:key', authenticateUser, requirePermission('manage_system'), async (req, res) => {
     const { key } = req.params;
     const { value } = req.body;
@@ -136,6 +178,42 @@ app.post('/api/roles', authenticateUser, requirePermission('manage_system'), asy
     });
 
     res.status(201).json(data[0]);
+
+});
+app.get('/api/roles/:id', authenticateUser, requirePermission('manage_system'), async (req, res) => {
+    const { data, error } = await supabase.from('custom_roles').select('*').eq('id', req.params.id).single();
+    if (error || !data) return res.status(404).json({ error: 'Role not found' });
+    res.json(data);
+});
+
+app.patch('/api/roles/:id', authenticateUser, requirePermission('manage_system'), async (req, res) => {
+    const { name, permissions, description } = req.body;
+
+    const { data: before } = await supabase.from('custom_roles').select('*').eq('id', req.params.id).single();
+
+    const updatePayload = {};
+    if (name !== undefined) updatePayload.name = name;
+    if (permissions !== undefined) updatePayload.permissions = permissions;
+    if (description !== undefined) updatePayload.description = description;
+
+    const { data, error } = await supabase.from('custom_roles')
+        .update(updatePayload)
+        .eq('id', req.params.id)
+        .select();
+
+    if (error) return res.status(500).json({ error: error.message });
+    if (!data || data.length === 0) return res.status(404).json({ error: 'Role not found' });
+
+    await logAudit({
+        empId: req.user.id,
+        module: 'System Configuration',
+        action: `Updated role: ${data[0].name}`,
+        recordId: req.params.id,
+        previousValue: before ? { name: before.name, permissions: before.permissions } : null,
+        newValue: { name: data[0].name, permissions: data[0].permissions }
+    });
+
+    res.json(data[0]);
 });
 
 // ==========================================
@@ -391,9 +469,22 @@ app.patch('/api/notifications/:id/read', authenticateUser, async (req, res) => {
 });
 
 app.get('/api/activities', authenticateUser, requirePermission('view_users'), async (req, res) => {
-    const { data, error } = await supabase.from('audit_logs')
-        .select('id, action, module, created_at, profiles(name)')
-        .order('created_at', { ascending: false }).limit(10);
+    let query = supabase.from('audit_logs')
+        .select('id, emp_id, action, module, created_at, record_id, previous_value, new_value, profiles(name, role)')
+        .order('created_at', { ascending: false });
+
+    if (req.query.today === 'true') {
+        const now = new Date();
+        const istNow = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+        const startOfIstDay = new Date(Date.UTC(
+            istNow.getUTCFullYear(),
+            istNow.getUTCMonth(),
+            istNow.getUTCDate()
+        ) - (5.5 * 60 * 60 * 1000));
+        query = query.gte('created_at', startOfIstDay.toISOString());
+    }
+
+    const { data, error } = await query;
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
 });
@@ -436,26 +527,176 @@ app.get('/api/dashboard/admin-stats', authenticateUser, requirePermission('view_
             .select('*', { count: 'exact', head: true })
             .eq('status', 'active');
 
-        const todayStr = new Date().toISOString().split('T')[0];
+        const { count: activeUsersNow, error: activeUsersError } = await supabase
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('active', true);
+        if (activeUsersError) return res.status(500).json({ error: activeUsersError.message });
+
+        const now = new Date();
+        const istNow = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+        const startOfIstDay = new Date(Date.UTC(
+            istNow.getUTCFullYear(),
+            istNow.getUTCMonth(),
+            istNow.getUTCDate()
+        ) - (5.5 * 60 * 60 * 1000));
         const { data: activeLogs } = await supabase
             .from('audit_logs')
             .select('emp_id')
-            .gte('created_at', todayStr);
+            .gte('created_at', startOfIstDay.toISOString());
 
-        const uniqueActiveUsers = activeLogs ? new Set(activeLogs.map(l => l.emp_id)).size : 0;
-        const finalActiveToday = uniqueActiveUsers > 0 ? uniqueActiveUsers : 1;
+        const uniqueActiveUsers = activeLogs
+            ? new Set(activeLogs.map(log => log.emp_id).filter(Boolean)).size
+            : 0;
 
         res.json({ 
             totalEmployees: totalEmployees ?? 2, 
             activeProjects: activeProjects ?? 0, 
-            activeUsersToday: finalActiveToday 
+            activeUsersToday: activeUsersNow ?? 0,
+            activeUsersTodayByActivity: uniqueActiveUsers
         });
     } catch (err) {
         console.error("Error fetching admin stats:", err);
         res.status(500).json({ error: err.message });
     }
 });
+app.get('/api/reports/summary', authenticateUser, requirePermission('view_reports'), async (req, res) => {
+    try {
+        let query = supabase.from('projects').select('id, name, status, start_date, end_date, progress, manager_id, profiles(name)');
+        if (req.user.role.toLowerCase() === 'manager') query = query.eq('manager_id', req.user.id);
 
+        const { data, error } = await query;
+        if (error) return res.status(500).json({ error: error.message });
+
+        const ongoing = data.filter(p => p.status === 'active').length;
+        const completed = data.filter(p => p.status === 'completed').length;
+        const delayed = data.filter(p => p.status === 'delayed').length;
+
+        res.json({
+            counts: { ongoing, completed, delayed },
+            projects: data.map(p => ({
+                id: p.id,
+                name: p.name,
+                status: p.status,
+                startDate: p.start_date,
+                endDate: p.end_date,
+                progress: p.progress,
+                managerName: p.profiles ? p.profiles.name : null
+            }))
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/reports/project/:projectId', authenticateUser, requirePermission('view_reports'), async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const [{ data: project, error: projectError }, { data: members, error: membersError }, { data: tasks, error: tasksError }, { data: timesheets, error: timesheetsError }] = await Promise.all([
+            supabase.from('projects').select('*').eq('id', projectId).single(),
+            supabase.from('project_members').select('*').eq('project_id', projectId),
+            supabase.from('tasks').select('*').eq('project_id', projectId),
+            supabase.from('timesheets').select('*').eq('project_id', projectId)
+        ]);
+
+        if (projectError || !project) return res.status(404).json({ error: 'Project not found' });
+        if (membersError) return res.status(500).json({ error: membersError.message });
+        if (tasksError) return res.status(500).json({ error: tasksError.message });
+        if (timesheetsError) return res.status(500).json({ error: timesheetsError.message });
+
+        const memberIds = [...new Set((members || []).map(member => member.emp_id).filter(Boolean))];
+        const profileIds = [...new Set([project.manager_id, ...memberIds].filter(Boolean))];
+        let profiles = [];
+        if (profileIds.length > 0) {
+            const { data: profileData, error: profilesError } = await supabase
+                .from('profiles').select('emp_id, name').in('emp_id', profileIds);
+            if (profilesError) return res.status(500).json({ error: profilesError.message });
+            profiles = profileData || [];
+        }
+
+        const profileById = new Map(profiles.map(profile => [profile.emp_id, profile]));
+        const totalEstimatedHours = (tasks || []).reduce((sum, task) => sum + (Number(task.estimated_hours) || 0), 0);
+        const totalLoggedHours = (timesheets || []).reduce((sum, timesheet) => sum + (Number(timesheet.hours) || 0), 0);
+
+        res.json({
+            project: { ...project, managerName: profileById.get(project.manager_id)?.name || 'Unassigned' },
+            members: (members || []).map(member => ({ ...member, name: profileById.get(member.emp_id)?.name || member.emp_id })),
+            tasks: tasks || [],
+            timesheets: timesheets || [],
+            metrics: {
+                memberCount: memberIds.length,
+                taskCount: (tasks || []).length,
+                completedTaskCount: (tasks || []).filter(task => task.status === 'completed').length,
+                totalEstimatedHours,
+                totalLoggedHours
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/reports/employee-activity', authenticateUser, requirePermission('view_reports'), async (req, res) => {
+    const { department, empId } = req.query;
+
+    let profileQuery = supabase.from('profiles').select('emp_id, name, department');
+    if (department) profileQuery = profileQuery.eq('department', department);
+    if (empId) profileQuery = profileQuery.eq('emp_id', empId);
+
+    const { data: profiles, error: profileError } = await profileQuery;
+    if (profileError) return res.status(500).json({ error: profileError.message });
+
+    const empIds = profiles.map(p => p.emp_id);
+    let logs = [];
+    if (empIds.length > 0) {
+        const { data: logData, error: logError } = await supabase
+            .from('audit_logs')
+            .select('*')
+            .in('emp_id', empIds)
+            .order('created_at', { ascending: false });
+        if (logError) return res.status(500).json({ error: logError.message });
+        logs = logData;
+    }
+
+    res.json({ employees: profiles, activity: logs });
+});
+
+app.get('/api/reports/resource-allocation', authenticateUser, requirePermission('view_reports'), async (req, res) => {
+    const { projectId } = req.query;
+
+    let memberQuery = supabase.from('project_members').select('emp_id, project_id');
+    if (projectId) memberQuery = memberQuery.eq('project_id', projectId);
+
+    const { data: members, error: memberError } = await memberQuery;
+    if (memberError) return res.status(500).json({ error: memberError.message });
+
+    const { count: totalEmployees, error: empError } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
+    if (empError) return res.status(500).json({ error: empError.message });
+
+    const allocatedEmployeeIds = [...new Set((members || []).map(member => member.emp_id).filter(Boolean))];
+    const allocatedEmployees = allocatedEmployeeIds.length;
+    const utilizationPercentage = totalEmployees > 0 ? Math.round((allocatedEmployees / totalEmployees) * 100) : 0;
+
+    let projects = [];
+    if (projectId) {
+        const { data: project, error: projectError } = await supabase
+            .from('projects').select('id, name, status, progress').eq('id', projectId).single();
+        if (projectError || !project) return res.status(404).json({ error: 'Project not found' });
+        projects = [project];
+    } else {
+        const projectIds = [...new Set((members || []).map(member => member.project_id).filter(Boolean))];
+        if (projectIds.length > 0) {
+            const { data: projectData, error: projectError } = await supabase
+                .from('projects').select('id, name, status, progress').in('id', projectIds);
+            if (projectError) return res.status(500).json({ error: projectError.message });
+            projects = projectData || [];
+        }
+    }
+
+    res.json({ projectId: projectId || null, projects, allocatedEmployees, totalEmployees: totalEmployees ?? 0, utilizationPercentage, members: members || [] });
+});
 // ==========================================
 // 10. EMPLOYEE API ENDPOINTS
 // ==========================================

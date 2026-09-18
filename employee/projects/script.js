@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
         return;
     }
 
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Logout handling redirects to login/signup page
     document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.clear();
-        window.location.href = '../login/index.html';
+        window.location.replace('../login/index.html');
     });
 });
 

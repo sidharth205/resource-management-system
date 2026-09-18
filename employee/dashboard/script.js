@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadEmployeeDashboardTasks(token);
     await loadEmployeeNotifications(token);
     await loadEmployeeActivity(token);
+    setInterval(() => {
+        loadEmployeeDashboardTasks(token);
+        loadEmployeeNotifications(token);
+        loadEmployeeActivity(token);
+    }, 30000);
 
     // 4. Secure Logout handling (replaces history state to block back-button access)
     const logoutBtn = document.getElementById('logoutBtn');
@@ -62,6 +67,9 @@ async function loadEmployeeDashboardTasks(token) {
         const tasks = await res.json();
         const countEl = document.getElementById('statAssignedCount');
         if (countEl) countEl.textContent = tasks ? tasks.length : '0';
+        const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+        document.getElementById('statDueCount').textContent = (tasks || []).filter(task => task.due_date === today).length;
+        document.getElementById('statCompletedCount').textContent = (tasks || []).filter(task => (task.status || '').toLowerCase() === 'completed').length;
 
         if (!tasks || tasks.length === 0) {
             tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #64748b; padding: 20px;">No active tasks assigned.</td></tr>`;
@@ -85,10 +93,10 @@ async function loadEmployeeDashboardTasks(token) {
 
             tr.innerHTML = `
                 <td>
-                    <strong class="task-title-text">${taskTitle}</strong>
-                    <span class="task-sub-text" style="display: block; font-size: 0.75rem; color: #64748b;">${projectName}</span>
+                    <strong class="task-title-text">${escapeHtml(taskTitle)}</strong>
+                    <span class="task-sub-text">${escapeHtml(projectName)}</span>
                 </td>
-                <td><span style="color: #3b82f6; font-weight: 700;">${dueDate}</span></td>
+                <td><span class="task-due-date">${escapeHtml(dueDate)}</span></td>
             `;
             tbody.appendChild(tr);
         });
@@ -100,6 +108,20 @@ async function loadEmployeeDashboardTasks(token) {
         }
     }
 }
+
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[character]));
+}
+
+function formatIstTime(value) {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? 'Recently' : date.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true
+    }) + ' IST';
+}
+
 async function loadEmployeeNotifications(token) {
     const container = document.getElementById('employeeNotificationsList');
     if (!container) return;
@@ -126,8 +148,8 @@ async function loadEmployeeNotifications(token) {
                 <div class="notif-item">
                     <span class="dot ${n.unread ? 'red-dot' : 'blue-dot'}"></span>
                     <div class="notif-content">
-                        <p>${n.message || n.text}</p>
-                        <span class="time-ago">${n.time_ago || 'Recently'}</span>
+                        <p>${escapeHtml(n.message || n.text || n.title || 'Notification')}</p>
+                        <span class="time-ago">${formatIstTime(n.created_at)}</span>
                     </div>
                 </div>
                 ${index < notifications.length - 1 ? '<hr class="divider">' : ''}
@@ -162,10 +184,10 @@ async function loadEmployeeActivity(token) {
         activities.forEach(a => {
             container.innerHTML += `
                 <div class="timeline-row">
-                    <div class="tl-icon-box">${a.icon || '📌'}</div>
+                    <div class="tl-icon-box"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"></path></svg></div>
                     <div class="tl-content">
-                        <p>${a.description || a.text}</p>
-                        <span class="time-ago">${a.time_ago || 'Recently'}</span>
+                        <p><strong>You</strong> ${escapeHtml(a.description || a.text || 'Updated a record')}</p>
+                        <span class="time-ago">${formatIstTime(a.created_at)}${a.time_ago ? ` (${escapeHtml(a.time_ago)})` : ''}</span>
                     </div>
                 </div>
             `;
