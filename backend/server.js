@@ -336,8 +336,24 @@ app.post('/api/designations', authenticateUser, requirePermission('manage_system
 // ==========================================
 // 5. PROJECTS
 // ==========================================
+async function updateProjectStatusByDueDate(project) {
+    const today = new Date().toISOString().slice(0, 10);
+    const status = String(project.status || 'active').toLowerCase();
+
+    if (status !== 'active' || !project.end_date || project.end_date >= today) return project;
+
+    const { data, error } = await supabase
+        .from('projects')
+        .update({ status: 'delayed' })
+        .eq('id', project.id)
+        .select()
+        .single();
+
+    return error || !data ? { ...project, status: 'delayed' } : data;
+}
+
 app.get('/api/projects', authenticateUser, requirePermission('view_projects'), async (req, res) => {
-    let query = supabase.from('projects').select('id, name, description, manager_id, start_date, end_date, status, progress');
+    let query = supabase.from('projects').select('id, name, description, manager_id, start_date, end_date, status, progress, profiles(name, emp_id)');
     
     if (req.user.role.toLowerCase() === 'manager') {
         query = query.eq('manager_id', req.user.empId || req.user.id);
@@ -350,7 +366,7 @@ app.get('/api/projects', authenticateUser, requirePermission('view_projects'), a
 
     const { data, error } = await query;
     if (error) return res.status(500).json({ error: error.message });
-    res.json(data);
+    res.json(await Promise.all((data || []).map(updateProjectStatusByDueDate)));
 });
 
 app.post('/api/projects', authenticateUser, requirePermission('manage_projects'), async (req, res) => {
@@ -400,6 +416,13 @@ app.post('/api/tasks', authenticateUser, requirePermission('manage_tasks'), asyn
 
     if (error) return res.status(500).json({ error: error.message });
     await createNotification({ empId: assignedTo, title: 'New Task', message: `You were assigned: ${title}`, type: 'task' });
+    await logAudit({
+        empId: req.user.empId || req.user.id,
+        module: 'Tasks',
+        action: `Created task: ${title}`,
+        recordId: data[0].id,
+        newValue: { project_id: projectId, assigned_to: assignedTo }
+    });
     res.status(201).json(data[0]);
 });
 
@@ -472,6 +495,47 @@ app.get('/api/activities', authenticateUser, requirePermission('view_users'), as
     let query = supabase.from('audit_logs')
         .select('id, emp_id, action, module, created_at, record_id, previous_value, new_value, profiles(name, role)')
         .order('created_at', { ascending: false });
+
+    if (req.user.role.toLowerCase() === 'manager') {
+        const managerId = req.user.empId || req.user.id;
+        const { data: projects, error: projectError } = await supabase
+            .from('projects')
+            .select('id')
+            .eq('manager_id', managerId);
+        if (projectError) return res.status(500).json({ error: projectError.message });
+
+        const projectIds = (projects || []).map(project => project.id);
+        if (projectIds.length === 0) return res.json([]);
+
+        const { data: members, error: memberError } = await supabase
+            .from('project_members')
+            .select('emp_id')
+            .in('project_id', projectIds);
+        if (memberError) return res.status(500).json({ error: memberError.message });
+
+        const { data: tasks, error: taskError } = await supabase
+            .from('tasks')
+            .select('assigned_to')
+            .in('project_id', projectIds);
+        if (taskError) return res.status(500).json({ error: taskError.message });
+
+        const assignedIds = [
+            ...(members || []).map(member => member.emp_id),
+            ...(tasks || []).map(task => task.assigned_to)
+        ].filter(Boolean);
+        const uniqueAssignedIds = [...new Set(assignedIds)];
+        if (uniqueAssignedIds.length === 0) return res.json([]);
+        const { data: employees, error: employeeError } = await supabase
+            .from('profiles')
+            .select('emp_id')
+            .in('emp_id', uniqueAssignedIds)
+            .ilike('role', 'employee');
+        if (employeeError) return res.status(500).json({ error: employeeError.message });
+
+        const employeeIds = (employees || []).map(employee => employee.emp_id);
+        if (employeeIds.length === 0) return res.json([]);
+        query = query.in('emp_id', employeeIds);
+    }
 
     if (req.query.today === 'true') {
         const now = new Date();
@@ -744,20 +808,36 @@ async function fetchEmployeeTasks(req, res) {
             .from('tasks')
             .select(`
                 *,
-                projects(name, id),
-                timesheets(hours, remarks, date, profiles:timesheets_employee_id_fkey(name)),
-                task_attachments(file_url, created_at, profiles:task_attachments_emp_id_fkey(name))
+                projects(name, id, manager_id),
+                timesheets(hours, remarks, date, created_at, profiles:timesheets_employee_id_fkey(name)),
+                task_attachments(id, file_url, created_at, profiles:task_attachments_emp_id_fkey(name))
             `)
             .or(`assigned_to.eq.${empId},assigned_to.eq.${req.user.id}`);
         
         if (error) throw error;
+
+        const managerIds = [...new Set((data || [])
+            .map(task => task.projects?.manager_id)
+            .filter(Boolean))];
+        let managerProfiles = [];
+        if (managerIds.length > 0) {
+            const { data: profiles, error: profileError } = await supabase
+                .from('profiles')
+                .select('emp_id, name')
+                .in('emp_id', managerIds);
+            if (profileError) throw profileError;
+            managerProfiles = profiles || [];
+        }
+        const managerById = new Map(managerProfiles.map(manager => [String(manager.emp_id), manager]));
         
         const mapped = (data || []).map(t => {
             let activities = [];
+            const timesheets = Array.isArray(t.timesheets) ? t.timesheets : (t.timesheets ? [t.timesheets] : []);
+            const attachments = Array.isArray(t.task_attachments) ? t.task_attachments : (t.task_attachments ? [t.task_attachments] : []);
             
             let counter = 0;
-            if (t.timesheets && t.timesheets.length > 0) {
-                t.timesheets.forEach(ts => {
+            if (timesheets.length > 0) {
+                timesheets.forEach(ts => {
                     const rawTime = ts.created_at || ts.date;
                     const safeTimeStr = typeof rawTime === 'string' && rawTime.includes(' ') && !rawTime.includes('T') 
                         ? rawTime.replace(' ', 'T') 
@@ -776,8 +856,8 @@ async function fetchEmployeeTasks(req, res) {
                 });
             }
             
-            if (t.task_attachments && t.task_attachments.length > 0) {
-                t.task_attachments.forEach(att => {
+            if (attachments.length > 0) {
+                attachments.forEach(att => {
                     const fileName = att.file_url.split('/').pop().split('_').slice(1).join('_') || 'a file';
                     activities.push({
                         text: `Uploaded attachment: ${fileName}`,
@@ -797,12 +877,17 @@ async function fetchEmployeeTasks(req, res) {
                 return b.rawIndex - a.rawIndex; 
             });
 
+            const managerId = t.projects?.manager_id;
+            const manager = managerById.get(String(managerId));
+
             return {
                 ...t,
                 task_name: t.title,
                 project_name: t.projects?.name,
                 project_id: t.project_id || t.projects?.id,
-                assigned_by: 'Manager',
+                assigned_by: manager?.name || 'Manager',
+                assigned_by_emp_id: manager?.emp_id || managerId || 'N/A',
+                task_attachments: attachments,
                 activities: activities
             };
         });
@@ -986,23 +1071,127 @@ app.post('/api/employee/tasks/upload', authenticateUser, upload.single('file'), 
 // Get specific project details
 app.get('/api/employee/projects/:id', authenticateUser, async (req, res) => {
     const { id } = req.params;
-    const { data, error } = await supabase
+    let { data: project, error: projectError } = await supabase
         .from('projects')
         .select('*')
         .eq('id', id)
         .single();
-        
-    if (error) return res.status(400).json({ error: error.message });
-    res.json(data);
+
+    if (projectError) return res.status(400).json({ error: projectError.message });
+    project = await updateProjectStatusByDueDate(project);
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('emp_id')
+        .eq('auth_id', req.user.id)
+        .single();
+    const empId = profile?.emp_id || req.user.empId || req.user.id;
+
+    const [{ data: memberships, error: membershipError }, { data: tasks, error: taskError }] = await Promise.all([
+        supabase.from('project_members').select('emp_id, role_on_project').eq('project_id', id),
+        supabase.from('tasks').select('id, title, assigned_to').eq('project_id', id)
+    ]);
+
+    if (membershipError) return res.status(400).json({ error: membershipError.message });
+    if (taskError) return res.status(400).json({ error: taskError.message });
+
+    const isManager = String(project.manager_id) === String(empId);
+    const isMember = (memberships || []).some(member => String(member.emp_id) === String(empId));
+    if (!isManager && !isMember) return res.status(403).json({ error: 'Unauthorized access to project' });
+
+    const profileIds = [...new Set([
+        project.manager_id,
+        ...(memberships || []).map(member => member.emp_id)
+    ].filter(Boolean))];
+    const { data: memberProfiles, error: memberProfileError } = profileIds.length > 0
+        ? await supabase.from('profiles').select('emp_id, name, role').in('emp_id', profileIds)
+        : { data: [], error: null };
+    if (memberProfileError) return res.status(400).json({ error: memberProfileError.message });
+
+    const profileById = new Map((memberProfiles || []).map(member => [String(member.emp_id), member]));
+    const taskCountByEmployee = (tasks || []).reduce((counts, task) => {
+        if (task.assigned_to) counts[task.assigned_to] = (counts[task.assigned_to] || 0) + 1;
+        return counts;
+    }, {});
+    const team = (memberships || []).map(member => ({
+        emp_id: member.emp_id,
+        name: profileById.get(String(member.emp_id))?.name || member.emp_id,
+        role: member.role_on_project || profileById.get(String(member.emp_id))?.role || 'Team Member',
+        task_count: taskCountByEmployee[member.emp_id] || 0
+    }));
+    const taskIds = (tasks || []).map(task => task.id).filter(Boolean);
+    let activities = [];
+    let documents = [];
+    if (taskIds.length > 0) {
+        const [{ data: logs, error: activityError }, { data: attachments, error: attachmentError }] = await Promise.all([
+            supabase
+            .from('audit_logs')
+            .select('id, action, created_at, record_id, profiles(name)')
+            .in('record_id', taskIds)
+            .order('created_at', { ascending: false })
+            .limit(20),
+            supabase
+                .from('task_attachments')
+                .select('id, task_id, file_url, created_at')
+                .in('task_id', taskIds)
+                .order('created_at', { ascending: false })
+        ]);
+        if (activityError) return res.status(400).json({ error: activityError.message });
+        if (attachmentError) return res.status(400).json({ error: attachmentError.message });
+
+        const taskById = new Map((tasks || []).map(task => [String(task.id), task]));
+        activities = (logs || []).map(log => ({
+            id: log.id,
+            text: `${log.profiles?.name || 'A team member'} ${log.action}${taskById.get(String(log.record_id))?.title ? ` on ${taskById.get(String(log.record_id)).title}` : ''}`,
+            time: log.created_at
+        }));
+
+        documents = (attachments || []).map(attachment => ({
+            id: attachment.id,
+            name: decodeURIComponent(attachment.file_url.split('/').pop() || 'Attachment').replace(/^\d+_/, ''),
+            task_name: taskById.get(String(attachment.task_id))?.title || 'Task attachment',
+            file_url: attachment.file_url,
+            created_at: attachment.created_at
+        }));
+    }
+
+    res.json({
+        ...project,
+        manager_name: profileById.get(String(project.manager_id))?.name || 'Manager',
+        team,
+        members_count: team.length,
+        activities,
+        documents
+    });
 });
 
-// Get project-wide activity log
+// Get project-wide activity log from Timesheets
 app.get('/api/projects/:projectId/activity', authenticateUser, async (req, res) => {
     const projectId = req.params.projectId;
 
     try {
         const { data: profile } = await supabase.from('profiles').select('emp_id').eq('auth_id', req.user.id).single();
         const empId = profile?.emp_id || req.user.empId || req.user.id;
+
+        // Fetch project creation date and manager
+        const { data: project, error: projectError } = await supabase
+            .from('projects')
+            .select('created_at, manager_id')
+            .eq('id', projectId)
+            .single();
+        
+        if (projectError || !project) return res.status(404).json({ error: 'Project not found' });
+
+        // Get all members assigned to the project
+        const { data: members } = await supabase
+            .from('project_members')
+            .select('emp_id')
+            .eq('project_id', projectId);
+        
+        // Requirement: If no employees assigned, don't list activity
+        if (!members || members.length === 0) {
+            return res.json([]);
+        }
 
         const { data: membership } = await supabase
             .from('project_members')
@@ -1011,29 +1200,26 @@ app.get('/api/projects/:projectId/activity', authenticateUser, async (req, res) 
             .eq('emp_id', empId)
             .single();
 
-        if (!membership) {
+        const isManager = project.manager_id === empId;
+        if (!membership && !isManager) {
             return res.status(403).json({ error: 'Unauthorized access to project activity' });
         }
 
-        const { data: projectTasks } = await supabase
-            .from('tasks')
-            .select('id')
-            .eq('project_id', projectId);
-
-        const taskIds = (projectTasks || []).map(t => t.id);
-        if (taskIds.length === 0) return res.json([]);
-
-        const { data: logs, error } = await supabase
-            .from('audit_logs')
-            .select('id, module, action, created_at, profiles(name)')
-            .in('record_id', taskIds)
+        // Fetch Timesheets for this project
+        // Filter logs: AFTER project creation date
+        const { data: timesheets, error } = await supabase
+            .from('timesheets')
+            .select('id, hours, remarks, created_at, employee_id, profiles(name)')
+            .eq('project_id', projectId)
+            .gte('created_at', project.created_at)
             .order('created_at', { ascending: false });
 
         if (error) throw error;
 
-        const formatted = (logs || []).map(item => ({
-            icon: item.module === 'Tasks' ? '📌' : '⚡',
-            description: `${item.profiles?.name || 'A team member'} ${item.action}`,
+        const formatted = (timesheets || []).map(item => ({
+            id: item.id,
+            description: `${item.profiles?.name || 'A team member'} logged ${item.hours} hours${item.remarks ? `: ${item.remarks}` : ''}`,
+            created_at: item.created_at,
             time_ago: new Date(item.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })
         }));
 
@@ -1044,22 +1230,83 @@ app.get('/api/projects/:projectId/activity', authenticateUser, async (req, res) 
     }
 });
 
-// Get employee notifications
-// Get employee notifications fetched from project timesheets & attachments timeline
+// Get personal notifications plus activity from the employee's projects.
 app.get('/api/employee/notifications', authenticateUser, async (req, res) => {
     try {
         const { data: profile } = await supabase.from('profiles').select('emp_id').eq('auth_id', req.user.id).single();
         const empId = profile?.emp_id || req.user.empId || req.user.id;
 
-        const { data, error } = await supabase
+        const [{ data: personalNotifications, error: notificationError }, { data: memberships, error: membershipError }, { data: managedProjects, error: managedProjectError }] = await Promise.all([
+            supabase
             .from('notifications')
             .select('*')
             .eq('emp_id', empId)
             .order('created_at', { ascending: false })
-            .limit(30);
+            .limit(30),
+            supabase.from('project_members').select('project_id').eq('emp_id', empId),
+            supabase.from('projects').select('id').eq('manager_id', empId)
+        ]);
 
-        if (error) throw error;
-        res.json(data || []);
+        if (notificationError) throw notificationError;
+        if (membershipError) throw membershipError;
+        if (managedProjectError) throw managedProjectError;
+
+        const projectIds = [...new Set([
+            ...(memberships || []).map(member => member.project_id),
+            ...(managedProjects || []).map(project => project.id)
+        ].filter(Boolean))];
+
+        let projectActivity = [];
+        if (projectIds.length > 0) {
+            const { data: projectTasks, error: taskError } = await supabase
+                .from('tasks')
+                .select('id, project_id, title')
+                .in('project_id', projectIds);
+            if (taskError) throw taskError;
+
+            const taskIds = (projectTasks || []).map(task => task.id).filter(Boolean);
+            const taskById = new Map((projectTasks || []).map(task => [String(task.id), task]));
+            const auditQueries = [];
+
+            if (taskIds.length > 0) {
+                auditQueries.push(supabase
+                    .from('audit_logs')
+                    .select('id, module, action, created_at, record_id, emp_id, profiles(name)')
+                    .in('record_id', taskIds));
+            }
+            auditQueries.push(supabase
+                .from('audit_logs')
+                .select('id, module, action, created_at, record_id, emp_id, profiles(name)')
+                .in('record_id', projectIds));
+
+            const auditResults = await Promise.all(auditQueries);
+            auditResults.forEach(result => {
+                if (result.error) throw result.error;
+                projectActivity.push(...(result.data || [])
+                    .filter(log => String(log.emp_id) !== String(empId))
+                    .map(log => {
+                    const task = taskById.get(String(log.record_id));
+                    const actorName = log.profiles?.name || 'A project member';
+                    const subject = task ? ` on ${task.title}` : '';
+                    return {
+                        id: `activity-${log.id}`,
+                        title: `${log.module || 'Project'} activity`,
+                        message: `${actorName} ${log.action}${subject}`,
+                        type: (log.module || 'project').toLowerCase(),
+                        is_read: false,
+                        created_at: log.created_at,
+                        task_id: task?.id || null,
+                        is_project_activity: true
+                    };
+                    }));
+            });
+        }
+
+        const notifications = [...(personalNotifications || []), ...projectActivity]
+            .sort((first, second) => new Date(second.created_at || 0) - new Date(first.created_at || 0))
+            .slice(0, 50);
+
+        res.json(notifications);
     } catch (err) {
         console.error("Error fetching notifications:", err.message);
         res.status(500).json({ error: err.message });

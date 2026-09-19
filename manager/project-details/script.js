@@ -46,16 +46,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const storedName = localStorage.getItem('user_name') || 'Manager';
-  const initial = storedName.charAt(0).toUpperCase();
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
-  const sidebarAvatar = document.getElementById('sidebarAvatar');
-  const headerAvatar = document.getElementById('headerAvatar');
 
   if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
   if (headerNameEl) headerNameEl.textContent = storedName;
-  if (sidebarAvatar) sidebarAvatar.textContent = initial;
-  if (headerAvatar) headerAvatar.textContent = initial;
 
   try {
     const profRes = await fetch(`${BASE_URL}/api/employee/profile`, { headers });
@@ -63,10 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const prof = await profRes.json();
       if (prof && prof.name) {
         if (userNameEl) userNameEl.textContent = prof.name.toUpperCase();
-        if (headerNameEl) headerNameEl.textContent = prof.name;
-        const pInit = prof.name.charAt(0).toUpperCase();
-        if (sidebarAvatar) sidebarAvatar.textContent = pInit;
-        if (headerAvatar) headerAvatar.textContent = pInit;
+        if (headerNameEl) headerNameEl.textContent = window.getFirstName(prof.name);
       }
     }
   } catch (e) {}
@@ -152,15 +144,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       const st = (p.status || 'active').toLowerCase();
       const badge = document.getElementById('projectStatusBadge');
       badge.textContent = st.charAt(0).toUpperCase() + st.slice(1);
-      badge.className = 'status-badge ' + (st === 'completed' ? 'status-completed' : (st === 'pending' ? 'status-pending' : 'status-active'));
+      const statusClass = st === 'completed' ? 'status-completed' : (st === 'pending' ? 'status-pending' : (st === 'delayed' ? 'status-delayed' : 'status-active'));
+      badge.className = `status-badge ${statusClass}`;
 
       const sDate = p.start_date ? new Date(p.start_date).toLocaleDateString() : 'N/A';
       const eDate = p.end_date ? new Date(p.end_date).toLocaleDateString() : 'N/A';
       document.getElementById('projectDates').textContent = `${sDate} to ${eDate}`;
 
-      const pct = Number(p.progress) || 0;
-      document.getElementById('projectProgressText').textContent = `${pct}%`;
-      document.getElementById('projectProgressFill').style.width = `${pct}%`;
     } catch (e) {
       document.getElementById('projectName').textContent = 'Error Loading Project';
     }
@@ -171,17 +161,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const teamListEl = document.getElementById('teamMembersList');
 
     try {
-      const res = await fetch(`${BASE_URL}/api/tasks?projectId=${projectId}`, { headers });
-      if (!res.ok) {
+      const [tasksRes, projectRes] = await Promise.all([
+        fetch(`${BASE_URL}/api/tasks?projectId=${projectId}`, { headers }),
+        fetch(`${BASE_URL}/api/employee/projects/${projectId}`, { headers })
+      ]);
+      if (!tasksRes.ok || !projectRes.ok) {
         taskListEl.innerHTML = '<div class="empty-state">Unable to load tasks</div>';
         teamListEl.innerHTML = '<div class="empty-state">Unable to load team</div>';
         return;
       }
 
-      const tasks = await res.json();
+      const tasks = await tasksRes.json();
+      const projectDetails = await projectRes.json();
+      const teamMembers = Array.isArray(projectDetails.team) ? projectDetails.team : [];
       if (!Array.isArray(tasks)) {
         taskListEl.innerHTML = '<div class="empty-state">No tasks available</div>';
-        teamListEl.innerHTML = '<div class="empty-state">No team members yet</div>';
+        renderTeamMembers(teamMembers, teamListEl);
         return;
       }
 
@@ -189,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (tasks.length === 0) {
         taskListEl.innerHTML = '<div class="empty-state">No tasks created yet for this project.</div>';
-        teamListEl.innerHTML = '<div class="empty-state">No team members assigned to tasks yet.</div>';
+        renderTeamMembers(teamMembers, teamListEl);
         return;
       }
 
@@ -227,19 +222,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         taskListEl.appendChild(card);
       });
 
-      const memberIds = Array.from(new Set(tasks.map(t => t.assigned_to).filter(Boolean)));
-      if (memberIds.length === 0) {
-        teamListEl.innerHTML = '<div class="empty-state">No team members assigned to tasks yet.</div>';
+      if (teamMembers.length === 0) {
+        teamListEl.innerHTML = '<div class="empty-state">No team members assigned to this project yet.</div>';
         return;
       }
 
-      teamListEl.innerHTML = '';
-      for (const empId of memberIds) {
-        const user = await getUserInfo(empId);
-        const name = user.name || empId;
-        const uInit = name.charAt(0).toUpperCase();
-        const roleStr = user.role || user.designations?.name || 'Contributor';
+      renderTeamMembers(teamMembers, teamListEl);
+    } catch (e) {
+      taskListEl.innerHTML = '<div class="empty-state">Network error loading project tasks</div>';
+      teamListEl.innerHTML = '<div class="empty-state">Network error loading team</div>';
+    }
+  }
 
+  function renderTeamMembers(teamMembers, teamListEl) {
+    if (teamMembers.length === 0) {
+      teamListEl.innerHTML = '<div class="empty-state">No team members assigned to this project yet.</div>';
+      return;
+    }
+
+    teamListEl.innerHTML = '';
+    teamMembers.forEach(member => {
+        const empId = member.emp_id;
+        const name = member.name || empId;
+        const uInit = name.charAt(0).toUpperCase();
+        const roleStr = member.role || 'Team Member';
         const row = document.createElement('div');
         row.className = 'member-row';
         row.innerHTML = `
@@ -250,21 +256,18 @@ document.addEventListener('DOMContentLoaded', async () => {
               <span class="member-role">${escapeHtml(roleStr)} • ${escapeHtml(empId)}</span>
             </div>
           </div>
+          <span class="member-task-count">${member.task_count || 0} ${member.task_count === 1 ? 'task' : 'tasks'}</span>
           <button class="btn-remove-member" data-id="${empId}">Remove</button>
         `;
         teamListEl.appendChild(row);
-      }
+    });
 
-      teamListEl.querySelectorAll('.btn-remove-member').forEach(b => {
+    teamListEl.querySelectorAll('.btn-remove-member').forEach(b => {
         b.addEventListener('click', async () => {
           const empId = b.getAttribute('data-id');
           await removeMember(empId);
         });
-      });
-    } catch (e) {
-      taskListEl.innerHTML = '<div class="empty-state">Network error loading project tasks</div>';
-      teamListEl.innerHTML = '<div class="empty-state">Network error loading team</div>';
-    }
+    });
   }
 
   async function removeMember(empId) {
@@ -284,7 +287,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  async function loadActivity() {
+    async function loadActivity() {
     const actListEl = document.getElementById('projectActivityList');
     try {
       const res = await fetch(`${BASE_URL}/api/projects/${projectId}/activity`, { headers });
@@ -292,21 +295,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         const activities = await res.json();
         if (Array.isArray(activities) && activities.length > 0) {
           actListEl.innerHTML = '';
-          activities.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'timeline-item';
-            div.innerHTML = `
-              <span class="timeline-icon">${item.icon || '📌'}</span>
-              <div class="timeline-content">${escapeHtml(item.description || '')}</div>
-              <span class="timeline-time">${item.time_ago || ''}</span>
-            `;
-            actListEl.appendChild(div);
-          });
+          const maxInitial = 5;
+          const isLong = activities.length > maxInitial;
+          
+          const renderList = (limit) => {
+            actListEl.innerHTML = '';
+            activities.slice(0, limit).forEach(item => {
+              const div = document.createElement('div');
+              div.className = 'timeline-item';
+              div.innerHTML = `
+                <span class="timeline-icon">${item.icon || '📌'}</span>
+                <div class="timeline-content">${escapeHtml(item.description || '')}</div>
+                <span class="timeline-time">${item.time_ago || ''}</span>
+              `;
+              actListEl.appendChild(div);
+            });
+            
+            if (isLong) {
+              const toggleBtn = document.createElement('button');
+              toggleBtn.className = 'text-link-btn';
+              toggleBtn.textContent = limit === maxInitial ? 'View All' : 'Show Less';
+              toggleBtn.onclick = () => renderList(limit === maxInitial ? activities.length : maxInitial);
+              actListEl.appendChild(toggleBtn);
+            }
+          };
+          
+          renderList(maxInitial);
           return;
         }
       }
     } catch (e) {}
 
+    // Fallback logic
     try {
       const fallbackRes = await fetch(`${BASE_URL}/api/activities`, { headers });
       if (fallbackRes.ok) {

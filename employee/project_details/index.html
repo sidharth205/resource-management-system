@@ -12,8 +12,8 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="profile-section">
-                <div class="avatar">👤</div>
-                <div class="welcome-text">WELCOME <br><span id="userName">NAME</span></div>
+                <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+                <div class="welcome-text">WELCOME <span id="userName">NAME</span></div>
             </div>
             <nav class="nav-menu">
                 <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
@@ -23,7 +23,7 @@
                 <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
             </nav>
             <button id="logoutBtn" class="logout-btn">
-                <span class="logout-icon">🚪</span> Logout
+                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout
             </button>
         </aside>
 
@@ -31,13 +31,13 @@
         <main class="main-content">
             <!-- Top Header Bar -->
             <header class="top-header">
-                <div class="header-spacer"></div>
+                <h2>PROJECT DETAILS</h2>
                 <div class="header-actions">
                     <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
-                        <span class="bell-icon" title="Notifications">🔔</span>
+                        <span class="bell-icon" title="Notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
                     </a>
                     <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
-                        <span class="profile-icon-small">👤</span>
+                        <span class="profile-icon-small"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
                         <span id="headerName">Name</span>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
 
             <!-- Back Link to Projects -->
             <div class="back-link-row">
-                <a href="../projects/index.html" class="back-projects-link">← Projects</a>
+                <a href="../projects/index.html" class="back-projects-link"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg> Back to Projects</a>
             </div>
 
             <!-- Project Main Info Banner -->
@@ -57,21 +57,21 @@
             <!-- Top 3 Metric Cards Grid -->
             <div class="stats-grid-details">
                 <div class="stat-box">
-                    <div class="stat-icon-wrapper blue-bg">📅</div>
+                    <div class="stat-icon-wrapper blue-bg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></div>
                     <div class="stat-info">
                         <span class="stat-label">Start Date</span>
                         <span class="stat-value" id="projectStartDate">-</span>
                     </div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-icon-wrapper blue-bg">📅</div>
+                    <div class="stat-icon-wrapper blue-bg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></div>
                     <div class="stat-info">
                         <span class="stat-label">Due Date</span>
                         <span class="stat-value" id="projectDueDate">-</span>
                     </div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-icon-wrapper blue-bg">👥</div>
+                    <div class="stat-icon-wrapper blue-bg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M3 20a6 6 0 0 1 12 0M15 20a5 5 0 0 1 6 0"></path></svg></div>
                     <div class="stat-info">
                         <span class="stat-label">Members</span>
                         <span class="stat-value" id="projectMembersCount">0</span>
@@ -111,7 +111,28 @@
         </main>
     </div>
 
-    <script src="../../shared-assets/breadcrumb.js"></script>
+    <div id="activityModal" class="activity-modal" hidden>
+        <div class="activity-modal-card" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
+            <div class="activity-modal-header">
+                <div>
+                    <p class="activity-modal-eyebrow">PROJECT LOG</p>
+                    <h2 id="activityModalTitle">All Activity</h2>
+                </div>
+                <button type="button" id="closeActivityModal" class="modal-close-btn" aria-label="Close activity window">&times;</button>
+            </div>
+            <div class="activity-modal-toolbar">
+                <label for="activityDateFilter">Filter by date</label>
+                <div class="activity-date-controls">
+                    <input type="date" id="activityDateFilter">
+                    <button type="button" id="clearActivityDate" class="clear-date-btn">Clear</button>
+                </div>
+            </div>
+            <div id="allActivityList" class="all-activity-list">
+                <p class="activity-empty-state">Loading activity...</p>
+            </div>
+        </div>
+    </div>
+
     <script src="../../shared-assets/session-guard.js"></script>
     <script src="script.js"></script>
 </body>

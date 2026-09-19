@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Set dynamic profile names from localStorage
-    const storedName = localStorage.getItem('user_name') || 'Employee';
-    const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1);
+    const storedName = window.getFirstName(localStorage.getItem('user_name') || 'Employee');
+    const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1).toLowerCase();
     document.getElementById('userName').textContent = formattedName.toUpperCase();
     document.getElementById('headerName').textContent = formattedName;
 
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadEmployeeProjects(token) {
     try {
-        const res = await fetch('http://localhost:3000/api/employee/projects', {
+        const res = await fetch('http://localhost:3000/api/projects', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -51,18 +51,21 @@ async function loadEmployeeProjects(token) {
         projects.forEach(p => {
             const tr = document.createElement('tr');
             // Clicking the project name navigates to the corresponding Project Details page with ID parameter
+            const ownerName = p.profiles?.name || p.owner || 'Manager';
+            const ownerId = p.profiles?.emp_id || p.manager_id || '';
             tr.innerHTML = `
                 <td>
-                    <a href="../project-details/index.html?id=${p.id || ''}" class="project-title-link">${p.project_name || p.name || 'Project'}</a><br>
-                    <span class="project-sub-text">${p.team || 'General Team'}</span>
+                    <a href="../project_details/index.html?id=${encodeURIComponent(p.id || '')}" class="project-title-link">${escapeHtml(p.project_name || p.name || 'Project')}</a><br>
+                    <span class="project-sub-text">${escapeHtml(p.team || 'General Team')}</span>
                 </td>
                 <td>
                     <div class="owner-cell">
-                        <span class="owner-avatar">👤</span> ${p.owner || 'Manager'}
+                        <span class="owner-avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+                        <span>${escapeHtml(ownerName)}<small>${escapeHtml(ownerId)}</small></span>
                     </div>
                 </td>
-                <td>${p.start_date || 'N/A'}</td>
-                <td><span style="font-weight: 600; color: #1e293b;">${p.due_date || 'Pending'}</span></td>
+                <td>${escapeHtml(p.start_date || 'N/A')}</td>
+                <td><span style="font-weight: 600; color: #1e293b;">${escapeHtml(p.end_date || 'Pending')}</span></td>
             `;
             tbody.appendChild(tr);
         });
@@ -71,6 +74,13 @@ async function loadEmployeeProjects(token) {
         document.getElementById('employeeProjectsTable').innerHTML = `<tr><td colspan="4" style="text-align: center; color: #ef4444; padding: 20px;">Server connection error. Make sure backend is running.</td></tr>`;
     }
 }
+
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[character]));
+}
+
 async function loadProjectActivity(projectId, token) {
     const container = document.getElementById('projectActivityList');
     if (!container) return;

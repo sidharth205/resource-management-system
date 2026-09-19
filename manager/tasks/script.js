@@ -46,16 +46,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const storedName = localStorage.getItem('user_name') || 'Manager';
-  const initial = storedName.charAt(0).toUpperCase();
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
-  const sidebarAvatar = document.getElementById('sidebarAvatar');
-  const headerAvatar = document.getElementById('headerAvatar');
 
   if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
   if (headerNameEl) headerNameEl.textContent = storedName;
-  if (sidebarAvatar) sidebarAvatar.textContent = initial;
-  if (headerAvatar) headerAvatar.textContent = initial;
 
   try {
     const profRes = await fetch(`${BASE_URL}/api/employee/profile`, { headers });
@@ -63,10 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const prof = await profRes.json();
       if (prof && prof.name) {
         if (userNameEl) userNameEl.textContent = prof.name.toUpperCase();
-        if (headerNameEl) headerNameEl.textContent = prof.name;
-        const pInit = prof.name.charAt(0).toUpperCase();
-        if (sidebarAvatar) sidebarAvatar.textContent = pInit;
-        if (headerAvatar) headerAvatar.textContent = pInit;
+        if (headerNameEl) headerNameEl.textContent = window.getFirstName(prof.name);
       }
     }
   } catch (e) {}

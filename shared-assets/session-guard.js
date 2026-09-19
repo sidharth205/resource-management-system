@@ -1,4 +1,11 @@
 (function () {
+    window.getFirstName = function (name) {
+        return String(name || '').trim().split(/\s+/)[0] || 'User';
+    };
+
+    const storedName = localStorage.getItem('user_name');
+    if (storedName) localStorage.setItem('user_name', window.getFirstName(storedName));
+
     function redirectToLanding() {
         window.location.replace('../../Landing.html');
     }

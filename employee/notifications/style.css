@@ -280,3 +280,203 @@ body {
     text-decoration: none;
     font-weight: 700;
 }
+
+/* Notifications uses the same shell and typography as the updated employee pages. */
+body {
+    background-color: var(--bg-color);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-container {
+    background: transparent;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-color);
+    border-right: 1px solid var(--line-color);
+    box-shadow: 2px 0 12px rgba(20, 22, 40, 0.04);
+    padding-top: 20px;
+}
+
+.profile-section {
+    padding: 16px 18px;
+    background-color: var(--sidebar-active);
+    margin: 0 0 20px;
+    border-radius: 0 16px 16px 0;
+    width: 90%;
+}
+
+.avatar {
+    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
+    width: 40px;
+    height: 40px;
+}
+
+.welcome-text {
+    color: var(--text-color);
+    font-size: 0.7rem;
+}
+
+.nav-menu {
+    padding: 0 10px;
+    gap: 8px;
+}
+
+.nav-item {
+    color: var(--muted-color);
+    padding: 12px 16px;
+    margin-bottom: 0;
+    border-radius: 8px;
+    font-size: 0.75rem;
+}
+
+.nav-item.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(59, 108, 240, 0.25);
+}
+
+.logout-btn {
+    margin: 20px;
+    padding: 13px 15px;
+    background: transparent;
+    border: 1px solid var(--line-color);
+    border-radius: 10px;
+    color: var(--muted-color);
+    box-shadow: none;
+}
+
+.main-content {
+    padding: 20px 40px;
+}
+
+.top-header {
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line-color);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+.top-header h2 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.header-profile-tag {
+    color: var(--text-color);
+}
+
+.profile-icon-small {
+    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
+}
+
+.notifications-banner h1 {
+    color: var(--text-color);
+}
+
+.notif-controls-row {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line-color);
+}
+
+.filter-tabs {
+    gap: 22px;
+}
+
+.tab-btn {
+    color: var(--muted-color);
+    font-size: 0.75rem;
+}
+
+.tab-btn.active {
+    color: var(--text-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.mark-read-link {
+    color: var(--primary-color);
+    font-size: 0.75rem;
+}
+
+.notifications-list-container {
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.notif-card {
+    border: 1px solid var(--line-color);
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 10px 24px rgba(20, 22, 40, 0.06);
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+
+.notif-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px rgba(20, 22, 40, 0.1);
+}
+
+.notif-card.is-unread {
+    background: #f8faff;
+    border-left: 3px solid var(--primary-color);
+}
+
+.notif-card-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+}
+
+.notif-icon-box {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 10px;
+}
+
+.notif-icon-box .ui-icon {
+    width: 19px;
+    height: 19px;
+}
+
+.notif-text-content {
+    min-width: 0;
+}
+
+.notif-text-content h4 {
+    margin: 0 0 4px;
+    font-size: 0.85rem;
+    color: var(--text-color);
+}
+
+.notif-text-content p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    line-height: 1.4;
+}
+
+.notif-time {
+    margin-left: 16px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.footer-view-all a {
+    color: var(--primary-color);
+}
+
+@media (max-width: 900px) {
+    .sidebar { width: 220px; }
+    .main-content { padding: 18px 20px; }
+}
+
+@media (max-width: 640px) {
+    .notif-card { align-items: flex-start; flex-direction: column; gap: 10px; }
+    .notif-time { margin-left: 50px; }
+}

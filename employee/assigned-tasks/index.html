@@ -6,56 +6,14 @@
     <title>Assigned Tasks</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Ensures body and outer app container lock the viewport height */
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #dbeafe;
-        }
-        .app-container {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
-        }
-        /* Fixed Left Sidebar */
-        .sidebar {
-            width: 240px;
-            height: 100vh;
-            background: #c2d9ff;
-            display: flex;
-            flex-direction: column;
-            padding-top: 15px;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
-            flex-shrink: 0;
-        }
-        /* Main Content Scrollable Wrapper */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            padding: 20px 35px;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-        .scrollable-task-window {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 6px;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
     <div class="app-container">
         <!-- Sidebar Navigation (Stays fixed and intact) -->
         <aside class="sidebar">
             <div class="profile-section">
-                <div class="avatar">👤</div>
-                <div class="welcome-text">WELCOME <br><span id="userName">-</span></div>
+                <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+                <div class="welcome-text">WELCOME <span id="userName">-</span></div>
             </div>
             <nav class="nav-menu">
                 <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
@@ -65,7 +23,7 @@
                 <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
             </nav>
             <button id="logoutBtn" class="logout-btn">
-                <span class="logout-icon">🚪</span> Logout
+                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout
             </button>
         </aside>
 
@@ -73,22 +31,20 @@
         <main class="main-content">
             <!-- Top Header Bar -->
             <header class="top-header">
-                <div class="header-spacer"></div>
+                <h2>ASSIGNED TASKS</h2>
                 <div class="header-actions">
                     <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
-                        <span class="bell-icon" title="Notifications">🔔</span>
+                        <span class="bell-icon" title="Notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
                     </a>
                     <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
-                        <span class="profile-icon-small">👤</span>
+                        <span class="profile-icon-small"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
                         <span id="headerName">-</span>
                     </div>
                 </div>
             </header>
 
             <!-- Page Title -->
-            <div class="task-page-header-row">
-                <h1>My Assigned Tasks</h1>
-            </div>
+            
 
             <!-- Scrollable Content Window: JS will inject multiple tasks here -->
             <!-- The timeline IDs and form inputs are created dynamically by your script.js inside this container -->
@@ -99,7 +55,6 @@
         </main>
     </div>
 
-    <script src="../../shared-assets/breadcrumb.js"></script>
     <script src="../../shared-assets/session-guard.js"></script>
     <script src="script.js"></script>
 </body>

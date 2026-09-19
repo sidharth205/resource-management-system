@@ -177,6 +177,28 @@ body {
   gap: 20px;
 }
 
+.header-bell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--muted-color);
+  text-decoration: none;
+}
+
+.header-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.header-profile .ui-icon {
+  width: 20px;
+  height: 20px;
+}
+
 .bell-icon {
   font-size: 1.3rem;
   color: var(--muted-color);

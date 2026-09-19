@@ -210,3 +210,56 @@ body {
 .pwd-input-group input { padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 6px; background: #f8fafc; font-size: 0.8rem; }
 .btn-update-pwd { background: #3182ce; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.85rem; }
 .btn-update-pwd:hover { background: #2b6cb0; }
+
+/* Match the admin profile visual system. */
+body { background-color: var(--bg-color); }
+.app-container { background: transparent; }
+.sidebar { width: 250px; background-color: var(--sidebar-color); border-right: 1px solid var(--line-color); box-shadow: 2px 0 12px rgba(20, 22, 40, 0.04); padding-top: 20px; }
+.profile-section { padding: 16px 18px; background-color: var(--sidebar-active); margin: 0 0 20px; border-radius: 0 16px 16px 0; width: 90%; }
+.avatar { background: linear-gradient(135deg, var(--primary-color), #6d8ff5); width: 40px; height: 40px; }
+.welcome-text { color: var(--text-color); font-size: 0.7rem; }
+.nav-menu { padding: 0 10px; gap: 8px; }
+.nav-item { color: var(--muted-color); padding: 12px 16px; margin-bottom: 0; border-radius: 8px; font-size: 0.75rem; }
+.nav-item.active { background-color: var(--primary-color); color: #fff; box-shadow: 0 8px 18px rgba(59, 108, 240, 0.25); }
+.logout-btn { margin: 20px; padding: 13px 15px; background: transparent; border: 1px solid var(--line-color); border-radius: 10px; color: var(--muted-color); box-shadow: none; }
+.main-content { padding: 20px 40px; }
+.top-header { justify-content: space-between; border-bottom: 1px solid var(--line-color); padding-bottom: 14px; margin-bottom: 20px; }
+.top-header h2 { margin: 0; color: var(--text-color); font-size: 1.3rem; font-weight: 800; }
+.header-profile { display: flex; align-items: center; gap: 8px; color: var(--text-color); font-size: 0.85rem; font-weight: bold; }
+.profile-icon-small { background: linear-gradient(135deg, var(--primary-color), #6d8ff5); }
+.profile-page-container { gap: 20px; }
+.card { border: 1px solid var(--line-color); border-radius: 14px; box-shadow: 0 10px 24px rgba(20, 22, 40, 0.06); }
+.top-banner-card { padding: 30px; }
+.large-avatar { background: linear-gradient(135deg, var(--primary-color), #6d8ff5); border-color: var(--line-color); }
+.large-avatar .ui-icon { width: 42px; height: 42px; }
+.banner-text-info h2, .card-title-row h3, .password-card h3 { color: var(--text-color); }
+.banner-right { border-left-color: var(--line-color); }
+.meta-row, .field-row { color: var(--muted-color); }
+.meta-row strong, .field-row span { color: var(--text-color); }
+.card-title-row { border-bottom-color: var(--line-color); }
+.field-row { border-bottom-color: #eef0f5; }
+.btn-edit, .btn-update-pwd { background: var(--primary-color); }
+.pwd-input-group input { border-color: var(--line-color); background: #f8f9fc; }
+.pwd-input-group input:focus { border-color: var(--primary-color); }
+.pwd-input-group input:disabled { background: #edf0f5; }
+.password-rules { display: flex; flex-direction: column; gap: 4px; margin: -4px 0 4px; padding: 0; list-style: none; font-size: 0.72rem; }
+.password-rules li { color: #b0332f; }
+.password-rules li::before { content: '○'; display: inline-block; width: 18px; }
+.password-rules li.fulfilled { color: #1f7a4d; }
+.password-rules li.fulfilled::before { content: '✓'; }
+.password-rules li[hidden] { display: none; }
+.btn-verify-password { align-self: flex-start; margin-top: 3px; padding: 6px 14px; border: 1px solid var(--primary-color); border-radius: 16px; background: transparent; color: var(--primary-color); font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+.btn-verify-password:hover { background: var(--sidebar-active); }
+.btn-update-pwd { padding: 12px; border-radius: 24px; box-shadow: 0 8px 18px rgba(59, 108, 240, .3); }
+.btn-update-pwd:disabled { opacity: .55; cursor: not-allowed; box-shadow: none; }
+.password-message { min-height: 18px; margin: 0; font-size: 0.75rem; }
+.password-message.success { color: #1f7a4d; }
+.password-message.error { color: #b0332f; }
+
+@media (max-width: 900px) {
+    .sidebar { width: 220px; }
+    .main-content { padding: 18px 20px; }
+    .top-banner-card { align-items: flex-start; flex-direction: column; gap: 24px; }
+    .banner-right { border-left: 0; border-top: 1px solid var(--line-color); padding: 20px 0 0; min-width: 0; width: 100%; }
+    .bottom-grid { grid-template-columns: 1fr; }
+}

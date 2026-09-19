@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!profileRes.ok) throw new Error(emp.error || 'Failed to load profile details');
 
         // Populate Banner & Meta Info
-        document.getElementById('bannerName').textContent = emp.name || 'N/A';
+        document.getElementById('bannerName').textContent = window.getFirstName(emp.name || 'N/A');
         document.getElementById('bannerEmail').textContent = emp.email || 'N/A';
         document.getElementById('bannerPhone').textContent = emp.phone || 'Phone not provided';
         document.getElementById('bannerJoiningDate').textContent = emp.joining_date || 'N/A';
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('detPhone').textContent = emp.phone || '--';
 
         // Header and Sidebar Name Updates
-        document.getElementById('headerName').textContent = emp.name || 'User';
+        document.getElementById('headerName').textContent = window.getFirstName(emp.name || 'User');
         const firstName = (emp.name || 'User').split(' ')[0];
         const sidebarUserElem = document.getElementById('sidebarUserName');
         if (sidebarUserElem) {

@@ -46,16 +46,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const storedName = localStorage.getItem('user_name') || 'Manager';
-  const initial = storedName.charAt(0).toUpperCase();
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
-  const sidebarAvatar = document.getElementById('sidebarAvatar');
-  const headerAvatar = document.getElementById('headerAvatar');
 
   if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
   if (headerNameEl) headerNameEl.textContent = storedName;
-  if (sidebarAvatar) sidebarAvatar.textContent = initial;
-  if (headerAvatar) headerAvatar.textContent = initial;
 
   try {
     const notifRes = await fetch(`${BASE_URL}/api/notifications`, { headers });
@@ -87,14 +82,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       currentEmpId = p.emp_id || '';
       const name = p.name || storedName;
-      const pInit = name.charAt(0).toUpperCase();
 
-      document.getElementById('profName').textContent = name;
+      document.getElementById('profName').textContent = window.getFirstName(name);
       document.getElementById('profBigAvatar').textContent = pInit;
       if (userNameEl) userNameEl.textContent = name.toUpperCase();
-      if (headerNameEl) headerNameEl.textContent = name;
-      if (sidebarAvatar) sidebarAvatar.textContent = pInit;
-      if (headerAvatar) headerAvatar.textContent = pInit;
+      if (headerNameEl) headerNameEl.textContent = window.getFirstName(name);
 
       const desig = p.designations?.name || p.role || 'Project Manager';
       document.getElementById('profDesignation').textContent = desig;

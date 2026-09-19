@@ -46,16 +46,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const storedName = localStorage.getItem('user_name') || 'Manager';
-  const initial = storedName.charAt(0).toUpperCase();
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
-  const sidebarAvatar = document.getElementById('sidebarAvatar');
-  const headerAvatar = document.getElementById('headerAvatar');
 
   if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
   if (headerNameEl) headerNameEl.textContent = storedName;
-  if (sidebarAvatar) sidebarAvatar.textContent = initial;
-  if (headerAvatar) headerAvatar.textContent = initial;
 
   try {
     const profRes = await fetch(`${BASE_URL}/api/employee/profile`, { headers });
@@ -63,16 +58,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       const prof = await profRes.json();
       if (prof && prof.name) {
         if (userNameEl) userNameEl.textContent = prof.name.toUpperCase();
-        if (headerNameEl) headerNameEl.textContent = prof.name;
-        const pInit = prof.name.charAt(0).toUpperCase();
-        if (sidebarAvatar) sidebarAvatar.textContent = pInit;
-        if (headerAvatar) headerAvatar.textContent = pInit;
+        if (headerNameEl) headerNameEl.textContent = window.getFirstName(prof.name);
       }
     }
   } catch (e) {}
 
   let managerProjects = [];
   const managerProjectIds = new Set();
+  const employeeNames = new Map();
 
   async function loadNotifications() {
     try {
@@ -102,96 +95,66 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (Array.isArray(managerProjects)) {
           managerProjects.forEach(p => managerProjectIds.add(p.id));
           document.getElementById('statProjects').textContent = managerProjects.length;
-          renderDonutChart(managerProjects);
-          renderProjectBars(managerProjects);
+          renderProjectOverview(managerProjects);
         } else {
           document.getElementById('statProjects').textContent = '0';
+          renderProjectOverview([]);
         }
       } else {
         document.getElementById('statProjects').textContent = '--';
+        renderProjectOverview([]);
       }
     } catch (e) {
       document.getElementById('statProjects').textContent = '--';
+      renderProjectOverview([]);
     }
   }
 
-  function renderDonutChart(projects) {
-    const total = projects.length;
-    const totalCountEl = document.getElementById('donutTotalCount');
-    if (totalCountEl) totalCountEl.textContent = total;
-
-    let completed = 0;
-    let inProgress = 0;
-    let pending = 0;
-
-    projects.forEach(p => {
-      const st = (p.status || '').toLowerCase();
-      const prog = Number(p.progress) || 0;
-      if (st === 'completed' || prog === 100) {
-        completed++;
-      } else if (st === 'active' || prog > 0) {
-        inProgress++;
-      } else {
-        pending++;
-      }
-    });
-
-    document.getElementById('legendCompleted').textContent = completed;
-    document.getElementById('legendProgress').textContent = inProgress;
-    document.getElementById('legendPending').textContent = pending;
-
-    const C = 2 * Math.PI * 75;
-    const segComp = document.getElementById('segCompleted');
-    const segProg = document.getElementById('segProgress');
-    const segPend = document.getElementById('segPending');
-
-    if (total === 0) {
-      segComp.style.strokeDasharray = `0 ${C}`;
-      segProg.style.strokeDasharray = `0 ${C}`;
-      segPend.style.strokeDasharray = `0 ${C}`;
-      return;
-    }
-
-    const compLen = (completed / total) * C;
-    const progLen = (inProgress / total) * C;
-    const pendLen = (pending / total) * C;
-
-    let offset = 0;
-    segComp.style.strokeDasharray = `${compLen} ${C}`;
-    segComp.style.strokeDashoffset = `0`;
-
-    offset -= compLen;
-    segProg.style.strokeDasharray = `${progLen} ${C}`;
-    segProg.style.strokeDashoffset = `${offset}`;
-
-    offset -= progLen;
-    segPend.style.strokeDasharray = `${pendLen} ${C}`;
-    segPend.style.strokeDashoffset = `${offset}`;
-  }
-
-  function renderProjectBars(projects) {
-    const list = document.getElementById('projectBarsList');
-    if (!list) return;
+  function renderProjectOverview(projects) {
+    const container = document.getElementById('projectOverviewContent');
+    if (!container) return;
     if (projects.length === 0) {
-      list.innerHTML = '<div class="empty-state">No active projects found</div>';
+      container.innerHTML = '<div class="empty-state">No projects found</div>';
       return;
     }
-    list.innerHTML = '';
-    projects.slice(0, 4).forEach(p => {
-      const pct = Number(p.progress) || 0;
-      const row = document.createElement('div');
-      row.className = 'project-progress-row';
-      row.innerHTML = `
-        <div class="project-row-top">
-          <a href="../project-details/index.html?id=${p.id}" class="project-row-name">${escapeHtml(p.name || 'Untitled Project')}</a>
-          <span class="project-row-pct">${pct}%</span>
+
+    const statusCounts = projects.reduce((counts, project) => {
+      const status = (project.status || 'planning').toLowerCase();
+      counts[status] = (counts[status] || 0) + 1;
+      return counts;
+    }, {});
+
+    const statusOrder = ['active', 'planning', 'pending', 'completed', 'delayed'];
+    const statusSummary = statusOrder
+      .filter(status => statusCounts[status])
+      .map(status => `
+        <div class="project-status-summary">
+          <span class="project-status-dot status-dot-${status}"></span>
+          <span>${escapeHtml(status.replace('_', ' '))}</span>
+          <strong>${statusCounts[status]}</strong>
         </div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: ${pct}%;"></div>
-        </div>
+      `).join('');
+
+    const projectRows = projects.slice(0, 4).map(project => {
+      const status = (project.status || 'planning').toLowerCase();
+      const startDate = project.start_date ? new Date(project.start_date).toLocaleDateString() : 'No start date';
+      const endDate = project.end_date ? new Date(project.end_date).toLocaleDateString() : 'No end date';
+      return `
+        <a class="project-overview-row" href="../project-details/index.html?id=${encodeURIComponent(project.id)}">
+          <span class="project-overview-name">${escapeHtml(project.name || 'Untitled Project')}</span>
+          <span class="project-overview-dates">${escapeHtml(startDate)} - ${escapeHtml(endDate)}</span>
+          <span class="project-status-badge status-badge-${status}">${escapeHtml(status.replace('_', ' '))}</span>
+        </a>
       `;
-      list.appendChild(row);
-    });
+    }).join('');
+
+    container.innerHTML = `
+      <div class="project-overview-summary">
+        <div class="project-total-count"><strong>${projects.length}</strong><span>Total projects</span></div>
+        <div class="project-status-summary-list">${statusSummary}</div>
+      </div>
+      <div class="project-overview-list">${projectRows}</div>
+    `;
   }
 
   async function loadTasks() {
@@ -215,8 +178,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!urgentContainer) return;
 
       const urgentTasks = myTasks
-        .filter(t => (t.priority || '').toLowerCase() === 'high' && (t.status || '').toLowerCase() !== 'completed')
-        .slice(0, 4);
+        .filter(t => (t.status || '').toLowerCase() !== 'completed')
+        .sort((a, b) => {
+          const priorityRank = { high: 0, medium: 1 };
+          return (priorityRank[(a.priority || '').toLowerCase()] ?? 2) - (priorityRank[(b.priority || '').toLowerCase()] ?? 2);
+        })
+        .filter(t => ['high', 'medium'].includes((t.priority || '').toLowerCase()));
 
       if (urgentTasks.length === 0) {
         urgentContainer.innerHTML = '<div class="empty-state">No urgent tasks pending</div>';
@@ -225,14 +192,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       urgentContainer.innerHTML = '';
       urgentTasks.forEach(t => {
-        const row = document.createElement('div');
+        const row = document.createElement('a');
         row.className = 'task-quick-row';
+        row.href = `../tasks/index.html?projectId=${encodeURIComponent(t.project_id)}`;
         row.innerHTML = `
           <div>
             <div class="task-quick-title">${escapeHtml(t.title || 'Untitled Task')}</div>
             <div class="task-quick-meta">Due: ${t.due_date ? new Date(t.due_date).toLocaleDateString() : 'No date'}</div>
           </div>
-          <span class="pill-badge pill-high">High</span>
+          <span class="pill-badge pill-${(t.priority || '').toLowerCase()}">${escapeHtml(t.priority || '')}</span>
         `;
         urgentContainer.appendChild(row);
       });
@@ -254,8 +222,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
+      try {
+        const employeeRes = await fetch(`${BASE_URL}/api/users?role=employee`, { headers });
+        if (employeeRes.ok) {
+          const employees = await employeeRes.json();
+          if (Array.isArray(employees)) {
+            employees.forEach(employee => employeeNames.set(employee.emp_id, employee.name || employee.emp_id));
+          }
+        }
+      } catch (e) {}
+
       const myTimesheets = allTs.filter(ts => managerProjectIds.has(ts.project_id));
-      const pendingTs = myTimesheets.filter(ts => (ts.status || '').toLowerCase() === 'pending');
+      const pendingTs = myTimesheets.filter(ts => !ts.approved_at);
       document.getElementById('statTimesheets').textContent = pendingTs.length;
 
       const list = document.getElementById('pendingTimesheetsList');
@@ -266,56 +244,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      list.innerHTML = '';
-      pendingTs.slice(0, 3).forEach(ts => {
+      list.innerHTML = '<div class="ts-list-header"><span>EMPLOYEE</span><span>LOGGED</span><span>CREATED AT</span></div>';
+      pendingTs.forEach(ts => {
         const row = document.createElement('div');
         row.className = 'ts-quick-row';
+        row.tabIndex = 0;
+        row.setAttribute('role', 'link');
+        row.addEventListener('click', () => {
+          window.location.href = `../timesheets/index.html?timesheetId=${encodeURIComponent(ts.id)}`;
+        });
+        row.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            row.click();
+          }
+        });
+        const createdAt = ts.created_at ? new Date(ts.created_at).toLocaleString() : 'N/A';
+        const employeeName = employeeNames.get(ts.employee_id) || ts.employee_id || 'Employee';
         row.innerHTML = `
           <div class="ts-info">
-            <span class="ts-emp-name">${escapeHtml(ts.employee_id || 'Employee')}</span>
-            <span class="ts-details">${ts.hours || 0} hrs • ${ts.date ? new Date(ts.date).toLocaleDateString() : ''}</span>
+            <span class="ts-emp-name">${escapeHtml(employeeName)}</span>
+            <span class="ts-details">EMP ID: ${escapeHtml(ts.employee_id || 'N/A')}</span>
           </div>
-          <div class="ts-actions">
-            <button class="btn-approve" data-id="${ts.id}">Approve</button>
-            <button class="btn-reject" data-id="${ts.id}">Reject</button>
+          <div class="ts-logged">
+            <strong>${ts.hours || 0} hrs</strong>
+            <span>${ts.date ? new Date(ts.date).toLocaleDateString() : 'N/A'}</span>
           </div>
+          <span class="ts-created-at">${escapeHtml(createdAt)}</span>
         `;
         list.appendChild(row);
-      });
-
-      list.querySelectorAll('.btn-approve').forEach(b => {
-        b.addEventListener('click', async () => {
-          await updateTimesheetStatus(b.getAttribute('data-id'), 'approved');
-        });
-      });
-
-      list.querySelectorAll('.btn-reject').forEach(b => {
-        b.addEventListener('click', async () => {
-          await updateTimesheetStatus(b.getAttribute('data-id'), 'rejected');
-        });
       });
     } catch (e) {
       document.getElementById('statTimesheets').textContent = '--';
     }
   }
 
-  async function updateTimesheetStatus(id, status) {
-    try {
-      const res = await fetch(`${BASE_URL}/api/timesheets/${id}`, {
-        method: 'PATCH',
-        headers,
-        body: JSON.stringify({ status, remarks: `${status.charAt(0).toUpperCase() + status.slice(1)} by manager` })
-      });
-      if (res.ok) {
-        showToast(`Timesheet ${status}`);
-        await loadTimesheets();
-      } else {
-        showToast('Failed to update timesheet');
-      }
-    } catch (e) {
-      showToast('Network error updating timesheet');
-    }
-  }
 
   async function loadTeamCount() {
     try {

@@ -11,35 +11,35 @@
   <div class="app-container">
     <aside class="sidebar" id="sidebar">
       <div class="profile-section">
-        <div class="avatar" id="sidebarAvatar">M</div>
-        <div class="welcome-text">WELCOME <br><span id="userName">MANAGER</span></div>
+        <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+        <div class="welcome-text">WELCOME <span id="userName">MANAGER</span></div>
       </div>
       <nav class="nav-menu">
-        <a href="../dashboard/index.html" class="nav-item active">📊 Dashboard</a>
-        <a href="../projects/index.html" class="nav-item">📁 Projects</a>
-        <a href="../tasks/index.html" class="nav-item">✓ Tasks</a>
-        <a href="../timesheets/index.html" class="nav-item">⏱ Timesheets</a>
-        <a href="../employees/index.html" class="nav-item">👥 Employees</a>
-        <a href="../reports/index.html" class="nav-item">📈 Reports</a>
-        <a href="../notifications/index.html" class="nav-item">🔔 Notifications <span class="nav-badge" id="navNotifBadge"></span></a>
-        <a href="../profile/index.html" class="nav-item">👤 My Profile</a>
+        <a href="../dashboard/index.html" class="nav-item active">DASHBOARD</a>
+        <a href="../projects/index.html" class="nav-item">PROJECTS</a>
+        <a href="../tasks/index.html" class="nav-item">TASKS</a>
+        <a href="../timesheets/index.html" class="nav-item">TIMESHEETS</a>
+        <a href="../employees/index.html" class="nav-item">EMPLOYEES</a>
+        <a href="../reports/index.html" class="nav-item">REPORTS</a>
+        <a href="../notifications/index.html" class="nav-item">NOTIFICATIONS <span class="nav-badge" id="navNotifBadge"></span></a>
+        <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
       </nav>
-      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+      <button id="logoutBtn" class="logout-btn"><span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> LOGOUT</button>
     </aside>
     <main class="main-content">
       <header class="top-header">
         <div class="header-left">
-          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation">☰</button>
+          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
           <h2>DASHBOARD</h2>
         </div>
         <div class="header-actions">
-          <a href="../notifications/index.html" class="bell-link" title="Notifications">
-            <span class="bell-icon">🔔</span>
+          <a href="../notifications/index.html" class="header-bell" title="Notifications">
+            <span class="bell-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
             <span class="bell-badge" id="bellBadge"></span>
           </a>
-          <a href="../profile/index.html" class="profile-chip" id="profileChip">
-            <span class="chip-avatar" id="headerAvatar">M</span>
-            <span class="chip-name" id="headerName">Manager</span>
+          <a href="../profile/index.html" class="header-profile" id="profileChip">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+            <span id="headerName">Manager</span>
           </a>
         </div>
       </header>
@@ -47,28 +47,28 @@
       <div class="dashboard-scrollable">
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-icon stat-blue">📁</div>
+            <div class="stat-icon stat-blue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
             <div class="stat-info">
               <span class="stat-label">ACTIVE PROJECTS</span>
               <h2 id="statProjects">--</h2>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon stat-purple">👥</div>
+            <div class="stat-icon stat-purple"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M3 20a6 6 0 0 1 12 0M15 20a5 5 0 0 1 6 0"></path></svg></div>
             <div class="stat-info">
               <span class="stat-label">TEAM MEMBERS</span>
               <h2 id="statTeam">--</h2>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon stat-green">✓</div>
+            <div class="stat-icon stat-green"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg></div>
             <div class="stat-info">
               <span class="stat-label">ACTIVE TASKS</span>
               <h2 id="statTasks">--</h2>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon stat-amber">⏱</div>
+            <div class="stat-icon stat-amber"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div>
             <div class="stat-info">
               <span class="stat-label">PENDING TIMESHEETS</span>
               <h2 id="statTimesheets">--</h2>
@@ -80,43 +80,12 @@
           <div class="glass-card chart-card">
             <div class="card-header-bar">
               <div>
-                <h3 class="card-title">Project Progress</h3>
-                <span class="card-subtitle">Status overview of manager projects</span>
+                <h3 class="card-title">Project Overview</h3>
+                <span class="card-subtitle">Status and delivery timelines across your projects</span>
               </div>
               <a href="../projects/index.html" class="card-header-link">View All →</a>
             </div>
-            <div class="donut-chart-container">
-              <div class="donut-wrapper">
-                <svg viewBox="0 0 200 200" class="donut-svg" id="donutSvg">
-                  <circle class="donut-bg" cx="100" cy="100" r="75" />
-                  <circle class="donut-segment segment-completed" id="segCompleted" cx="100" cy="100" r="75" />
-                  <circle class="donut-segment segment-progress" id="segProgress" cx="100" cy="100" r="75" />
-                  <circle class="donut-segment segment-pending" id="segPending" cx="100" cy="100" r="75" />
-                </svg>
-                <div class="donut-center-text">
-                  <span class="center-value" id="donutTotalCount">--</span>
-                  <span class="center-label">Projects</span>
-                </div>
-              </div>
-              <div class="donut-legend" id="donutLegend">
-                <div class="legend-item">
-                  <span class="legend-dot dot-green"></span>
-                  <span class="legend-name">Completed</span>
-                  <span class="legend-value" id="legendCompleted">0</span>
-                </div>
-                <div class="legend-item">
-                  <span class="legend-dot dot-blue"></span>
-                  <span class="legend-name">In Progress</span>
-                  <span class="legend-value" id="legendProgress">0</span>
-                </div>
-                <div class="legend-item">
-                  <span class="legend-dot dot-amber"></span>
-                  <span class="legend-name">Planning / Pending</span>
-                  <span class="legend-value" id="legendPending">0</span>
-                </div>
-              </div>
-            </div>
-            <div class="project-bars-list" id="projectBarsList">
+            <div class="project-overview-content" id="projectOverviewContent">
               <div class="skeleton-row"></div>
               <div class="skeleton-row"></div>
             </div>
@@ -141,12 +110,13 @@
           <div class="glass-card">
             <div class="card-header-bar">
               <div>
-                <h3 class="card-title">Pending Timesheets to Approve</h3>
-                <span class="card-subtitle">Submissions requiring your review</span>
+                <h3 class="card-title">Pending Timesheet</h3>
+                <span class="card-subtitle">Select a submission to review its details</span>
               </div>
               <a href="../timesheets/index.html" class="card-header-link">Manage Timesheets →</a>
             </div>
             <div class="pending-timesheets-list" id="pendingTimesheetsList">
+              <div class="ts-list-header"><span>EMPLOYEE</span><span>LOGGED</span><span>CREATED AT</span></div>
               <div class="skeleton-row"></div>
             </div>
           </div>
@@ -168,7 +138,6 @@
     </main>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="../../shared-assets/breadcrumb.js"></script>
   <script src="../../shared-assets/session-guard.js"></script>
   <script src="script.js"></script>
 </body>

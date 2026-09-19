@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 2. Dynamic user name binding for whoever is logged in
-    const storedName = localStorage.getItem('user_name') || 'Employee';
-    const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1);
+    const storedName = window.getFirstName(localStorage.getItem('user_name') || 'Employee');
+    const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1).toLowerCase();
 
     const userNameEl = document.getElementById('userName');
     const headerNameEl = document.getElementById('headerName');
@@ -84,7 +84,7 @@ async function loadEmployeeDashboardTasks(token) {
             // Make the row clickable and route to the specific task using the hash anchor
             tr.style.cursor = 'pointer';
             tr.onclick = () => {
-                window.location.href = `../assigned-tasks/index.html#${t.id}`;
+                window.location.href = `../assigned-tasks/index.html#${encodeURIComponent(t.id)}`;
             };
 
             const taskTitle = t.title || t.task_name || t.name || t.description || 'Task Assignment';

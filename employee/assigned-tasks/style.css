@@ -456,3 +456,229 @@ body {
 .individual-task-block .task-grid-layout {
     padding-bottom: 0;
 }
+
+/* Assigned tasks uses the same shell and visual language as the dashboards. */
+body {
+    background-color: var(--bg-color);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-container {
+    background: transparent;
+}
+
+.sidebar {
+    width: 250px;
+    height: auto;
+    background-color: var(--sidebar-color);
+    border-right: 1px solid var(--line-color);
+    box-shadow: 2px 0 12px rgba(20, 22, 40, 0.04);
+    padding-top: 20px;
+}
+
+.profile-section {
+    padding: 16px 18px;
+    background-color: var(--sidebar-active);
+    margin: 0 0 20px;
+    border-radius: 0 16px 16px 0;
+    width: 90%;
+}
+
+.avatar {
+    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
+    width: 40px;
+    height: 40px;
+}
+
+.welcome-text {
+    color: var(--text-color);
+    font-size: 0.7rem;
+}
+
+.nav-menu {
+    padding: 0 10px;
+    gap: 8px;
+}
+
+.nav-item {
+    color: var(--muted-color);
+    padding: 12px 16px;
+    margin-bottom: 0;
+    border-radius: 8px;
+    font-size: 0.75rem;
+}
+
+.nav-item.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(59, 108, 240, 0.25);
+}
+
+.logout-btn {
+    margin: 20px;
+    padding: 13px 15px;
+    background: transparent;
+    border: 1px solid var(--line-color);
+    border-radius: 10px;
+    color: var(--muted-color);
+    box-shadow: none;
+}
+
+.main-content {
+    height: 100vh;
+    padding: 20px 40px;
+    overflow: hidden;
+}
+
+.top-header {
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line-color);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+.top-header h2 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.header-profile-tag {
+    color: var(--text-color);
+}
+
+.profile-icon-small {
+    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
+}
+
+.task-page-header-row {
+    margin-bottom: 16px;
+}
+
+.task-page-header-row h1 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+}
+
+.scrollable-task-window {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 6px 30px 0;
+}
+
+.tasks-wrapper {
+    gap: 20px;
+}
+
+.individual-task-block {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid var(--line-color);
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(20, 22, 40, 0.06);
+}
+
+.individual-task-block.task-targeted {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 108, 240, 0.14), 0 14px 28px rgba(20, 22, 40, 0.08);
+}
+
+.task-block-header {
+    margin-bottom: 18px;
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--line-color);
+}
+
+.task-block-header h2 {
+    color: var(--text-color);
+    font-size: 1.15rem;
+}
+
+.task-grid-layout {
+    gap: 20px;
+}
+
+.dash-card {
+    padding: 18px;
+    border: 1px solid var(--line-color);
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(20, 22, 40, 0.05);
+}
+
+.card-title-bar {
+    padding: 0 0 8px;
+    margin-bottom: 12px;
+    background: transparent;
+    border-bottom: 1px solid var(--line-color);
+    border-radius: 0;
+    color: #4a5568;
+    letter-spacing: 0.5px;
+}
+
+.green-bar, .brown-bar, .blue-bar {
+    background: transparent;
+    color: #4a5568;
+}
+
+.meta-row {
+    color: var(--muted-color);
+    border-bottom-color: #edf0f5;
+}
+
+.task-inline-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    margin-right: 4px;
+    color: var(--primary-color);
+}
+
+.task-loading-icon {
+    animation: taskIconSpin 0.9s linear infinite;
+}
+
+@keyframes taskIconSpin {
+    to { transform: rotate(360deg); }
+}
+
+.meta-row strong {
+    color: var(--text-color);
+}
+
+.assigned-by-row strong {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.assigned-by-row small {
+    color: var(--muted-color);
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.attachment-item {
+    background: #f8f9fc !important;
+    border-color: var(--line-color) !important;
+}
+
+.upload-dropzone {
+    background: #fafbfe !important;
+    border-color: #cbd2e1 !important;
+}
+
+.input-with-suffix, .form-group textarea {
+    border-color: #d8dce6;
+}
+
+.btn-submit-blue, .btn-download-small {
+    background: var(--primary-color) !important;
+}
+
+@media (max-width: 900px) {
+    .sidebar { width: 220px; }
+    .main-content { padding: 18px 20px; }
+    .task-grid-layout { grid-template-columns: 1fr; }
+}

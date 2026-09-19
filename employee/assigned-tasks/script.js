@@ -1,3 +1,12 @@
+const TASK_ICONS = {
+    file: '<svg class="ui-icon task-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4M9 12h6M9 16h6"></path></svg>',
+    calendar: '<svg class="ui-icon task-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg>',
+    user: '<svg class="ui-icon task-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>',
+    clock: '<svg class="ui-icon task-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>',
+    upload: '<svg class="ui-icon task-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M5 20h14"></path></svg>',
+    loading: '<svg class="ui-icon task-inline-icon task-loading-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"></path></svg>'
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Secure token validation & back-button cache check
     const token = localStorage.getItem('access_token');
@@ -7,8 +16,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 2. Dynamic user name configuration
-    const storedName = localStorage.getItem('user_name') || 'Employee';
-    const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1);
+    const storedName = window.getFirstName(localStorage.getItem('user_name') || 'Employee');
+    const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1).toLowerCase();
     document.getElementById('userName').textContent = formattedName.toUpperCase();
     document.getElementById('headerName').textContent = formattedName;
 
@@ -103,7 +112,7 @@ async function loadAssignedTaskData(token) {
                     const fileName = att.file_url.split('/').pop().split('_').slice(1).join('_') || 'Document';
                     return `
                         <div class="attachment-item" style="display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 6px;">
-                            <span style="font-size: 0.85rem; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px;" title="${fileName}">📄 ${fileName}</span>
+                            <span style="font-size: 0.85rem; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px;" title="${fileName}">${TASK_ICONS.file} ${escapeHtml(fileName)}</span>
                             <a href="${att.file_url}" target="_blank" download class="btn-download-small" style="background: #3b82f6; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; font-weight: bold;">Download</a>
                         </div>
                     `;
@@ -133,17 +142,17 @@ async function loadAssignedTaskData(token) {
                         <div class="task-col-left">
                             <div class="dash-card">
                                 <div class="card-title-bar green-bar">Task Details</div>
-                                <div class="meta-row"><span>📅 Due Date</span><strong>${task.due_date || 'N/A'}</strong></div>
-                                <div class="meta-row"><span>👤 Assigned By</span><strong>${task.assigned_by || 'Manager'}</strong></div>
-                                <div class="meta-row"><span>📅 Created</span><strong>${task.created_date || 'N/A'}</strong></div>
-                                <div class="meta-row"><span>⏱️ Est. Hours</span><strong id="est-hours-${taskId}">${estimatedHours} hrs</strong></div>
+                                <div class="meta-row"><span>${TASK_ICONS.calendar} Due Date</span><strong>${task.due_date || 'N/A'}</strong></div>
+                                <div class="meta-row assigned-by-row"><span>${TASK_ICONS.user} Assigned By</span><strong>${task.assigned_by || 'Manager'}<small>${task.assigned_by_emp_id || 'N/A'}</small></strong></div>
+                                <div class="meta-row"><span>${TASK_ICONS.calendar} Created</span><strong>${task.created_date || 'N/A'}</strong></div>
+                                <div class="meta-row"><span>${TASK_ICONS.clock} Est. Hours</span><strong id="est-hours-${taskId}">${estimatedHours} hrs</strong></div>
                             </div>
 
                             <div class="dash-card">
                                 <div class="card-title-bar brown-bar">Attachments</div>
                                 <div class="attachments-list" id="attach-list-${taskId}" style="max-height: 140px; overflow-y: auto; margin-bottom: 10px; padding-right: 4px;">${attachmentsHTML}</div>
                                 <div class="upload-dropzone" onclick="document.getElementById('file-${taskId}').click()" style="cursor: pointer; border: 2px dashed #cbd5e1; padding: 12px; text-align: center; border-radius: 8px; background: #fafafa;">
-                                    <p style="margin: 0 0 2px 0; font-size: 0.85rem;">☁️ <strong>Upload Attachment</strong></p>
+                                    <p style="margin: 0 0 2px 0; font-size: 0.85rem;">${TASK_ICONS.upload} <strong>Upload Attachment</strong></p>
                                     <span style="font-size: 0.75rem; color: #64748b;">Click to browse and upload</span>
                                     <input type="file" id="file-${taskId}" style="display: none;" onchange="uploadFile(event, '${taskId}', '${token}')">
                                 </div>
@@ -188,102 +197,28 @@ async function loadAssignedTaskData(token) {
             
             wrapper.insertAdjacentHTML('beforeend', taskHTML);
         });
+
+        focusRequestedTask();
     } catch (err) {
         console.error("Error loading tasks:", err);
     }
 }
 
-// 3. Updated Submission functions to call appendTimelineActivity
-async function submitWorkHours(event, taskId, projectId, token) {
-    event.preventDefault(); 
+function focusRequestedTask() {
+    const requestedTaskId = decodeURIComponent(window.location.hash.slice(1));
+    if (!requestedTaskId) return;
 
-    const hoursInput = document.getElementById(`logHoursInput-${taskId}`);
-    const loggedHours = parseFloat(hoursInput.value);
-    const remarks = document.getElementById(`logDescInput-${taskId}`).value;
+    const taskElement = document.getElementById(requestedTaskId);
+    if (!taskElement) return;
 
-    try {
-        const res = await fetch('http://localhost:3000/api/employee/tasks/log', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ task_id: taskId, project_id: projectId, hours: loggedHours, remarks })
-        });
-
-        if (res.ok) {
-            alert('Work hours logged successfully!');
-            document.getElementById(`logHoursForm-${taskId}`).reset();
-            
-            // Visually reduce estimated hours
-            const estHoursEl = document.getElementById(`est-hours-${taskId}`);
-            if (estHoursEl) {
-                let currentEst = parseFloat(estHoursEl.innerText.replace(' hrs', ''));
-                if (!isNaN(currentEst)) {
-                    let newEst = Math.max(0, currentEst - loggedHours);
-                    estHoursEl.innerText = `${newEst} hrs`;
-                }
-            }
-
-            // Immediately update the timeline UI
-            appendTimelineActivity(taskId, `Logged ${loggedHours} hrs: ${remarks}`);
-            
-        } else {
-            const data = await res.json();
-            alert(`Failed to submit hours: ${data.error}`);
-        }
-    } catch (err) {
-        console.error("Submission error:", err);
-    }
+    taskElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    taskElement.classList.add('task-targeted');
 }
 
-async function uploadFile(event, taskId, token) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const dropzone = event.target.closest('.upload-dropzone');
-    const originalText = dropzone.innerHTML;
-    dropzone.innerHTML = `<p>⏳ <strong>Uploading ${file.name}...</strong></p>`;
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('task_id', taskId);
-
-    try {
-        const res = await fetch('http://localhost:3000/api/employee/tasks/upload', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        if (res.ok) {
-            alert('File uploaded successfully!');
-            
-            // Remove 'No attachments' text if present
-            const attachList = document.getElementById(`attach-list-${taskId}`);
-            if(attachList.innerHTML.includes('No attachments available')) attachList.innerHTML = '';
-
-            // Append visual file
-            attachList.innerHTML += `
-                <div class="attachment-item">
-                    <span>📄 ${file.name}</span>
-                    <span style="color: #64748b;">Just now</span>
-                </div>
-            `;
-
-            // Immediately update the timeline UI
-            appendTimelineActivity(taskId, `Uploaded attachment: ${file.name}`);
-
-        } else {
-            alert('File upload failed.');
-        }
-    } catch (err) {
-        console.error("Upload error:", err);
-    } finally {
-        dropzone.innerHTML = originalText;
-    }
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[character]));
 }
 
 // Modal handling for multiple tasks
@@ -362,6 +297,9 @@ async function submitWorkHours(event, taskId, projectId, token) {
                     estHoursEl.innerText = `${newEst} hrs`;
                 }
             }
+
+            appendTimelineActivity(taskId, `Logged ${loggedHours} hrs: ${remarks}`);
+            await loadAssignedTaskData(token);
         } else {
             const data = await res.json();
             alert(`Failed to submit hours: ${data.error}`);
@@ -377,7 +315,7 @@ async function uploadFile(event, taskId, token) {
 
     const dropzone = event.target.closest('.upload-dropzone');
     const originalText = dropzone.innerHTML;
-    dropzone.innerHTML = `<p>⏳ <strong>Uploading ${file.name}...</strong></p>`;
+    dropzone.innerHTML = `<p>${TASK_ICONS.loading} <strong>Uploading ${escapeHtml(file.name)}...</strong></p>`;
 
     const formData = new FormData();
     formData.append('file', file);
@@ -394,12 +332,18 @@ async function uploadFile(event, taskId, token) {
 
         if (res.ok) {
             alert('File uploaded successfully!');
-            document.getElementById(`attach-list-${taskId}`).innerHTML += `
+
+            const attachList = document.getElementById(`attach-list-${taskId}`);
+            if (attachList.innerHTML.includes('No attachments available')) attachList.innerHTML = '';
+            attachList.innerHTML += `
                 <div class="attachment-item">
-                    <span>📄 ${file.name}</span>
+                    <span>${TASK_ICONS.file} ${escapeHtml(file.name)}</span>
                     <span style="color: #64748b;">Just now</span>
                 </div>
             `;
+
+            appendTimelineActivity(taskId, `Uploaded attachment: ${file.name}`);
+            await loadAssignedTaskData(token);
         } else {
             alert('File upload failed.');
         }

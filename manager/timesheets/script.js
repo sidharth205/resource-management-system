@@ -46,16 +46,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const storedName = localStorage.getItem('user_name') || 'Manager';
-  const initial = storedName.charAt(0).toUpperCase();
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
-  const sidebarAvatar = document.getElementById('sidebarAvatar');
-  const headerAvatar = document.getElementById('headerAvatar');
 
   if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
   if (headerNameEl) headerNameEl.textContent = storedName;
-  if (sidebarAvatar) sidebarAvatar.textContent = initial;
-  if (headerAvatar) headerAvatar.textContent = initial;
 
   try {
     const profRes = await fetch(`${BASE_URL}/api/employee/profile`, { headers });
@@ -63,10 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const prof = await profRes.json();
       if (prof && prof.name) {
         if (userNameEl) userNameEl.textContent = prof.name.toUpperCase();
-        if (headerNameEl) headerNameEl.textContent = prof.name;
-        const pInit = prof.name.charAt(0).toUpperCase();
-        if (sidebarAvatar) sidebarAvatar.textContent = pInit;
-        if (headerAvatar) headerAvatar.textContent = pInit;
+        if (headerNameEl) headerNameEl.textContent = window.getFirstName(prof.name);
       }
     }
   } catch (e) {}
@@ -193,6 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderTimesheets() {
     const tbody = document.getElementById('timesheetsTableBody');
     if (!tbody) return;
+    const selectedTimesheetId = new URLSearchParams(window.location.search).get('timesheetId');
 
     const query = (document.getElementById('timesheetSearch').value || '').toLowerCase().trim();
     const statusVal = (document.getElementById('statusFilter').value || 'all').toLowerCase();
@@ -228,6 +221,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     tbody.innerHTML = '';
     filtered.forEach(ts => {
       const tr = document.createElement('tr');
+      tr.dataset.timesheetId = ts.id;
       const empDisplay = employeeMap.get(ts.employee_id) || ts.employee_id || 'Employee';
       const projDisplay = projectMap.get(ts.project_id) || 'Project';
       const taskDisplay = taskMap.get(ts.task_id) || (ts.task_id ? `Task #${ts.task_id}` : 'General Log');
@@ -270,6 +264,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       tbody.appendChild(tr);
     });
+
+    if (selectedTimesheetId) {
+      const selectedRow = tbody.querySelector(`[data-timesheet-id="${CSS.escape(selectedTimesheetId)}"]`);
+      if (selectedRow) {
+        selectedRow.classList.add('selected-timesheet-row');
+        selectedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
 
     tbody.querySelectorAll('.btn-approve').forEach(b => {
       b.addEventListener('click', async () => {
