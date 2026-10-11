@@ -303,8 +303,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             activities.slice(0, limit).forEach(item => {
               const div = document.createElement('div');
               div.className = 'timeline-item';
+              const iconSvg = item.icon === 'task' || item.module === 'Tasks'
+                ? '<svg class="ui-icon" style="width:14px;height:14px;color:var(--teal);" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>'
+                : '<svg class="ui-icon" style="width:14px;height:14px;color:var(--teal);" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>';
               div.innerHTML = `
-                <span class="timeline-icon">${item.icon || '📌'}</span>
+                <span class="timeline-icon">${iconSvg}</span>
                 <div class="timeline-content">${escapeHtml(item.description || '')}</div>
                 <span class="timeline-time">${item.time_ago || ''}</span>
               `;
@@ -338,7 +341,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const div = document.createElement('div');
             div.className = 'timeline-item';
             div.innerHTML = `
-              <span class="timeline-icon">⚡</span>
+              <span class="timeline-icon"><svg class="ui-icon" style="width:14px;height:14px;color:var(--teal);" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg></span>
               <div class="timeline-content"><strong>${escapeHtml(name)}</strong>: ${escapeHtml(item.action || item.module || 'Updated')}</div>
               <span class="timeline-time">${item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</span>
             `;

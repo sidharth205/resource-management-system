@@ -1,95 +1,110 @@
 /* =========================================
    EMPLOYEE PROJECTS PAGE STYLING
+   Theme: Navy, Teal, Sky Blue, Beige, White
 ========================================= */
 
 body {
-    background-color: #dbeafe;
+    background-color: var(--bg-color, #F5EFEB);
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: inherit;
+    color: var(--text-color, #2F4156);
+}
+
+.ui-icon {
+    width: 1em;
+    height: 1em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: middle;
 }
 
 .app-container {
     display: flex;
     height: 100vh;
-    background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
+    background: transparent;
 }
 
 /* Sidebar Layout */
 .sidebar {
-    width: 240px;
-    background: #c2d9ff;
+    width: 250px;
+    background-color: var(--sidebar-color, #ffffff);
+    border-right: 1px solid var(--line-color, #dce4ec);
+    box-shadow: 2px 0 12px rgba(47, 65, 86, 0.05);
     display: flex;
     flex-direction: column;
-    padding-top: 15px;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+    padding-top: 20px;
     flex-shrink: 0;
 }
 
 .profile-section {
+    padding: 16px 18px;
+    background-color: var(--sidebar-active, #C8D9E6);
+    margin: 0 0 20px;
+    border-radius: 0 16px 16px 0;
+    width: 90%;
     display: flex;
     align-items: center;
-    background-color: #93c5fd;
-    padding: 12px 15px;
-    margin: 10px 10px 20px 10px;
-    border-radius: 30px;
 }
 
 .avatar {
-    font-size: 20px;
-    background: #4f46e5;
-    color: white;
+    background: linear-gradient(135deg, var(--navy, #2F4156), var(--teal, #567C8D));
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
 .welcome-text {
-    font-size: 0.7rem;
+    color: var(--text-color, #2F4156);
+    font-size: 0.75rem;
     font-weight: 800;
-    color: #1e1b4b;
-    line-height: 1.2;
 }
 
 .nav-menu {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 12px;
-    gap: 8px;
+    padding: 0 10px;
 }
 
 .nav-item {
     text-decoration: none;
-    color: #334155;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 0.75rem;
+    color: var(--muted-text, #6b8292);
+    padding: 13px 15px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.5px;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
 .nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(200, 217, 230, 0.45);
+    color: var(--navy, #2F4156);
 }
 
 .nav-item.active {
-    background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    color: #0f172a;
+    background-color: var(--navy, #2F4156);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(47, 65, 86, 0.25);
 }
 
 .logout-btn {
-    margin: 15px;
-    padding: 12px;
-    background: #818cf8;
-    color: white;
-    border: none;
-    border-radius: 8px;
+    margin: 20px;
+    padding: 13px 15px;
+    background: transparent;
+    border: 1px solid var(--line-color, #dce4ec);
+    border-radius: 10px;
+    color: var(--muted-text, #6b8292);
     text-align: left;
     font-weight: bold;
     cursor: pointer;
@@ -97,7 +112,13 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    border-color: var(--teal, #567C8D);
+    color: var(--navy, #2F4156);
+    background-color: rgba(200, 217, 230, 0.35);
 }
 
 /* Main Content Area */
@@ -105,16 +126,25 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 20px 35px;
+    padding: 20px 40px;
     overflow-y: auto;
     box-sizing: border-box;
 }
 
 .top-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    border-bottom: 1px solid var(--line-color, #dce4ec);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+.top-header h2 {
+    margin: 0;
+    color: var(--text-color, #2F4156);
+    font-size: 1.3rem;
+    font-weight: 800;
 }
 
 .header-actions {
@@ -126,7 +156,7 @@ body {
 .bell-icon {
     font-size: 1.2rem;
     cursor: pointer;
-    color: #312e81;
+    color: var(--teal, #567C8D);
 }
 
 .header-profile-tag {
@@ -134,12 +164,12 @@ body {
     align-items: center;
     gap: 8px;
     font-weight: bold;
-    color: #1e1b4b;
+    color: var(--text-color, #2F4156);
     font-size: 0.85rem;
 }
 
 .profile-icon-small {
-    background: #4f46e5;
+    background: linear-gradient(135deg, var(--navy, #2F4156), var(--teal, #567C8D));
     color: white;
     padding: 4px;
     border-radius: 50%;
@@ -159,14 +189,14 @@ body {
 .projects-banner h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #0f172a;
+    color: var(--text-color, #2F4156);
     font-weight: 800;
 }
 
 .projects-banner p {
     margin: 4px 0 0 0;
     font-size: 0.8rem;
-    color: #475569;
+    color: var(--muted-color, #567C8D);
     font-weight: 500;
 }
 
@@ -180,16 +210,23 @@ body {
 
 .stat-box {
     background: #ffffff;
-    border-radius: 12px;
+    border: 1px solid var(--line-color, #dce4ec);
+    border-radius: 14px;
     padding: 18px 20px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    box-shadow: 0 10px 24px rgba(47, 65, 86, 0.06);
+    transition: transform .25s, box-shadow .25s;
 }
 
-.card-blue { border-left: 4px solid #3b82f6; }
-.card-green { border-left: 4px solid #10b981; background-color: #f0fdf4; }
+.stat-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(47, 65, 86, 0.1);
+}
+
+.card-blue { border-left: 4px solid var(--teal, #567C8D); }
+.card-green { border-left: 4px solid var(--sky-blue, #C8D9E6); }
 
 .stat-icon-wrapper {
     font-size: 1.5rem;
@@ -200,8 +237,9 @@ body {
     justify-content: center;
 }
 
-.blue-bg { background: #eff6ff; }
-.green-bg { background: #dcfce7; }
+.stat-icon-wrapper .ui-icon { width: 24px; height: 24px; }
+.blue-bg { background: rgba(200, 217, 230, 0.5); color: var(--navy, #2F4156); }
+.green-bg { background: var(--bg-color, #F5EFEB); color: var(--teal, #567C8D); }
 
 .stat-info {
     display: flex;
@@ -211,27 +249,38 @@ body {
 .stat-number {
     font-size: 1.7rem;
     font-weight: 900;
-    color: #0f172a;
+    color: var(--navy, #2F4156);
     line-height: 1.1;
 }
 
 .stat-label {
     font-size: 0.8rem;
     font-weight: 800;
-    color: #334155;
+    color: var(--text-color, #2F4156);
     margin-top: 2px;
 }
 
 /* Content Section Card */
 .section-card {
     background: #ffffff;
-    border-radius: 12px;
+    border: 1px solid var(--line-color, #dce4ec);
+    border-radius: 14px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    box-shadow: 0 10px 24px rgba(47, 65, 86, 0.06);
     margin-bottom: 20px;
+    min-width: 0;
+    transition: transform .25s, box-shadow .25s;
 }
 
-/* Tables matching mockup */
+.section-card:hover {
+    box-shadow: 0 18px 34px rgba(47, 65, 86, 0.1);
+}
+
+/* Tables */
+.table-container {
+    overflow-x: auto;
+}
+
 .table-container table {
     width: 100%;
     border-collapse: collapse;
@@ -240,32 +289,33 @@ body {
 
 .table-container th {
     text-align: left;
-    color: #64748b;
+    color: var(--muted-color, #567C8D);
     font-weight: 700;
     padding-bottom: 12px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--line-color, #dce4ec);
 }
 
 .table-container td {
     padding: 14px 0;
-    border-bottom: 1px solid #f1f5f9;
-    color: #1e293b;
+    border-bottom: 1px solid var(--line-color, #dce4ec);
+    color: var(--text-color, #2F4156);
 }
 
 .project-title-link {
     font-size: 0.85rem;
-    color: #1e40af;
+    color: var(--teal, #567C8D);
     font-weight: 700;
     text-decoration: none;
 }
 
 .project-title-link:hover {
+    color: var(--navy, #2F4156);
     text-decoration: underline;
 }
 
 .project-sub-text {
     font-size: 0.7rem;
-    color: #64748b;
+    color: var(--muted-color, #567C8D);
 }
 
 .owner-cell {
@@ -273,169 +323,7 @@ body {
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    color: #334155;
-}
-
-.owner-avatar {
-    background: #cbd5e1;
-    color: #334155;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-}
-
-.table-footer-link {
-    text-align: center;
-    margin-top: 15px;
-}
-
-.table-footer-link a {
-    font-size: 0.8rem;
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 700;
-}
-
-/* Projects uses the same shell and typography as the employee dashboard. */
-body {
-    background-color: var(--bg-color);
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.app-container {
-    background: transparent;
-}
-
-.sidebar {
-    width: 250px;
-    background-color: var(--sidebar-color);
-    border-right: 1px solid var(--line-color);
-    box-shadow: 2px 0 12px rgba(20, 22, 40, 0.04);
-    padding-top: 20px;
-}
-
-.profile-section {
-    padding: 16px 18px;
-    background-color: var(--sidebar-active);
-    margin: 0 0 20px;
-    border-radius: 0 16px 16px 0;
-    width: 90%;
-}
-
-.avatar {
-    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
-    width: 40px;
-    height: 40px;
-}
-
-.welcome-text {
-    color: var(--text-color);
-    font-size: 0.7rem;
-}
-
-.nav-menu {
-    padding: 0 10px;
-    gap: 8px;
-}
-
-.nav-item {
-    color: var(--muted-color);
-    padding: 12px 16px;
-    margin-bottom: 0;
-    border-radius: 8px;
-    font-size: 0.75rem;
-}
-
-.nav-item.active {
-    background-color: var(--primary-color);
-    color: #fff;
-    box-shadow: 0 8px 18px rgba(59, 108, 240, 0.25);
-}
-
-.logout-btn {
-    margin: 20px;
-    padding: 13px 15px;
-    background: transparent;
-    border: 1px solid var(--line-color);
-    border-radius: 10px;
-    color: var(--muted-color);
-    box-shadow: none;
-}
-
-.main-content {
-    padding: 20px 40px;
-}
-
-.top-header {
-    justify-content: space-between;
-    border-bottom: 1px solid var(--line-color);
-    padding-bottom: 14px;
-    margin-bottom: 20px;
-}
-
-.top-header h2 {
-    margin: 0;
-    color: var(--text-color);
-    font-size: 1.3rem;
-    font-weight: 800;
-}
-
-.header-profile-tag {
-    color: var(--text-color);
-}
-
-.profile-icon-small {
-    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
-}
-
-.projects-banner h1 {
-    color: var(--text-color);
-}
-
-.stat-box,
-.section-card {
-    border: 1px solid var(--line-color);
-    border-radius: 14px;
-    box-shadow: 0 10px 24px rgba(20, 22, 40, 0.06);
-}
-
-.stat-box {
-    transition: transform .25s, box-shadow .25s;
-}
-
-.stat-box:hover,
-.section-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 34px rgba(20, 22, 40, 0.1);
-}
-
-.card-green {
-    background-color: #fff;
-}
-
-.section-card {
-    min-width: 0;
-}
-
-.table-container {
-    overflow-x: auto;
-}
-
-.table-container th {
-    color: var(--muted-color);
-}
-
-.table-container td {
-    color: var(--text-color);
-}
-
-.project-title-link,
-.table-footer-link a {
-    color: var(--primary-color);
+    color: var(--text-color, #2F4156);
 }
 
 .owner-cell > span:last-child {
@@ -445,20 +333,41 @@ body {
 }
 
 .owner-cell small {
-    color: var(--muted-color);
+    color: var(--muted-color, #567C8D);
     font-size: 0.68rem;
     font-weight: 600;
+}
+
+.owner-avatar {
+    background: var(--sky-blue, #C8D9E6);
+    color: var(--navy, #2F4156);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.table-footer-link {
+    text-align: center;
+    margin-top: 15px;
 }
 
 .table-footer-link a {
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    font-size: 0.8rem;
+    color: var(--teal, #567C8D);
+    text-decoration: none;
+    font-weight: 700;
 }
 
-.owner-avatar {
-    background: var(--sidebar-active);
-    color: var(--primary-color);
+.table-footer-link a:hover {
+    color: var(--navy, #2F4156);
 }
 
 @media (max-width: 900px) {

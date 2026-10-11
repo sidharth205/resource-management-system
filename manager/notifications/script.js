@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     btn.disabled = false;
-    btn.textContent = '✓ Mark All as Read';
+    btn.innerHTML = '<svg class="ui-icon" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>Mark All as Read';
     showToast('All notifications marked as read');
     updateBadges(allNotifications);
     renderNotifications();

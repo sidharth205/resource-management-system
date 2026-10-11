@@ -224,10 +224,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         <p class="task-item-desc">${escapeHtml(t.description || 'No description provided')}</p>
         <div class="task-item-meta">
           <div class="task-meta-left">
-            <span>📁 ${escapeHtml(projName)}</span>
-            <span>👤 ${escapeHtml(assigneeName)}</span>
+            <span class="meta-item"><svg class="ui-icon" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2-2H5a2 2 0 0 0-2 2z"></path></svg>${escapeHtml(projName)}</span>
+            <span class="meta-item"><svg class="ui-icon" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>${escapeHtml(assigneeName)}</span>
           </div>
-          <span>📅 ${dueStr}</span>
+          <span class="meta-item"><svg class="ui-icon" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>${dueStr}</span>
         </div>
       `;
 

@@ -1,9 +1,16 @@
-/* Local styles for Login — matches landing page theme */
-:root{
-    --accent:#3b6cf0;
-    --dark:#1a1c25;
-    --muted:#767a8a;
-    --line:#e8e9ee;
+/* Local styles for Login — Palette: Navy, Teal, Sky Blue, Beige, White */
+:root {
+    --navy: #2F4156;
+    --teal: #567C8D;
+    --sky-blue: #C8D9E6;
+    --beige: #F5EFEB;
+    --white: #FFFFFF;
+
+    --accent: #567C8D;
+    --dark: #2F4156;
+    --muted: #567C8D;
+    --muted-text: #6b8292;
+    --line: #dce4ec;
 }
 
 body {
@@ -12,52 +19,71 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f4f5f8;
-    background-image: radial-gradient(#d7d9e2 1px, transparent 1px);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--beige);
+    background-image: radial-gradient(rgba(86, 124, 141, 0.16) 1px, transparent 1px);
     background-size: 22px 22px;
     color: var(--dark);
+    -webkit-font-smoothing: antialiased;
 }
 
 .login-wrap {
     position: relative;
     width: 100%;
-    max-width: 420px;
-    padding: 20px;
+    max-width: 440px;
+    padding: 24px 20px;
 }
 
 .back-link {
-    display: inline-block;
-    margin-bottom: 18px;
-    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    font-size: 13.5px;
     color: var(--muted);
     text-decoration: none;
+    font-weight: 700;
+    transition: all .2s;
 }
 
 .back-link:hover {
     color: var(--dark);
+    transform: translateX(-3px);
 }
 
 .login-card {
-    background: #fff;
+    background: var(--white);
     border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 40px 36px;
-    box-shadow: 0 20px 50px rgba(20, 22, 40, 0.08);
+    border-radius: 22px;
+    padding: 42px 38px;
+    box-shadow: 0 20px 50px rgba(47, 65, 86, 0.09);
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--teal), var(--navy), var(--sky-blue));
 }
 
 .badge {
     width: 48px;
     height: 48px;
-    background: #f4f5f8;
-    border-radius: 12px;
+    background: var(--sky-blue);
+    border-radius: 14px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 5px;
     place-items: center;
     padding: 10px;
-    margin: 0 auto 22px;
+    margin: 0 auto 20px;
+    box-shadow: 0 6px 16px rgba(47, 65, 86, 0.1);
 }
 
 .badge span {
@@ -68,19 +94,21 @@ body {
 }
 
 .badge span:first-child {
-    background: var(--accent);
+    background: var(--teal);
 }
 
 .login-card h2 {
     margin: 0 0 6px;
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 25px;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.5px;
 }
 
 .login-card .sub {
-    margin: 0 0 28px;
+    margin: 0 0 26px;
     font-size: 14px;
-    color: var(--muted);
+    color: var(--muted-text);
 }
 
 .input-group {
@@ -91,50 +119,114 @@ body {
 .input-group label {
     display: block;
     font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-weight: 700;
+    margin-bottom: 7px;
     color: var(--dark);
 }
 
 .input-group input {
     width: 100%;
     padding: 12px 14px;
-    background-color: #f4f5f8;
+    background-color: var(--beige);
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: 10px;
     box-sizing: border-box;
     font-size: 14px;
     color: var(--dark);
-    transition: border-color .2s;
+    font-family: inherit;
+    transition: border-color .2s, background-color .2s, box-shadow .2s;
 }
 
 .input-group input:focus {
     outline: none;
-    border-color: var(--accent);
-    background-color: #fff;
+    border-color: var(--teal);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(86, 124, 141, 0.15);
 }
 
+/* Suppress Microsoft Edge / IE duplicate native password reveal icon */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 46px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--muted-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+    z-index: 2;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.toggle-password:hover {
+    color: var(--navy);
+    background-color: rgba(86, 124, 141, 0.12);
+}
+
+.toggle-password:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+}
+
+.toggle-password svg {
+    pointer-events: none;
+}
+
+
 .actions {
-    margin-top: 26px;
+    margin-top: 22px;
 }
 
 .btn-primary {
     width: 100%;
-    background-color: var(--accent);
-    color: #fff;
+    background: linear-gradient(135deg, var(--dark), #3a5068);
+    color: var(--white);
     padding: 13px 24px;
     border: none;
-    border-radius: 24px;
+    border-radius: 26px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    box-shadow: 0 8px 20px rgba(59, 108, 240, .3);
-    transition: transform .2s, box-shadow .2s;
+    font-weight: 700;
+    font-size: 14.5px;
+    box-shadow: 0 8px 20px rgba(47, 65, 86, .26);
+    transition: transform .2s, box-shadow .2s, background-color .2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .btn-primary:hover {
+    background: linear-gradient(135deg, var(--teal), var(--dark));
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(59, 108, 240, .4);
+    box-shadow: 0 12px 26px rgba(86, 124, 141, .36);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
 }
 
 .btn-primary:disabled {
@@ -144,29 +236,46 @@ body {
 }
 
 .error-msg {
-    color: #e0434b;
+    color: #dc2626;
+    background: rgba(254, 226, 226, 0.6);
+    border-radius: 8px;
     font-size: 13px;
     text-align: center;
-    margin-top: 16px;
-    min-height: 18px;
+    margin-top: 14px;
+    min-height: 0;
+    padding: 0;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.error-msg:not(:empty) {
+    padding: 8px 12px;
+    border: 1px solid rgba(220, 38, 38, 0.2);
 }
 
 .success-msg {
-    color: #1f7a4d;
+    color: #15803d;
+    background: rgba(220, 252, 231, 0.6);
+    border-radius: 8px;
     font-size: 13px;
     text-align: center;
-    margin-top: 16px;
-    min-height: 18px;
+    margin-top: 14px;
+    min-height: 0;
+    padding: 0;
+    font-weight: 600;
+}
+
+.success-msg:not(:empty) {
+    padding: 8px 12px;
+    border: 1px solid rgba(22, 163, 74, 0.2);
 }
 
 .help-text {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 22px;
-}
-
-.help-text a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
+    font-size: 12px;
+    color: var(--muted-text);
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }

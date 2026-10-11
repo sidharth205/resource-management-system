@@ -1,95 +1,110 @@
 /* =========================================
    EMPLOYEE NOTIFICATION PAGE STYLING
+   Theme: Navy, Teal, Sky Blue, Beige, White
 ========================================= */
 
 body {
-    background-color: #dbeafe;
+    background-color: var(--bg-color, #F5EFEB);
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: inherit;
+    color: var(--text-color, #2F4156);
+}
+
+.ui-icon {
+    width: 1em;
+    height: 1em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: middle;
 }
 
 .app-container {
     display: flex;
     height: 100vh;
-    background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
+    background: transparent;
 }
 
 /* Sidebar Layout */
 .sidebar {
-    width: 240px;
-    background: #c2d9ff;
+    width: 250px;
+    background-color: var(--sidebar-color, #ffffff);
+    border-right: 1px solid var(--line-color, #dce4ec);
+    box-shadow: 2px 0 12px rgba(47, 65, 86, 0.05);
     display: flex;
     flex-direction: column;
-    padding-top: 15px;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+    padding-top: 20px;
     flex-shrink: 0;
 }
 
 .profile-section {
+    padding: 16px 18px;
+    background-color: var(--sidebar-active, #C8D9E6);
+    margin: 0 0 20px;
+    border-radius: 0 16px 16px 0;
+    width: 90%;
     display: flex;
     align-items: center;
-    background-color: #93c5fd;
-    padding: 12px 15px;
-    margin: 10px 10px 20px 10px;
-    border-radius: 30px;
 }
 
 .avatar {
-    font-size: 20px;
-    background: #4f46e5;
-    color: white;
+    background: linear-gradient(135deg, var(--navy, #2F4156), var(--teal, #567C8D));
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
 .welcome-text {
-    font-size: 0.7rem;
+    color: var(--text-color, #2F4156);
+    font-size: 0.75rem;
     font-weight: 800;
-    color: #1e1b4b;
-    line-height: 1.2;
 }
 
 .nav-menu {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 12px;
-    gap: 8px;
+    padding: 0 10px;
 }
 
 .nav-item {
     text-decoration: none;
-    color: #334155;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 0.75rem;
+    color: var(--muted-text, #6b8292);
+    padding: 13px 15px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.5px;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
 .nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(200, 217, 230, 0.45);
+    color: var(--navy, #2F4156);
 }
 
 .nav-item.active {
-    background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    color: #0f172a;
+    background-color: var(--navy, #2F4156);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(47, 65, 86, 0.25);
 }
 
 .logout-btn {
-    margin: 15px;
-    padding: 12px;
-    background: #818cf8;
-    color: white;
-    border: none;
-    border-radius: 8px;
+    margin: 20px;
+    padding: 13px 15px;
+    background: transparent;
+    border: 1px solid var(--line-color, #dce4ec);
+    border-radius: 10px;
+    color: var(--muted-text, #6b8292);
     text-align: left;
     font-weight: bold;
     cursor: pointer;
@@ -97,7 +112,13 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    border-color: var(--teal, #567C8D);
+    color: var(--navy, #2F4156);
+    background-color: rgba(200, 217, 230, 0.35);
 }
 
 /* Main Content Area */
@@ -105,16 +126,25 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 20px 35px;
+    padding: 20px 40px;
     overflow-y: auto;
     box-sizing: border-box;
 }
 
 .top-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    border-bottom: 1px solid var(--line-color, #dce4ec);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+.top-header h2 {
+    margin: 0;
+    color: var(--text-color, #2F4156);
+    font-size: 1.3rem;
+    font-weight: 800;
 }
 
 .header-actions {
@@ -126,7 +156,7 @@ body {
 .bell-icon {
     font-size: 1.2rem;
     cursor: pointer;
-    color: #312e81;
+    color: var(--teal, #567C8D);
 }
 
 .header-profile-tag {
@@ -134,12 +164,12 @@ body {
     align-items: center;
     gap: 8px;
     font-weight: bold;
-    color: #1e1b4b;
+    color: var(--text-color, #2F4156);
     font-size: 0.85rem;
 }
 
 .profile-icon-small {
-    background: #4f46e5;
+    background: linear-gradient(135deg, var(--navy, #2F4156), var(--teal, #567C8D));
     color: white;
     padding: 4px;
     border-radius: 50%;
@@ -159,18 +189,18 @@ body {
 .notifications-banner h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #0f172a;
+    color: var(--text-color, #2F4156);
     font-weight: 800;
 }
 
 .notifications-banner p {
     margin: 4px 0 0 0;
     font-size: 0.8rem;
-    color: #475569;
+    color: var(--muted-color, #567C8D);
     font-weight: 500;
 }
 
-/* Controls Row (Tabs & Mark all as read) */
+/* Controls Row */
 .notif-controls-row {
     display: flex;
     justify-content: space-between;
@@ -188,26 +218,28 @@ body {
     border: none;
     font-size: 0.8rem;
     font-weight: 800;
-    color: #64748b;
+    color: var(--muted-color, #567C8D);
     cursor: pointer;
     padding-bottom: 4px;
+    transition: color .2s;
 }
 
 .tab-btn.active {
-    color: #0f172a;
-    border-bottom: 2px solid #2563eb;
+    color: var(--navy, #2F4156);
+    border-bottom: 2px solid var(--teal, #567C8D);
 }
 
 .mark-read-link {
     background: none;
     border: none;
     font-size: 0.8rem;
-    color: #2563eb;
+    color: var(--teal, #567C8D);
     font-weight: 700;
     cursor: pointer;
 }
 
 .mark-read-link:hover {
+    color: var(--navy, #2F4156);
     text-decoration: underline;
 }
 
@@ -221,12 +253,19 @@ body {
 
 .notif-card {
     background: #ffffff;
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 12px;
     padding: 16px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 12px rgba(47, 65, 86, 0.04);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.notif-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(47, 65, 86, 0.08);
 }
 
 .notif-card-left {
@@ -243,29 +282,31 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1.1rem;
+    background-color: var(--sky-blue, #C8D9E6);
+    color: var(--navy, #2F4156);
 }
 
-.icon-orange { background-color: #ffedd5; color: #c2410c; }
-.icon-blue { background-color: #e0f2fe; color: #0284c7; }
-.icon-green { background-color: #dcfce7; color: #16a34a; }
-.icon-pink { background-color: #ffe4e6; color: #e11d48; }
+.icon-orange { background-color: var(--bg-color, #F5EFEB); color: var(--teal, #567C8D); }
+.icon-blue { background-color: var(--sky-blue, #C8D9E6); color: var(--navy, #2F4156); }
+.icon-green { background-color: rgba(200, 217, 230, 0.5); color: var(--teal, #567C8D); }
+.icon-pink { background-color: var(--bg-color, #F5EFEB); color: var(--navy, #2F4156); }
 
 .notif-text-content h4 {
     margin: 0;
     font-size: 0.85rem;
-    color: #0f172a;
+    color: var(--text-color, #2F4156);
     font-weight: 800;
 }
 
 .notif-text-content p {
     margin: 2px 0 0 0;
     font-size: 0.75rem;
-    color: #64748b;
+    color: var(--muted-color, #567C8D);
 }
 
 .notif-time {
     font-size: 0.75rem;
-    color: #64748b;
+    color: var(--muted-color, #567C8D);
     font-weight: 600;
 }
 
@@ -276,207 +317,16 @@ body {
 
 .footer-view-all a {
     font-size: 0.8rem;
-    color: #2563eb;
+    color: var(--teal, #567C8D);
     text-decoration: none;
     font-weight: 700;
 }
 
-/* Notifications uses the same shell and typography as the updated employee pages. */
-body {
-    background-color: var(--bg-color);
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.app-container {
-    background: transparent;
-}
-
-.sidebar {
-    width: 250px;
-    background-color: var(--sidebar-color);
-    border-right: 1px solid var(--line-color);
-    box-shadow: 2px 0 12px rgba(20, 22, 40, 0.04);
-    padding-top: 20px;
-}
-
-.profile-section {
-    padding: 16px 18px;
-    background-color: var(--sidebar-active);
-    margin: 0 0 20px;
-    border-radius: 0 16px 16px 0;
-    width: 90%;
-}
-
-.avatar {
-    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
-    width: 40px;
-    height: 40px;
-}
-
-.welcome-text {
-    color: var(--text-color);
-    font-size: 0.7rem;
-}
-
-.nav-menu {
-    padding: 0 10px;
-    gap: 8px;
-}
-
-.nav-item {
-    color: var(--muted-color);
-    padding: 12px 16px;
-    margin-bottom: 0;
-    border-radius: 8px;
-    font-size: 0.75rem;
-}
-
-.nav-item.active {
-    background-color: var(--primary-color);
-    color: #fff;
-    box-shadow: 0 8px 18px rgba(59, 108, 240, 0.25);
-}
-
-.logout-btn {
-    margin: 20px;
-    padding: 13px 15px;
-    background: transparent;
-    border: 1px solid var(--line-color);
-    border-radius: 10px;
-    color: var(--muted-color);
-    box-shadow: none;
-}
-
-.main-content {
-    padding: 20px 40px;
-}
-
-.top-header {
-    justify-content: space-between;
-    border-bottom: 1px solid var(--line-color);
-    padding-bottom: 14px;
-    margin-bottom: 20px;
-}
-
-.top-header h2 {
-    margin: 0;
-    color: var(--text-color);
-    font-size: 1.3rem;
-    font-weight: 800;
-}
-
-.header-profile-tag {
-    color: var(--text-color);
-}
-
-.profile-icon-small {
-    background: linear-gradient(135deg, var(--primary-color), #6d8ff5);
-}
-
-.notifications-banner h1 {
-    color: var(--text-color);
-}
-
-.notif-controls-row {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line-color);
-}
-
-.filter-tabs {
-    gap: 22px;
-}
-
-.tab-btn {
-    color: var(--muted-color);
-    font-size: 0.75rem;
-}
-
-.tab-btn.active {
-    color: var(--text-color);
-    border-bottom-color: var(--primary-color);
-}
-
-.mark-read-link {
-    color: var(--primary-color);
-    font-size: 0.75rem;
-}
-
-.notifications-list-container {
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.notif-card {
-    border: 1px solid var(--line-color);
-    border-radius: 14px;
-    padding: 16px 18px;
-    box-shadow: 0 10px 24px rgba(20, 22, 40, 0.06);
-    transition: transform .25s, box-shadow .25s, border-color .25s;
-}
-
-.notif-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 30px rgba(20, 22, 40, 0.1);
-}
-
-.notif-card.is-unread {
-    background: #f8faff;
-    border-left: 3px solid var(--primary-color);
-}
-
-.notif-card-main {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    min-width: 0;
-}
-
-.notif-icon-box {
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
-    border-radius: 10px;
-}
-
-.notif-icon-box .ui-icon {
-    width: 19px;
-    height: 19px;
-}
-
-.notif-text-content {
-    min-width: 0;
-}
-
-.notif-text-content h4 {
-    margin: 0 0 4px;
-    font-size: 0.85rem;
-    color: var(--text-color);
-}
-
-.notif-text-content p {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--muted-color);
-    line-height: 1.4;
-}
-
-.notif-time {
-    margin-left: 16px;
-    font-size: 0.75rem;
-    color: #94a3b8;
-    white-space: nowrap;
-}
-
-.footer-view-all a {
-    color: var(--primary-color);
+.footer-view-all a:hover {
+    color: var(--navy, #2F4156);
 }
 
 @media (max-width: 900px) {
     .sidebar { width: 220px; }
     .main-content { padding: 18px 20px; }
-}
-
-@media (max-width: 640px) {
-    .notif-card { align-items: flex-start; flex-direction: column; gap: 10px; }
-    .notif-time { margin-left: 50px; }
 }

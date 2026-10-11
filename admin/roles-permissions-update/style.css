@@ -1,6 +1,6 @@
 /* =========================================
    UPDATE ROLE SPECIFIC STYLES
-   Base layout/sidebar now come from shared-assets/global.css
+   Theme: Navy, Teal, Sky Blue, Beige, White
 ========================================= */
 
 .main-content { position: relative; overflow-x: hidden; overflow-y: auto; }
@@ -8,8 +8,8 @@
     content: ""; position: absolute; border-radius: 50%; filter: blur(70px);
     opacity: .2; z-index: 0; pointer-events: none; animation: pageFloat 11s ease-in-out infinite;
 }
-.main-content::before { width: 220px; height: 220px; background: #3b6cf0; top: -50px; right: 12%; }
-.main-content::after { width: 190px; height: 190px; background: #a6b3ff; bottom: -50px; left: 8%; animation-delay: -5s; }
+.main-content::before { width: 220px; height: 220px; background: var(--sky-blue, #C8D9E6); top: -50px; right: 12%; }
+.main-content::after { width: 190px; height: 190px; background: var(--teal, #567C8D); bottom: -50px; left: 8%; animation-delay: -5s; }
 @keyframes pageFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-22px) scale(1.08); } }
 
 .top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
@@ -17,7 +17,7 @@
 
 .breadcrumb {
     position: relative; z-index: 1;
-    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.4px; color: #767a8a;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.4px; color: var(--muted-color, #567C8D);
     margin: -6px 0 16px;
 }
 
@@ -32,52 +32,52 @@
 .card {
     border-radius: 14px;
     padding: 30px;
-    box-shadow: 0 14px 30px rgba(20,22,40,0.1);
+    box-shadow: 0 14px 30px rgba(47, 65, 86, 0.12);
     opacity: 0; transform: translateY(20px); animation: cardIn .55s cubic-bezier(.2,.7,.3,1) forwards;
 }
 @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
 
-.dark-card { background-color: #1a1c25; color: #ffffff; }
+.dark-card { background-color: var(--navy, #2F4156); color: #ffffff; }
 
 .card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
 .card-eyebrow { font-size: 1rem; font-weight: 800; letter-spacing: 0.5px; }
 .btn-back {
-    background: #2b2e3f; border: none; color: #e2e4ec; padding: 8px 16px; border-radius: 20px;
-    font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: background .2s;
+    background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(200, 217, 230, 0.25); color: var(--sky-blue, #C8D9E6); padding: 8px 16px; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all .2s;
 }
-.btn-back:hover { background: #3a3d52; }
+.btn-back:hover { background: var(--teal, #567C8D); color: #ffffff; }
 
 .input-group { display: flex; flex-direction: column; margin-bottom: 22px; }
-.input-group label { font-size: 0.85rem; font-weight: 700; color: #c3c5d1; margin-bottom: 8px; letter-spacing: 0.5px; }
+.input-group label { font-size: 0.85rem; font-weight: 700; color: var(--sky-blue, #C8D9E6); margin-bottom: 8px; letter-spacing: 0.5px; }
 .input-group input[type="text"], .input-group textarea {
-    padding: 12px 15px; border: 1px solid #3a3d52; border-radius: 8px; font-size: 1rem;
-    background-color: #12131f; color: white; font-family: inherit; resize: vertical; transition: all 0.2s;
+    padding: 12px 15px; border: 1px solid rgba(200, 217, 230, 0.25); border-radius: 8px; font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.08); color: white; font-family: inherit; resize: vertical; transition: all 0.2s;
 }
 .input-group input[type="text"]:focus, .input-group textarea:focus {
-    outline: none; border-color: #3b6cf0; box-shadow: 0 0 0 3px rgba(59,108,240,0.25);
+    outline: none; border-color: var(--teal, #567C8D); box-shadow: 0 0 0 3px rgba(86, 124, 141, 0.3);
 }
 
 .permissions-section > label {
-    display: block; font-size: 0.85rem; font-weight: 700; color: #c3c5d1; margin-bottom: 20px;
-    letter-spacing: 0.5px; border-bottom: 1px solid #3a3d52; padding-bottom: 10px;
+    display: block; font-size: 0.85rem; font-weight: 700; color: var(--sky-blue, #C8D9E6); margin-bottom: 20px;
+    letter-spacing: 0.5px; border-bottom: 1px solid rgba(200, 217, 230, 0.2); padding-bottom: 10px;
 }
 .permissions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-bottom: 30px; }
 .permission-category h4 {
-    margin: 0 0 15px 0; font-size: 0.8rem; color: #a3a6b5; text-transform: uppercase;
-    border-bottom: 1px solid #3a3d52; padding-bottom: 5px;
+    margin: 0 0 15px 0; font-size: 0.8rem; color: var(--sky-blue, #C8D9E6); text-transform: uppercase;
+    border-bottom: 1px solid rgba(200, 217, 230, 0.2); padding-bottom: 5px;
 }
 .checkbox-label {
-    display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #e2e4ec;
+    display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ffffff;
     margin-bottom: 12px; cursor: pointer; font-weight: 600;
 }
-.checkbox-label input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #3b6cf0; }
+.checkbox-label input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--teal, #567C8D); }
 
-.form-actions { display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #3a3d52; padding-top: 20px; }
+.form-actions { display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid rgba(200, 217, 230, 0.2); padding-top: 20px; }
 .form-actions button { padding: 10px 25px; border-radius: 24px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
 
-.btn-cancel { background-color: transparent; color: #c3c5d1; border: 1px solid #565875; }
-.btn-cancel:hover { background-color: #2b2e3f; color: white; }
+.btn-cancel { background-color: transparent; color: var(--sky-blue, #C8D9E6); border: 1px solid var(--teal, #567C8D); }
+.btn-cancel:hover { background-color: rgba(200, 217, 230, 0.15); color: white; }
 
-.btn-save { background-color: #3b6cf0; color: white; border: none; box-shadow: 0 8px 18px rgba(59,108,240,.3); }
-.btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(59,108,240,.4); }
+.btn-save { background-color: var(--teal, #567C8D); color: white; border: none; box-shadow: 0 8px 18px rgba(86, 124, 141, .35); }
+.btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(86, 124, 141, .45); background-color: #466776; }
 .btn-save:disabled { opacity: .7; cursor: not-allowed; transform: none; }

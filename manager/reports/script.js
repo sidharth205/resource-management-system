@@ -249,8 +249,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>${tasksCount} tasks</td>
         <td>
           <div style="display:flex; align-items:center; gap:8px;">
-            <div style="width:70px; height:6px; background:#e2e8f0; border-radius:4px; overflow:hidden;">
-              <div style="width:${pct}%; height:100%; background:#4A90E2; border-radius:4px;"></div>
+            <div style="width:70px; height:6px; background:rgba(200, 217, 230, 0.5); border-radius:4px; overflow:hidden;">
+              <div style="width:${pct}%; height:100%; background:#567C8D; border-radius:4px;"></div>
             </div>
             <span>${pct}%</span>
           </div>

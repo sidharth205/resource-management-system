@@ -1,6 +1,6 @@
 /* =========================================
    AUDIT & MONITORING SPECIFIC STYLES
-   Base layout/sidebar now come from shared-assets/global.css
+   Theme: Navy, Teal, Sky Blue, Beige, White
 ========================================= */
 
 .main-content { position: relative; overflow-x: hidden; overflow-y: auto; }
@@ -8,19 +8,19 @@
     content: ""; position: absolute; border-radius: 50%; filter: blur(70px);
     opacity: .2; z-index: 0; pointer-events: none; animation: pageFloat 11s ease-in-out infinite;
 }
-.main-content::before { width: 240px; height: 240px; background: #3b6cf0; top: -50px; right: 10%; }
-.main-content::after { width: 200px; height: 200px; background: #7ce0c9; bottom: -50px; left: 6%; animation-delay: -5s; }
+.main-content::before { width: 240px; height: 240px; background: var(--sky-blue, #C8D9E6); top: -50px; right: 10%; }
+.main-content::after { width: 200px; height: 200px; background: var(--teal, #567C8D); bottom: -50px; left: 6%; animation-delay: -5s; }
 @keyframes pageFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-22px) scale(1.08); } }
 
 .top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
 @keyframes fadeIn { to { opacity: 1; } }
 
 .card {
-    background: #ffffff;
-    border: 1px solid #e8e9ee;
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 14px;
     padding: 25px;
-    box-shadow: 0 10px 24px rgba(20,22,40,0.06);
+    box-shadow: 0 10px 24px rgba(47, 65, 86, 0.06);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -33,14 +33,14 @@
 .card:nth-of-type(2) { animation-delay: .2s; }
 
 .audit-card {
-    background-color: #eefaf8;
-    border: 1px solid #cdeee7;
+    background-color: var(--card-bg, #ffffff);
+    border: 1px solid var(--line-color, #dce4ec);
 }
 
 .audit-header h3 {
     margin: 0 0 15px 0;
     font-size: 1.1rem;
-    color: #1a1c25;
+    color: var(--text-color, #2F4156);
 }
 
 /* Controls & Filters */
@@ -56,15 +56,16 @@
     gap: 10px;
     font-size: 0.85rem;
     font-weight: bold;
-    color: #4a5568;
+    color: var(--text-color, #2F4156);
 }
 
 .date-filters input[type="date"] {
     padding: 6px 10px;
-    border: 1px solid #e8e9ee;
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 8px;
     font-family: inherit;
-    background-color: white;
+    background-color: var(--bg-color, #F5EFEB);
+    color: var(--text-color, #2F4156);
 }
 
 .date-filters input[type="date"]:invalid {
@@ -84,12 +85,13 @@
     flex: 1;
     min-width: 0;
     padding: 10px 15px;
-    border: 1px solid #e8e9ee;
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 20px;
     font-size: 0.85rem;
-    background-color: white;
+    background-color: var(--bg-color, #F5EFEB);
+    color: var(--text-color, #2F4156);
 }
-.search-input:focus { outline: none; border-color: #3b6cf0; }
+.search-input:focus { outline: none; border-color: var(--teal, #567C8D); background-color: #fff; }
 
 .filter-pills {
     display: flex;
@@ -130,18 +132,18 @@
     justify-content: center;
     padding: 7px;
     background: transparent;
-    border: 1px solid #d9deea;
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 8px;
-    color: #4a5568;
+    color: var(--text-color, #2F4156);
     cursor: pointer;
     transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .filter-icon:hover,
 .filter-icon[aria-expanded="true"] {
-    background-color: #eef0f5;
-    border-color: #c5ccdc;
-    color: #1a1c25;
+    background-color: var(--sky-blue, #C8D9E6);
+    border-color: var(--teal, #567C8D);
+    color: var(--navy, #2F4156);
 }
 
 .filter-icon svg {
@@ -151,15 +153,15 @@
 }
 
 .filter-btn {
-    background-color: #eef0f5;
-    border: 1px solid transparent;
+    background-color: var(--bg-color, #F5EFEB);
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: bold;
-    color: #1a1c25;
+    color: var(--text-color, #2F4156);
     cursor: pointer;
     appearance: none;
-    background-image: linear-gradient(45deg, transparent 50%, #4a5568 50%), linear-gradient(135deg, #4a5568 50%, transparent 50%);
+    background-image: linear-gradient(45deg, transparent 50%, var(--teal, #567C8D) 50%), linear-gradient(135deg, var(--teal, #567C8D) 50%, transparent 50%);
     background-position: calc(100% - 12px) 50%, calc(100% - 8px) 50%;
     background-size: 4px 4px, 4px 4px;
     background-repeat: no-repeat;
@@ -167,10 +169,10 @@
 }
 
 .filter-btn:hover,
-.filter-btn:focus { background-color: #dce1ee; border-color: #c5ccdc; outline: none; }
+.filter-btn:focus { background-color: var(--sky-blue, #C8D9E6); border-color: var(--teal, #567C8D); outline: none; }
 
 .btn-export {
-    background-color: #1a1c25;
+    background-color: var(--navy, #2F4156);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -181,14 +183,15 @@
     transition: background 0.2s;
 }
 
-.btn-export:hover { background-color: #33364a; }
+.btn-export:hover { background-color: var(--teal, #567C8D); }
 
 /* Data Table */
 .table-responsive {
     background-color: white;
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(47, 65, 86, 0.04);
 }
 
 .data-table {
@@ -200,12 +203,13 @@
     padding: 15px;
     text-align: left;
     font-size: 0.85rem;
-    border-bottom: 1px solid #eef0f5;
+    border-bottom: 1px solid var(--line-color, #dce4ec);
+    color: var(--text-color, #2F4156);
 }
 
 .data-table th {
-    background-color: #f8f9fc;
-    color: #4a5568;
+    background-color: var(--bg-color, #F5EFEB);
+    color: var(--text-color, #2F4156);
     font-weight: bold;
     text-transform: uppercase;
     font-size: 0.75rem;
@@ -221,13 +225,14 @@
 }
 
 .data-table tr:hover {
-    background-color: #f4f6fb;
+    background-color: rgba(200, 217, 230, 0.35);
 }
 
 .export-status {
     align-self: center;
-    color: #2f855a;
+    color: var(--teal, #567C8D);
     font-size: 0.75rem;
+    font-weight: 600;
 }
 
 .export-status.error {
@@ -236,12 +241,12 @@
 
 .audit-employee-name {
     font-weight: 600;
-    color: #1a1c25;
+    color: var(--text-color, #2F4156);
 }
 
 .audit-employee-id {
     margin-top: 3px;
-    color: #94a3b8;
+    color: var(--muted-color, #567C8D);
     font-size: 0.75rem;
 }
 

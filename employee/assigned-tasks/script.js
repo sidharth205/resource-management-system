@@ -56,9 +56,9 @@ function appendTimelineActivity(taskId, text, userName = 'You') {
 
     const timeStr = new Date().toISOString().split('T')[0];
     const activityHTML = `
-        <div class="timeline-item" style="margin-bottom: 10px; border-left: 2px solid #3b82f6; padding-left: 8px;">
-            <span class="timeline-meta" style="font-size: 0.75rem; color: #64748b; display: block;">${timeStr} — <strong>${userName}</strong></span>
-            <strong style="font-size: 0.85rem; color: #1e293b;">${text}</strong>
+        <div class="timeline-item" style="margin-bottom: 10px; border-left: 2px solid var(--teal, #567C8D); padding-left: 8px;">
+            <span class="timeline-meta" style="font-size: 0.75rem; color: var(--text-muted, #567C8D); display: block;">${timeStr} — <strong>${userName}</strong></span>
+            <strong style="font-size: 0.85rem; color: var(--text-color, #2F4156);">${text}</strong>
         </div>
     `;
     
@@ -106,26 +106,26 @@ async function loadAssignedTaskData(token) {
             const estimatedHours = task.estimated_hours || 0;
             
             // Build Attachments HTML (Scrollable + Download button)
-            let attachmentsHTML = '<p style="font-size: 0.75rem; color: #64748b; text-align: center; margin: 8px 0;">No attachments available.</p>';
+            let attachmentsHTML = '<p style="font-size: 0.75rem; color: var(--text-muted, #567C8D); text-align: center; margin: 8px 0;">No attachments available.</p>';
             if (task.task_attachments && task.task_attachments.length > 0) {
                 attachmentsHTML = task.task_attachments.map(att => {
                     const fileName = att.file_url.split('/').pop().split('_').slice(1).join('_') || 'Document';
                     return `
-                        <div class="attachment-item" style="display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 6px;">
-                            <span style="font-size: 0.85rem; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px;" title="${fileName}">${TASK_ICONS.file} ${escapeHtml(fileName)}</span>
-                            <a href="${att.file_url}" target="_blank" download class="btn-download-small" style="background: #3b82f6; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; font-weight: bold;">Download</a>
+                        <div class="attachment-item" style="display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: var(--bg-color, #F5EFEB); border: 1px solid var(--card-border, #dce4ec); border-radius: 6px; margin-bottom: 6px;">
+                            <span style="font-size: 0.85rem; color: var(--text-color, #2F4156); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px;" title="${fileName}">${TASK_ICONS.file} ${escapeHtml(fileName)}</span>
+                            <a href="${att.file_url}" target="_blank" download class="btn-download-small" style="background: var(--teal, #567C8D); color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; font-weight: bold;">Download</a>
                         </div>
                     `;
                 }).join('');
             }
 
             // Build Timeline HTML
-            let timelineHTML = '<p style="font-size: 0.75rem; color: #64748b;">No activity recorded yet.</p>';
+            let timelineHTML = '<p style="font-size: 0.75rem; color: var(--text-muted, #567C8D);">No activity recorded yet.</p>';
             if (task.activities && task.activities.length > 0) {
                 timelineHTML = task.activities.map(act => `
-                    <div class="timeline-item" style="margin-bottom: 10px; border-left: 2px solid #3b82f6; padding-left: 8px;">
-                        <span class="timeline-meta" style="font-size: 0.75rem; color: #64748b; display: block;">${formatActivityTime(act.time)} — <strong>${act.user_name}</strong></span>
-                        <strong style="font-size: 0.85rem; color: #1e293b;">${act.text}</strong>
+                    <div class="timeline-item" style="margin-bottom: 10px; border-left: 2px solid var(--teal, #567C8D); padding-left: 8px;">
+                        <span class="timeline-meta" style="font-size: 0.75rem; color: var(--text-muted, #567C8D); display: block;">${formatActivityTime(act.time)} — <strong>${act.user_name}</strong></span>
+                        <strong style="font-size: 0.85rem; color: var(--text-color, #2F4156);">${act.text}</strong>
                     </div>
                 `).join('');
             }
@@ -151,9 +151,9 @@ async function loadAssignedTaskData(token) {
                             <div class="dash-card">
                                 <div class="card-title-bar brown-bar">Attachments</div>
                                 <div class="attachments-list" id="attach-list-${taskId}" style="max-height: 140px; overflow-y: auto; margin-bottom: 10px; padding-right: 4px;">${attachmentsHTML}</div>
-                                <div class="upload-dropzone" onclick="document.getElementById('file-${taskId}').click()" style="cursor: pointer; border: 2px dashed #cbd5e1; padding: 12px; text-align: center; border-radius: 8px; background: #fafafa;">
+                                <div class="upload-dropzone" onclick="document.getElementById('file-${taskId}').click()" style="cursor: pointer; border: 2px dashed var(--card-border, #dce4ec); padding: 12px; text-align: center; border-radius: 8px; background: var(--bg-color, #F5EFEB);">
                                     <p style="margin: 0 0 2px 0; font-size: 0.85rem;">${TASK_ICONS.upload} <strong>Upload Attachment</strong></p>
-                                    <span style="font-size: 0.75rem; color: #64748b;">Click to browse and upload</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted, #567C8D);">Click to browse and upload</span>
                                     <input type="file" id="file-${taskId}" style="display: none;" onchange="uploadFile(event, '${taskId}', '${token}')">
                                 </div>
                             </div>

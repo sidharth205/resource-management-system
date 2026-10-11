@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const { supabase, createNotification, logAudit } = require('./helpers');
 const { authenticateUser, requirePermission } = require('./middleware');
@@ -1359,7 +1360,8 @@ app.get('/api/employee/activity', authenticateUser, async (req, res) => {
         if (error) throw error;
 
         const formatted = (data || []).map(item => ({
-            icon: item.module === 'Tasks' ? '📌' : '⚡',
+            icon: item.module === 'Tasks' ? 'task' : 'activity',
+            module: item.module,
             description: item.action,
             time_ago: new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }));

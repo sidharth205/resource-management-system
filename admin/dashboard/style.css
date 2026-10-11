@@ -1,6 +1,6 @@
 /* =========================================
    ADMIN DASHBOARD SPECIFIC STYLES
-   Theme: light, matches landing page
+   Theme: Navy, Teal, Sky Blue, Beige, White
 ========================================= */
 
 .main-content {
@@ -16,19 +16,19 @@
     position: absolute;
     border-radius: 50%;
     filter: blur(70px);
-    opacity: .25;
+    opacity: .22;
     z-index: 0;
     pointer-events: none;
     animation: dashFloat 10s ease-in-out infinite;
 }
 .main-content::before {
     width: 260px; height: 260px;
-    background: #3b6cf0;
+    background: var(--sky-blue, #C8D9E6);
     top: -60px; right: 10%;
 }
 .main-content::after {
     width: 220px; height: 220px;
-    background: #ff9fd6;
+    background: var(--teal, #567C8D);
     bottom: -60px; left: 5%;
     animation-delay: -4s;
 }
@@ -55,11 +55,11 @@
 .notifications-card { grid-column: 1 / -1; grid-row: 2; }
 
 .dash-card {
-    background: #ffffff;
-    border: 1px solid #e8e9ee;
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--line-color, #dce4ec);
     border-radius: 14px;
     padding: 18px;
-    box-shadow: 0 10px 24px rgba(20, 22, 40, 0.06);
+    box-shadow: 0 10px 24px rgba(47, 65, 86, 0.06);
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -71,7 +71,7 @@
 
 .dash-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 18px 34px rgba(20, 22, 40, 0.1);
+    box-shadow: 0 18px 34px rgba(47, 65, 86, 0.1);
 }
 
 /* staggered entrance */
@@ -98,8 +98,8 @@
 .card-title-bar {
     font-size: 0.75rem;
     font-weight: 800;
-    color: #4a5568;
-    border-bottom: 1px solid #e8e9ee;
+    color: var(--text-color, #2F4156);
+    border-bottom: 1px solid var(--line-color, #dce4ec);
     padding-bottom: 8px;
     letter-spacing: 0.5px;
 }
@@ -119,7 +119,7 @@
 
 /* 1. Active Users Today */
 .user-pill-row {
-    background-color: #e9fbf1;
+    background-color: var(--sky-blue, #C8D9E6);
     padding: 10px 14px;
     border-radius: 8px;
     display: flex;
@@ -127,7 +127,7 @@
     align-items: center;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #1f7a4d;
+    color: var(--navy, #2F4156);
     transition: transform .2s;
 }
 .user-pill-row:hover { transform: translateX(3px); }
@@ -135,25 +135,25 @@
 /* 2. Active Projects */
 .project-header-stat {
     text-align: center;
-    border-bottom: 1px solid #edf0f5;
+    border-bottom: 1px solid var(--line-color, #dce4ec);
     padding-bottom: 8px;
 }
 .project-header-stat h1 {
     margin: 0;
     font-size: 2.2rem;
-    color: #3b6cf0;
+    color: var(--navy, #2F4156);
     font-weight: 900;
 }
 .project-header-stat p {
     margin: 2px 0 0 0;
     font-size: 0.65rem;
     font-weight: 800;
-    color: #767a8a;
+    color: var(--muted-color, #567C8D);
     letter-spacing: 0.5px;
 }
 
 .project-progress-row {
-    background-color: #f4f5fb;
+    background-color: var(--bg-color, #F5EFEB);
     padding: 8px 12px;
     border-radius: 8px;
     display: flex;
@@ -161,7 +161,7 @@
     align-items: center;
     font-size: 0.7rem;
     font-weight: 700;
-    color: #4a5568;
+    color: var(--text-color, #2F4156);
     transition: transform .2s;
 }
 .project-progress-row:hover { transform: translateX(3px); }
@@ -173,10 +173,10 @@
     height: 14px;
     position: relative;
     overflow: hidden;
-    border: 1px solid #d7dcf5;
+    border: 1px solid var(--line-color, #dce4ec);
 }
 .proj-fill {
-    background-color: #3b6cf0;
+    background-color: var(--teal, #567C8D);
     height: 100%;
     position: absolute;
     left: 0; top: 0;
@@ -188,42 +188,43 @@
     text-align: center;
     font-size: 0.6rem;
     font-weight: 800;
-    color: #1a202c;
+    color: var(--navy, #2F4156);
     line-height: 14px;
 }
 
 /* 3. System Notifications */
 .notif-bar {
-    background: linear-gradient(90deg, #ffe9c7, #ffd9a0);
+    background: linear-gradient(90deg, #C8D9E6, #F5EFEB);
     min-height: 66px;
     border-radius: 8px;
+    border: 1px solid #dce4ec;
     width: 100%;
     padding: 10px 14px;
     box-sizing: border-box;
-    color: #744210;
+    color: var(--navy, #2F4156);
     font-size: 0.75rem;
     line-height: 1.4;
     overflow: hidden;
     overflow-wrap: anywhere;
 }
 
-.notif-bar strong { display: block; color: #5f3700; }
-.notif-meta { display: block; margin-top: 3px; color: #805c2b; font-size: 0.68rem; }
+.notif-bar strong { display: block; color: var(--navy, #2F4156); }
+.notif-meta { display: block; margin-top: 3px; color: var(--teal, #567C8D); font-size: 0.68rem; font-weight: 600; }
 .notif-summary { display: block; margin-top: 4px; }
-.notif-details { display: none; margin-top: 7px; padding-top: 7px; border-top: 1px solid rgba(116, 66, 16, 0.2); }
+.notif-details { display: none; margin-top: 7px; padding-top: 7px; border-top: 1px solid rgba(86, 124, 141, 0.2); }
 .notif-bar.expanded .notif-details { display: block; }
 .notif-toggle {
     margin-top: 7px;
     padding: 0;
     border: 0;
     background: transparent;
-    color: #805c2b;
+    color: var(--teal, #567C8D);
     font-size: 0.68rem;
     font-weight: 700;
     text-decoration: underline;
     cursor: pointer;
 }
-.notif-toggle:hover { color: #5f3700; }
+.notif-toggle:hover { color: var(--navy, #2F4156); }
 
 @media (max-width: 900px) {
     .dashboard-grid-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -247,10 +248,10 @@
 /* 4. Total Employees */
 .total-emp-flex {
     display: flex;
-    background: #eef2ff;
+    background: var(--sky-blue, #C8D9E6);
     border-radius: 10px;
     overflow: hidden;
-    border: 1px solid #dce3fb;
+    border: 1px solid #b7ccdb;
 }
 .total-count-box {
     flex: 1.2;
@@ -263,7 +264,7 @@
 .total-count-box h1 {
     margin: 0;
     font-size: 2.2rem;
-    color: #3b6cf0;
+    color: var(--navy, #2F4156);
     font-weight: 900;
 }
 .active-now-box {
@@ -271,7 +272,7 @@
     background: #ffffff;
     padding: 15px 10px;
     text-align: center;
-    border-left: 1px solid #dce3fb;
+    border-left: 1px solid #b7ccdb;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -280,11 +281,11 @@
     margin: 0;
     font-size: 0.6rem;
     font-weight: 800;
-    color: #1f7a4d;
+    color: var(--teal, #567C8D);
 }
 .active-now-box h2 {
     margin: 4px 0 0 0;
     font-size: 1.6rem;
     font-weight: 900;
-    color: #1f7a4d;
+    color: var(--teal, #567C8D);
 }

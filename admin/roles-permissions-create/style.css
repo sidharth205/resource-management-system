@@ -1,6 +1,6 @@
 /* =========================================
    CREATE ROLE SPECIFIC STYLES
-   Base layout/sidebar now come from shared-assets/global.css
+   Theme: Navy, Teal, Sky Blue, Beige, White
 ========================================= */
 
 .main-content { position: relative; overflow-x: hidden; overflow-y: auto; }
@@ -8,8 +8,8 @@
     content: ""; position: absolute; border-radius: 50%; filter: blur(70px);
     opacity: .2; z-index: 0; pointer-events: none; animation: pageFloat 11s ease-in-out infinite;
 }
-.main-content::before { width: 220px; height: 220px; background: #3b6cf0; top: -50px; right: 12%; }
-.main-content::after { width: 190px; height: 190px; background: #a6b3ff; bottom: -50px; left: 8%; animation-delay: -5s; }
+.main-content::before { width: 220px; height: 220px; background: var(--sky-blue, #C8D9E6); top: -50px; right: 12%; }
+.main-content::after { width: 190px; height: 190px; background: var(--teal, #567C8D); bottom: -50px; left: 8%; animation-delay: -5s; }
 @keyframes pageFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-22px) scale(1.08); } }
 
 .top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
@@ -26,13 +26,13 @@
 .card {
     border-radius: 14px;
     padding: 30px;
-    box-shadow: 0 14px 30px rgba(20,22,40,0.1);
+    box-shadow: 0 14px 30px rgba(47, 65, 86, 0.12);
     opacity: 0; transform: translateY(20px); animation: cardIn .55s cubic-bezier(.2,.7,.3,1) forwards;
 }
 @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
 
 .dark-card {
-    background-color: #1a1c25;
+    background-color: var(--navy, #2F4156);
     color: #ffffff;
 }
 
@@ -45,35 +45,35 @@
 .input-group label {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #c3c5d1;
+    color: var(--sky-blue, #C8D9E6);
     margin-bottom: 8px;
     letter-spacing: 0.5px;
 }
 
 .input-group input[type="text"] {
     padding: 12px 15px;
-    border: 1px solid #3a3d52;
+    border: 1px solid rgba(200, 217, 230, 0.25);
     border-radius: 8px;
     font-size: 1rem;
-    background-color: #12131f;
+    background-color: rgba(255, 255, 255, 0.08);
     color: white;
     transition: all 0.2s;
 }
 
 .input-group input[type="text"]:focus {
     outline: none;
-    border-color: #3b6cf0;
-    box-shadow: 0 0 0 3px rgba(59,108,240,0.25);
+    border-color: var(--teal, #567C8D);
+    box-shadow: 0 0 0 3px rgba(86, 124, 141, 0.3);
 }
 
 .permissions-section > label {
     display: block;
     font-size: 0.85rem;
     font-weight: 700;
-    color: #c3c5d1;
+    color: var(--sky-blue, #C8D9E6);
     margin-bottom: 20px;
     letter-spacing: 0.5px;
-    border-bottom: 1px solid #3a3d52;
+    border-bottom: 1px solid rgba(200, 217, 230, 0.2);
     padding-bottom: 10px;
 }
 
@@ -87,9 +87,9 @@
 .permission-category h4 {
     margin: 0 0 15px 0;
     font-size: 0.8rem;
-    color: #a3a6b5;
+    color: var(--sky-blue, #C8D9E6);
     text-transform: uppercase;
-    border-bottom: 1px solid #3a3d52;
+    border-bottom: 1px solid rgba(200, 217, 230, 0.2);
     padding-bottom: 5px;
 }
 
@@ -98,7 +98,7 @@
     align-items: center;
     gap: 10px;
     font-size: 0.85rem;
-    color: #e2e4ec;
+    color: #ffffff;
     margin-bottom: 12px;
     cursor: pointer;
     font-weight: 600;
@@ -108,14 +108,14 @@
     width: 16px;
     height: 16px;
     cursor: pointer;
-    accent-color: #3b6cf0;
+    accent-color: var(--teal, #567C8D);
 }
 
 .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 15px;
-    border-top: 1px solid #3a3d52;
+    border-top: 1px solid rgba(200, 217, 230, 0.2);
     padding-top: 20px;
 }
 
@@ -130,23 +130,24 @@
 
 .btn-cancel {
     background-color: transparent;
-    color: #c3c5d1;
-    border: 1px solid #565875;
+    color: var(--sky-blue, #C8D9E6);
+    border: 1px solid var(--teal, #567C8D);
 }
 
 .btn-cancel:hover {
-    background-color: #2b2e3f;
+    background-color: rgba(200, 217, 230, 0.15);
     color: white;
 }
 
 .btn-save {
-    background-color: #3b6cf0;
+    background-color: var(--teal, #567C8D);
     color: white;
     border: none;
-    box-shadow: 0 8px 18px rgba(59,108,240,.3);
+    box-shadow: 0 8px 18px rgba(86, 124, 141, .35);
 }
 
 .btn-save:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(59,108,240,.4);
+    box-shadow: 0 10px 22px rgba(86, 124, 141, .45);
+    background-color: #466776;
 }

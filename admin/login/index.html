@@ -3,42 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMS | Login</title>
+    <title>ResourceHub | Login</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="login-wrap">
-        <a class="back-link" href="../../landing.html">← Back to home</a>
+        <a class="back-link" href="../../Landing.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to home
+        </a>
 
         <div class="login-card">
             <div class="badge"><span></span><span></span><span></span><span></span></div>
             <h2>Welcome back</h2>
-            <p class="sub">Login to access your dashboard</p>
+            <p class="sub">Sign in to access your designated workspace</p>
 
             <form id="loginForm">
                 <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required placeholder="you@example.com">
+                    <label for="email">Work Email</label>
+                    <input type="email" id="email" required placeholder="you@company.com" autocomplete="email">
                 </div>
 
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" required placeholder="••••••••">
+                    <div class="password-wrapper">
+                        <input type="password" id="password" required placeholder="Enter your password" autocomplete="current-password">
+                        <button type="button" class="toggle-password" id="togglePasswordBtn" onclick="togglePasswordVisibility(event)" aria-label="Toggle password visibility" title="Show password">
+                            <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
                 </div>
 
+
                 <div class="actions">
-                    <button type="submit" class="btn-primary" id="loginBtn">Login</button>
+                    <button type="submit" class="btn-primary" id="loginBtn">Sign In to Dashboard →</button>
                 </div>
             </form>
+
             <div id="errorMessage" class="error-msg"></div>
             <div id="successMessage" class="success-msg" role="status" aria-live="polite"></div>
 
             <div class="help-text">
-                New employee? <a href="#">Click here</a> to request login credentials
+                Protected by Enterprise Role-Based Access Control
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>
