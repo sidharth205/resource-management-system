@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Set UI Header
-    document.getElementById('userName').textContent = (localStorage.getItem('user_name') || 'User').toUpperCase();
+    document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
 
     // UI Helper: If "Full Admin Access" is checked, visually check everything else

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Set dynamic profile names from localStorage
     const storedName = window.getFirstName(localStorage.getItem('user_name') || 'Employee');
     const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1).toLowerCase();
-    document.getElementById('userName').textContent = formattedName.toUpperCase();
+    document.getElementById('userName').textContent = formattedName;
     document.getElementById('headerName').textContent = formattedName;
 
     // Load active projects dynamically from database

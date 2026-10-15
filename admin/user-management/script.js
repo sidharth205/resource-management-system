@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.replace('../login/index.html');
         return;
     }
-    document.getElementById('userName').textContent = (localStorage.getItem('user_name') || 'User').toUpperCase();
+    document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
     // 1. Initialize Constraints & Auto-Generators
     setupFormConstraints();
@@ -67,7 +67,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
             </a>
         </td>
         <td>${u.department || 'N/A'}</td>
-        <td><span style="text-transform: uppercase; font-weight: 600;">${u.role}</span></td>
+        <td><span style=" font-weight: 600;">${u.role}</span></td>
         <td>${u.employment_type || 'N/A'}</td>
         <td><span class="status-badge status-active">${u.status || 'active'}</span></td>
     `;

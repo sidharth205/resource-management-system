@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
 
-  if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
+  if (userNameEl) userNameEl.textContent = storedName;
   if (headerNameEl) headerNameEl.textContent = storedName;
 
   try {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (profRes.ok) {
       const prof = await profRes.json();
       if (prof && prof.name) {
-        if (userNameEl) userNameEl.textContent = prof.name.toUpperCase();
+        if (userNameEl) userNameEl.textContent = prof.name;
         if (headerNameEl) headerNameEl.textContent = window.getFirstName(prof.name);
       }
     }
@@ -249,8 +249,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>${tasksCount} tasks</td>
         <td>
           <div style="display:flex; align-items:center; gap:8px;">
-            <div style="width:70px; height:6px; background:rgba(200, 217, 230, 0.5); border-radius:4px; overflow:hidden;">
-              <div style="width:${pct}%; height:100%; background:#567C8D; border-radius:4px;"></div>
+            <div style="width:70px; height:6px; background:rgba(184, 184, 209, 0.45); border-radius:4px; overflow:hidden;">
+              <div style="width:${pct}%; height:100%; background:#434775; border-radius:4px;"></div>
             </div>
             <span>${pct}%</span>
           </div>

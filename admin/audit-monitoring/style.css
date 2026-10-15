@@ -1,6 +1,6 @@
-/* =========================================
+﻿/* =========================================
    AUDIT & MONITORING SPECIFIC STYLES
-   Theme: Navy, Teal, Sky Blue, Beige, White
+   Theme: Slate Indigo, Lavender, Amber, Ivory, Coral (#434775, #c4c5db, #f09a1a, #ffffff, #ea5757)
 ========================================= */
 
 .main-content { position: relative; overflow-x: hidden; overflow-y: auto; }
@@ -8,8 +8,8 @@
     content: ""; position: absolute; border-radius: 50%; filter: blur(70px);
     opacity: .2; z-index: 0; pointer-events: none; animation: pageFloat 11s ease-in-out infinite;
 }
-.main-content::before { width: 240px; height: 240px; background: var(--sky-blue, #C8D9E6); top: -50px; right: 10%; }
-.main-content::after { width: 200px; height: 200px; background: var(--teal, #567C8D); bottom: -50px; left: 6%; animation-delay: -5s; }
+.main-content::before { width: 240px; height: 240px; background: var(--sky-blue, #c4c5db); top: -50px; right: 10%; }
+.main-content::after { width: 200px; height: 200px; background: var(--teal, #434775); bottom: -50px; left: 6%; animation-delay: -5s; }
 @keyframes pageFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-22px) scale(1.08); } }
 
 .top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
@@ -17,10 +17,10 @@
 
 .card {
     background: var(--card-bg, #ffffff);
-    border: 1px solid var(--line-color, #dce4ec);
+    border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 14px;
     padding: 25px;
-    box-shadow: 0 10px 24px rgba(47, 65, 86, 0.06);
+    box-shadow: 0 10px 24px rgba(91, 95, 151, 0.06);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -34,13 +34,13 @@
 
 .audit-card {
     background-color: var(--card-bg, #ffffff);
-    border: 1px solid var(--line-color, #dce4ec);
+    border: 1px solid var(--line-color, #e4e5ee);
 }
 
 .audit-header h3 {
     margin: 0 0 15px 0;
     font-size: 1.1rem;
-    color: var(--text-color, #2F4156);
+    color: var(--text-color, #1a1d2e);
 }
 
 /* Controls & Filters */
@@ -56,16 +56,16 @@
     gap: 10px;
     font-size: 0.85rem;
     font-weight: bold;
-    color: var(--text-color, #2F4156);
+    color: var(--text-color, #1a1d2e);
 }
 
 .date-filters input[type="date"] {
     padding: 6px 10px;
-    border: 1px solid var(--line-color, #dce4ec);
+    border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 8px;
     font-family: inherit;
-    background-color: var(--bg-color, #F5EFEB);
-    color: var(--text-color, #2F4156);
+    background-color: var(--bg-color, #f7f8fa);
+    color: var(--text-color, #1a1d2e);
 }
 
 .date-filters input[type="date"]:invalid {
@@ -85,13 +85,13 @@
     flex: 1;
     min-width: 0;
     padding: 10px 15px;
-    border: 1px solid var(--line-color, #dce4ec);
+    border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 20px;
     font-size: 0.85rem;
-    background-color: var(--bg-color, #F5EFEB);
-    color: var(--text-color, #2F4156);
+    background-color: var(--bg-color, #f7f8fa);
+    color: var(--text-color, #1a1d2e);
 }
-.search-input:focus { outline: none; border-color: var(--teal, #567C8D); background-color: #fff; }
+.search-input:focus { outline: none; border-color: var(--teal, #434775); background-color: #fff; }
 
 .filter-pills {
     display: flex;
@@ -132,18 +132,18 @@
     justify-content: center;
     padding: 7px;
     background: transparent;
-    border: 1px solid var(--line-color, #dce4ec);
+    border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 8px;
-    color: var(--text-color, #2F4156);
+    color: var(--text-color, #1a1d2e);
     cursor: pointer;
     transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .filter-icon:hover,
 .filter-icon[aria-expanded="true"] {
-    background-color: var(--sky-blue, #C8D9E6);
-    border-color: var(--teal, #567C8D);
-    color: var(--navy, #2F4156);
+    background-color: var(--sky-blue, #c4c5db);
+    border-color: var(--teal, #434775);
+    color: var(--navy, #434775);
 }
 
 .filter-icon svg {
@@ -153,15 +153,15 @@
 }
 
 .filter-btn {
-    background-color: var(--bg-color, #F5EFEB);
-    border: 1px solid var(--line-color, #dce4ec);
+    background-color: var(--bg-color, #f7f8fa);
+    border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: bold;
-    color: var(--text-color, #2F4156);
+    color: var(--text-color, #1a1d2e);
     cursor: pointer;
     appearance: none;
-    background-image: linear-gradient(45deg, transparent 50%, var(--teal, #567C8D) 50%), linear-gradient(135deg, var(--teal, #567C8D) 50%, transparent 50%);
+    background-image: linear-gradient(45deg, transparent 50%, var(--teal, #434775) 50%), linear-gradient(135deg, var(--teal, #434775) 50%, transparent 50%);
     background-position: calc(100% - 12px) 50%, calc(100% - 8px) 50%;
     background-size: 4px 4px, 4px 4px;
     background-repeat: no-repeat;
@@ -169,10 +169,10 @@
 }
 
 .filter-btn:hover,
-.filter-btn:focus { background-color: var(--sky-blue, #C8D9E6); border-color: var(--teal, #567C8D); outline: none; }
+.filter-btn:focus { background-color: var(--sky-blue, #c4c5db); border-color: var(--teal, #434775); outline: none; }
 
 .btn-export {
-    background-color: var(--navy, #2F4156);
+    background-color: var(--navy, #434775);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -183,15 +183,15 @@
     transition: background 0.2s;
 }
 
-.btn-export:hover { background-color: var(--teal, #567C8D); }
+.btn-export:hover { background-color: var(--teal, #434775); }
 
 /* Data Table */
 .table-responsive {
     background-color: white;
-    border: 1px solid var(--line-color, #dce4ec);
+    border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(47, 65, 86, 0.04);
+    box-shadow: 0 2px 4px rgba(91, 95, 151, 0.04);
 }
 
 .data-table {
@@ -203,15 +203,15 @@
     padding: 15px;
     text-align: left;
     font-size: 0.85rem;
-    border-bottom: 1px solid var(--line-color, #dce4ec);
-    color: var(--text-color, #2F4156);
+    border-bottom: 1px solid var(--line-color, #e4e5ee);
+    color: var(--text-color, #1a1d2e);
 }
 
 .data-table th {
-    background-color: var(--bg-color, #F5EFEB);
-    color: var(--text-color, #2F4156);
+    background-color: var(--bg-color, #f7f8fa);
+    color: var(--text-color, #1a1d2e);
     font-weight: bold;
-    text-transform: uppercase;
+    text-transform: none;
     font-size: 0.75rem;
     letter-spacing: 0.5px;
 }
@@ -225,12 +225,12 @@
 }
 
 .data-table tr:hover {
-    background-color: rgba(200, 217, 230, 0.35);
+    background-color: rgba(184, 184, 209, 0.35);
 }
 
 .export-status {
     align-self: center;
-    color: var(--teal, #567C8D);
+    color: var(--teal, #434775);
     font-size: 0.75rem;
     font-weight: 600;
 }
@@ -241,12 +241,12 @@
 
 .audit-employee-name {
     font-weight: 600;
-    color: var(--text-color, #2F4156);
+    color: var(--text-color, #1a1d2e);
 }
 
 .audit-employee-id {
     margin-top: 3px;
-    color: var(--muted-color, #567C8D);
+    color: var(--muted-color, #5e627d);
     font-size: 0.75rem;
 }
 

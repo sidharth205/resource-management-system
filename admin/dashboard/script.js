@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const currentAdminId = localStorage.getItem('user_emp_id');
     const currentAdminName = localStorage.getItem('user_name') || 'User';
-    document.getElementById('userName').textContent = currentAdminName.toUpperCase();
+    document.getElementById('userName').textContent = currentAdminName;
     document.getElementById('headerName').textContent = currentAdminName;
 
     await loadExactDashboardData();
@@ -79,7 +79,7 @@ if (todayActivities && todayActivities.length > 0) {
         const row = document.createElement('div');
         row.className = 'user-pill-row';
         row.innerHTML = `
-            <span class="emp-name" title="EMP ID: ${act.emp_id || 'SYSTEM'}">${escapeHtml(empName.toUpperCase())}</span>
+            <span class="emp-name" title="EMP ID: ${act.emp_id || 'SYSTEM'}">${escapeHtml(empName)}</span>
             <span class="emp-time">${formatIstTime(act.created_at)}</span>
         `;
         activeUsersList.appendChild(row);
@@ -103,7 +103,7 @@ if (todayActivities && todayActivities.length > 0) {
                     const row = document.createElement('div');
                     row.className = 'project-progress-row';
                     row.innerHTML = `
-                        <span class="proj-name">${(p.name || '--').toUpperCase()}</span>
+                        <span class="proj-name">${p.name || '--'}</span>
                         <div class="proj-bar-container">
                             <div class="proj-fill" style="width: ${progress}%;"></div>
                             <span class="proj-percentage">${progress}%</span>

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    document.getElementById('userName').textContent = (userName || 'Admin').toUpperCase();
+    document.getElementById('userName').textContent = userName || 'Admin';
     document.getElementById('headerName').textContent = userName || 'Admin';
 
     const authHeaders = { 'Authorization': `Bearer ${token}` };

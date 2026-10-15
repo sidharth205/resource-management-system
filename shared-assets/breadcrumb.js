@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const nav = document.createElement('nav');
     nav.className = 'breadcrumb-nav';
     nav.style.marginBottom = '20px';
-    nav.style.fontSize = '0.9rem';
-    nav.style.color = 'var(--text-muted, #567C8D)';
+    nav.style.fontSize = '0.96rem';
+    nav.style.color = 'var(--text-muted, #5e627d)';
 
     // 2. Define your site structure
     const pathMap = {
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Generate breadcrumbs from URL
     const pathParts = window.location.pathname.split('/').filter(p => p && p !== 'index.html');
-    let breadcrumbHTML = `<a href="../dashboard/index.html" style="color: var(--teal, #567C8D); text-decoration: none; font-weight: 600;">RMS</a>`;
+    let breadcrumbHTML = `<a href="../dashboard/index.html" style="color: var(--teal, #434775); text-decoration: none; font-weight: 600;">RMS</a>`;
     
     let currentPath = '';
     pathParts.forEach((part, index) => {
@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPath += `../${part}/index.html`;
         const label = pathMap[part] || part.replace('-', ' ');
         
-        breadcrumbHTML += ` <span style="margin: 0 5px; color: var(--text-muted, #567C8D);">></span> `;
+        breadcrumbHTML += ` <span style="margin: 0 5px; color: var(--text-muted, #5e627d);">></span> `;
         if (index === pathParts.length - 1) {
-            breadcrumbHTML += `<strong style="color: var(--navy, #2F4156); text-transform: uppercase;">${label}</strong>`;
+            breadcrumbHTML += `<strong style="color: var(--navy, #434775); ">${label}</strong>`;
         } else {
-            breadcrumbHTML += `<a href="${currentPath}" style="color: var(--teal, #567C8D); text-decoration: none; font-weight: 500;">${label}</a>`;
+            breadcrumbHTML += `<a href="${currentPath}" style="color: var(--teal, #434775); text-decoration: none; font-weight: 500;">${label}</a>`;
         }
     });
 

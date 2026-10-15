@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const storedName = window.getFirstName(localStorage.getItem('user_name') || 'Employee');
     const formattedName = storedName.charAt(0).toUpperCase() + storedName.slice(1).toLowerCase();
-    document.getElementById('userName').textContent = formattedName.toUpperCase();
+    document.getElementById('userName').textContent = formattedName;
     document.getElementById('headerName').textContent = formattedName;
 
     await loadNotifications(token);

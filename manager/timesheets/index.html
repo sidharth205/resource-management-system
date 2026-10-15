@@ -12,25 +12,25 @@
     <aside class="sidebar" id="sidebar">
       <div class="profile-section">
         <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
-        <div class="welcome-text">WELCOME <span id="userName">MANAGER</span></div>
+        <div class="welcome-text">Welcome<span id="userName">Manager</span></div>
       </div>
       <nav class="nav-menu">
-        <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
-        <a href="../projects/index.html" class="nav-item">PROJECTS</a>
-        <a href="../tasks/index.html" class="nav-item">TASKS</a>
-        <a href="../timesheets/index.html" class="nav-item active">TIMESHEETS</a>
-        <a href="../employees/index.html" class="nav-item">EMPLOYEES</a>
-        <a href="../reports/index.html" class="nav-item">REPORTS</a>
-        <a href="../notifications/index.html" class="nav-item">NOTIFICATIONS <span class="nav-badge" id="navNotifBadge"></span></a>
-        <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
+        <a href="../dashboard/index.html" class="nav-item">Dashboard</a>
+        <a href="../projects/index.html" class="nav-item">Projects</a>
+        <a href="../tasks/index.html" class="nav-item">Tasks</a>
+        <a href="../timesheets/index.html" class="nav-item active">Timesheets</a>
+        <a href="../employees/index.html" class="nav-item">Employees</a>
+        <a href="../reports/index.html" class="nav-item">Reports</a>
+        <a href="../notifications/index.html" class="nav-item">Notifications<span class="nav-badge" id="navNotifBadge"></span></a>
+        <a href="../profile/index.html" class="nav-item">My Profile</a>
       </nav>
-      <button id="logoutBtn" class="logout-btn"><span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> LOGOUT</button>
+      <button id="logoutBtn" class="logout-btn"><span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span>Logout</button>
     </aside>
     <main class="main-content">
       <header class="top-header">
         <div class="header-left">
           <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-          <h2>TIMESHEETS</h2>
+          <h2>Timesheets</h2>
         </div>
         <div class="header-actions">
           <a href="../notifications/index.html" class="header-bell" title="Notifications">
@@ -51,7 +51,7 @@
               <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </div>
             <div class="stat-info">
-              <span class="stat-label">PENDING APPROVAL</span>
+              <span class="stat-label">Pending Approval</span>
               <h2 id="statPending">--</h2>
             </div>
           </div>
@@ -60,7 +60,7 @@
               <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 15 15"></polyline></svg>
             </div>
             <div class="stat-info">
-              <span class="stat-label">TOTAL HOURS LOGGED</span>
+              <span class="stat-label">Total Hours Logged</span>
               <h2 id="statTotalHours">--</h2>
             </div>
           </div>
@@ -69,7 +69,7 @@
               <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
             <div class="stat-info">
-              <span class="stat-label">APPROVED TIMESHEETS</span>
+              <span class="stat-label">Approved Timesheets</span>
               <h2 id="statApproved">--</h2>
             </div>
           </div>
@@ -78,7 +78,7 @@
               <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </div>
             <div class="stat-info">
-              <span class="stat-label">REJECTED TIMESHEETS</span>
+              <span class="stat-label">Rejected Timesheets</span>
               <h2 id="statRejected">--</h2>
             </div>
           </div>
@@ -113,13 +113,13 @@
             <table class="glass-table">
               <thead>
                 <tr>
-                  <th>EMPLOYEE</th>
-                  <th>PROJECT</th>
-                  <th>TASK / DATE</th>
-                  <th>HOURS</th>
-                  <th>REMARKS</th>
-                  <th>STATUS</th>
-                  <th>ACTIONS</th>
+                  <th>Employee</th>
+                  <th>Project</th>
+                  <th>Task / Date</th>
+                  <th>Hours</th>
+                  <th>Remarks</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="timesheetsTableBody">

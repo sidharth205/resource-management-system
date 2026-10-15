@@ -12,25 +12,25 @@
     <aside class="sidebar" id="sidebar">
       <div class="profile-section">
         <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
-        <div class="welcome-text">WELCOME <span id="userName">MANAGER</span></div>
+        <div class="welcome-text">Welcome<span id="userName">Manager</span></div>
       </div>
       <nav class="nav-menu">
-        <a href="../dashboard/index.html" class="nav-item active">DASHBOARD</a>
-        <a href="../projects/index.html" class="nav-item">PROJECTS</a>
-        <a href="../tasks/index.html" class="nav-item">TASKS</a>
-        <a href="../timesheets/index.html" class="nav-item">TIMESHEETS</a>
-        <a href="../employees/index.html" class="nav-item">EMPLOYEES</a>
-        <a href="../reports/index.html" class="nav-item">REPORTS</a>
-        <a href="../notifications/index.html" class="nav-item">NOTIFICATIONS <span class="nav-badge" id="navNotifBadge"></span></a>
-        <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
+        <a href="../dashboard/index.html" class="nav-item active">Dashboard</a>
+        <a href="../projects/index.html" class="nav-item">Projects</a>
+        <a href="../tasks/index.html" class="nav-item">Tasks</a>
+        <a href="../timesheets/index.html" class="nav-item">Timesheets</a>
+        <a href="../employees/index.html" class="nav-item">Employees</a>
+        <a href="../reports/index.html" class="nav-item">Reports</a>
+        <a href="../notifications/index.html" class="nav-item">Notifications<span class="nav-badge" id="navNotifBadge"></span></a>
+        <a href="../profile/index.html" class="nav-item">My Profile</a>
       </nav>
-      <button id="logoutBtn" class="logout-btn"><span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> LOGOUT</button>
+      <button id="logoutBtn" class="logout-btn"><span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span>Logout</button>
     </aside>
     <main class="main-content">
       <header class="top-header">
         <div class="header-left">
           <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-          <h2>DASHBOARD</h2>
+          <h2>Dashboard</h2>
         </div>
         <div class="header-actions">
           <a href="../notifications/index.html" class="header-bell" title="Notifications">
@@ -49,28 +49,28 @@
           <div class="stat-card">
             <div class="stat-icon stat-blue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
             <div class="stat-info">
-              <span class="stat-label">ACTIVE PROJECTS</span>
+              <span class="stat-label">Active Projects</span>
               <h2 id="statProjects">--</h2>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon stat-purple"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M3 20a6 6 0 0 1 12 0M15 20a5 5 0 0 1 6 0"></path></svg></div>
             <div class="stat-info">
-              <span class="stat-label">TEAM MEMBERS</span>
+              <span class="stat-label">Team Members</span>
               <h2 id="statTeam">--</h2>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon stat-green"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg></div>
             <div class="stat-info">
-              <span class="stat-label">ACTIVE TASKS</span>
+              <span class="stat-label">Active Tasks</span>
               <h2 id="statTasks">--</h2>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon stat-amber"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div>
             <div class="stat-info">
-              <span class="stat-label">PENDING TIMESHEETS</span>
+              <span class="stat-label">Pending Timesheets</span>
               <h2 id="statTimesheets">--</h2>
             </div>
           </div>
@@ -116,7 +116,7 @@
               <a href="../timesheets/index.html" class="card-header-link">Manage Timesheets →</a>
             </div>
             <div class="pending-timesheets-list" id="pendingTimesheetsList">
-              <div class="ts-list-header"><span>EMPLOYEE</span><span>LOGGED</span><span>CREATED AT</span></div>
+              <div class="ts-list-header"><span>Employee</span><span>Logged</span><span>Created At</span></div>
               <div class="skeleton-row"></div>
             </div>
           </div>

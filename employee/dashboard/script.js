@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const headerNameEl = document.getElementById('headerName');
     const empWelcomeNameEl = document.getElementById('empWelcomeName');
 
-    if (userNameEl) userNameEl.textContent = formattedName.toUpperCase();
+    if (userNameEl) userNameEl.textContent = formattedName;
     if (headerNameEl) headerNameEl.textContent = formattedName;
     if (empWelcomeNameEl) empWelcomeNameEl.textContent = formattedName;
 

@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('bannerEmail').textContent = emp.email || 'N/A';
         document.getElementById('bannerPhone').textContent = emp.phone || 'Phone not provided';
         document.getElementById('bannerJoiningDate').textContent = emp.joining_date || 'N/A';
-        document.getElementById('bannerStatus').textContent = (emp.status || 'Active').toUpperCase();
+        document.getElementById('bannerStatus').textContent = emp.status || 'Active';
         
         document.getElementById('metaEmpId').textContent = emp.emp_id || '--';
         document.getElementById('metaDepartment').textContent = emp.department || 'Project Management';
         document.getElementById('metaReporting').textContent = emp.manager_id || '--';
-        document.getElementById('metaRole').textContent = (emp.role || 'Employee').toUpperCase();
+        document.getElementById('metaRole').textContent = emp.role || 'Employee';
 
         // Populate Personal Details View
         document.getElementById('detFullName').textContent = emp.name || '--';
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const firstName = (emp.name || 'User').split(' ')[0];
         const sidebarUserElem = document.getElementById('sidebarUserName');
         if (sidebarUserElem) {
-            sidebarUserElem.textContent = firstName.toUpperCase();
+            sidebarUserElem.textContent = firstName;
         }
 
     } catch (err) {

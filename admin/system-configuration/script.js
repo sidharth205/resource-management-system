@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Set UI Header
-    document.getElementById('userName').textContent = (localStorage.getItem('user_name') || 'User').toUpperCase();
+    document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
     // Boot up the system data
     await loadSystemSettings();
@@ -178,7 +178,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                     let pillsHtml = '';
                     if (role.permissions && role.permissions.length > 0) {
                         role.permissions.forEach(perm => {
-                            pillsHtml += `<span class="pill">${perm.replace(/_/g, ' ').toUpperCase()}</span>`;
+                            pillsHtml += `<span class="pill">${perm.replace(/_/g, ' ')}</span>`;
                         });
                     } else {
                         pillsHtml = `<span style="color: #a0aec0; font-size: 0.8rem;">No permissions assigned</span>`;
@@ -187,8 +187,8 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                     const dateStr = new Date(role.created_at).toLocaleDateString('en-GB');
 
                     card.innerHTML = `
-                        <h4>${role.name.toUpperCase()}</h4>
-                        <p class="section-label">PERMISSIONS</p>
+                        <h4>${role.name}</h4>
+                        <p class="section-label">Permissions</p>
                         <div class="permissions-list">${pillsHtml}</div>
                         <div class="role-card-footer">
                             <div class="role-actions">
@@ -196,7 +196,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                                 <button class="btn-clone">Clone <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2"></path></svg></button>
                                 <button class="btn-archive">Archive <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M6 7l1 13h10l1-13M9 7V4h6v3M10 11v5M14 11v5"></path></svg></button>
                             </div>
-                            <div class="role-meta">CREATED ON: ${dateStr}</div>
+                            <div class="role-meta">Created on: ${dateStr}</div>
                         </div>
                     `;
                     cardsContainer.appendChild(card);

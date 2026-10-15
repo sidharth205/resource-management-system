@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Set Header Info
-   document.getElementById('userName').textContent = (localStorage.getItem('user_name') || 'User').toUpperCase();
+   document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
     let allLogs = [];
     let visibleLogs = [];
@@ -46,7 +46,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
             employeeFilter.insertAdjacentHTML('beforeend', `<option value="${employee}">${employee}</option>`);
         });
         modules.forEach(module => {
-            moduleFilter.insertAdjacentHTML('beforeend', `<option value="${module}">${module.toUpperCase()}</option>`);
+            moduleFilter.insertAdjacentHTML('beforeend', `<option value="${module}">${module.charAt(0).toUpperCase() + module.slice(1).toLowerCase()}</option>`);
         });
     }
 
@@ -93,7 +93,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                     <div class="audit-employee-name">${empName}</div>
                     <div class="audit-employee-id">${empId}</div>
                 </td>
-                <td>${log.module.toUpperCase()}</td>
+                <td>${log.module}</td>
                 <td>${log.action}</td>
             `;
             tbody.appendChild(tr);

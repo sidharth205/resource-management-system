@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
 
-  if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
+  if (userNameEl) userNameEl.textContent = storedName;
   if (headerNameEl) headerNameEl.textContent = storedName;
 
   try {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (profRes.ok) {
       const prof = await profRes.json();
       if (prof && prof.name) {
-        if (userNameEl) userNameEl.textContent = prof.name.toUpperCase();
+        if (userNameEl) userNameEl.textContent = prof.name;
         if (headerNameEl) headerNameEl.textContent = window.getFirstName(prof.name);
       }
     }

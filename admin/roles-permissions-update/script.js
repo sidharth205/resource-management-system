@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    document.getElementById('userName').textContent = (localStorage.getItem('user_name') || 'User').toUpperCase();
+    document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
     const params = new URLSearchParams(window.location.search);
     const roleId = params.get('id');

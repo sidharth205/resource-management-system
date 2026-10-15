@@ -11,6 +11,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Block access to backend internal files and serve frontend static assets
+app.use((req, res, next) => {
+    if (req.path.includes('.env') || req.path.startsWith('/backend')) {
+        return res.status(403).send('Forbidden');
+    }
+    next();
+});
+app.use(express.static(path.join(__dirname, '..'), { dotfiles: 'ignore' }));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'Landing.html'));
+});
+
 
 
 // Update your multer configuration to accept documents
@@ -1376,6 +1389,17 @@ app.get('/api/employee/activity', authenticateUser, async (req, res) => {
 // SERVER INITIALIZATION
 // ==========================================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
+
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`\n[ERROR] Port ${PORT} is already in use by another process.`);
+        console.error(`To fix this, stop the process currently using port ${PORT} or change PORT in backend/.env\n`);
+        process.exit(1);
+    } else {
+        console.error('\n[ERROR] Server error:', err);
+        process.exit(1);
+    }
 });

@@ -13,15 +13,15 @@
         <aside class="sidebar">
             <div class="profile-section">
                 <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
-                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
+                <div class="welcome-text">Welcome<span id="userName">Admin</span></div>
             </div>
             <nav class="nav-menu">
-                <a href="../dashboard/index.html" class="nav-item">DASHBOARD</a>
-                <a href="#" class="nav-item active">USER MANAGEMENT</a>
-                <a href="../system-configuration/index.html" class="nav-item">SYSTEM CONFIGURATION</a>
-                <a href="../audit-monitoring/index.html" class="nav-item">AUDIT & MONITORING</a>
-                <a href="../reports/index.html" class="nav-item">REPORTS</a>
-                <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
+                <a href="../dashboard/index.html" class="nav-item">Dashboard</a>
+                <a href="#" class="nav-item active">User Management</a>
+                <a href="../system-configuration/index.html" class="nav-item">System Configuration</a>
+                <a href="../audit-monitoring/index.html" class="nav-item">Audit & Monitoring</a>
+                <a href="../reports/index.html" class="nav-item">Reports</a>
+                <a href="../profile/index.html" class="nav-item">My Profile</a>
             </nav>
             <button id="logoutBtn" class="logout-btn"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout</button>
         </aside>
@@ -29,7 +29,7 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="top-header">
-                <h2>USER MANAGEMENT</h2>
+                <h2>User Management</h2>
                 <div class="header-actions">
                     <span class="bell-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
                     <span class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Admin</span></span>
@@ -41,23 +41,23 @@
                     <!-- Create Employee Form -->
                     <div class="card create-employee-card">
                         <div class="card-header">
-                            <h3>CREATE EMPLOYEE <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 12l3 3 5-6"></path></svg></h3>
+                            <h3>Create Employee<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 12l3 3 5-6"></path></svg></h3>
                         </div>
                         <form id="createEmployeeForm">
                             <div class="form-columns">
                                 <!-- Personal Details -->
                                 <div class="form-section">
-                                    <h4>PERSONAL DETAILS</h4>
+                                    <h4>Personal Details</h4>
                                     <div class="input-group">
-                                        <label>FULL NAME</label>
+                                        <label>Full Name</label>
                                         <input type="text" id="fullName" required placeholder="John Doe">
                                     </div>
                                     <div class="input-group">
-                                        <label>OFFICIAL EMAIL ID</label>
+                                        <label>Official Email ID</label>
                                         <input type="email" id="email" required placeholder="john@company.com">
                                     </div>
                                     <div class="input-group">
-                                        <label>TEMPORARY PASSWORD</label>
+                                        <label>Temporary Password</label>
                                         <input type="password" id="tempPassword" required placeholder="Min 6 characters">
                                     </div>
                                     <div class="input-group">
@@ -67,9 +67,9 @@
                                 </div>
                                 <!-- Joining Details -->
                                 <div class="form-section">
-                                    <h4>JOINING DETAILS</h4>
+                                    <h4>Joining Details</h4>
                                     <div class="input-group">
-                                        <label>DEPARTMENT</label>
+                                        <label>Department</label>
                                         <select id="department" required>
                                             <option value="">Select Department</option>
                                             <option value="Engineering">Engineering</option>
@@ -79,13 +79,13 @@
                                         </select>
                                     </div>
                                     <div class="input-group">
-                                        <label>ASSIGN ROLE</label>
+                                        <label>Assign Role</label>
                                         <select id="roleSelect" required>
                                             <option value="">Loading roles...</option>
                                         </select>
                                     </div>
                                     <div class="input-group">
-                                        <label>EMPLOYMENT TYPE</label>
+                                        <label>Employment Type</label>
                                         <select id="employmentType" required>
                                             <option value="">Select Type</option>
                                             <option value="Full-Time">Full-Time</option>
@@ -95,13 +95,13 @@
                                         </select>
                                     </div>
                                     <div class="input-group">
-                                        <label>JOINING DATE</label>
+                                        <label>Joining Date</label>
                                         <input type="date" id="joiningDate" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="btn-add">ADD EMPLOYEE</button>
+                                <button type="submit" class="btn-add">Add Employee</button>
                             </div>
                         </form>
                     </div>
@@ -109,7 +109,7 @@
                     <!-- Search and View Employees -->
                     <div class="card search-view-card">
                         <div class="search-header">
-                            <h3>SEARCH AND VIEW EMPLOYEES <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M16 16l5 5"></path></svg></h3>
+                            <h3>Search and View Employees<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M16 16l5 5"></path></svg></h3>
                             <div class="filters">
                                 <input type="text" id="searchEmployeeInput" placeholder="Search by name or EMP ID..." class="search-input">
                             </div>
@@ -118,7 +118,7 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th>EMP ID</th>
+                                        <th>Emp ID</th>
                                         <th>Name</th>
                                         <th>Department</th>
                                         <th>Role</th>
@@ -137,7 +137,7 @@
                 <div class="right-column">
                     <!-- Employee Activity -->
                     <div class="card activity-card">
-                        <h3>EMPLOYEE ACTIVITY <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg></h3>
+                        <h3>Employee Activity<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg></h3>
                         <div class="activity-filters">
                             <label for="activityRange">Show</label>
                             <select id="activityRange">
@@ -158,11 +158,11 @@
 
                     <!-- Import Employees -->
                     <div class="card import-card">
-                        <h3>IMPORT EMPLOYEES <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg></h3>
+                        <h3>Import Employees<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg></h3>
                         <div class="drop-zone">
-                            <p>DROP CSV FILE OR <a href="#">BROWSE FILE</a></p>
+                            <p>Drop CSV file or <a href="#">Browse File</a></p>
                         </div>
-                        <button class="btn-import">IMPORT</button>
+                        <button class="btn-import">Import</button>
                     </div>
                 </div>
             </div>

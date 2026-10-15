@@ -13,15 +13,15 @@
         <aside class="sidebar">
             <div class="profile-section">
                 <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
-                <div class="welcome-text">WELCOME <span id="userName">ADMIN</span></div>
+                <div class="welcome-text">Welcome<span id="userName">Admin</span></div>
             </div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active">DASHBOARD</a>
-                <a href="../user-management/index.html" class="nav-item">USER MANAGEMENT</a>
-                <a href="../system-configuration/index.html" class="nav-item">SYSTEM CONFIGURATION</a>
-                <a href="../audit-monitoring/index.html" class="nav-item">AUDIT & MONITORING</a>
-                <a href="../reports/index.html" class="nav-item">REPORTS</a>
-                <a href="../profile/index.html" class="nav-item">MY PROFILE</a>
+                <a href="#" class="nav-item active">Dashboard</a>
+                <a href="../user-management/index.html" class="nav-item">User Management</a>
+                <a href="../system-configuration/index.html" class="nav-item">System Configuration</a>
+                <a href="../audit-monitoring/index.html" class="nav-item">Audit & Monitoring</a>
+                <a href="../reports/index.html" class="nav-item">Reports</a>
+                <a href="../profile/index.html" class="nav-item">My Profile</a>
             </nav>
             <button id="logoutBtn" class="logout-btn"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout</button>
         </aside>
@@ -29,7 +29,7 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="top-header">
-                <h2>DASHBOARD</h2>
+                <h2>Dashboard</h2>
                 <div class="header-actions">
                     <span class="bell-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
                     <span class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">&lt;Name&gt;</span></span>
@@ -41,7 +41,7 @@
                 <!-- 1. Active Users Today Card -->
                 <div class="dash-card active-users-card">
                     <div class="card-title-bar">
-                        <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg> ACTIVE USERS TODAY</span>
+                        <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg>Active Users Today</span>
                     </div>
                     <div class="card-content-list" id="activeUsersList">
                         <!-- Populated dynamically via JS. Shows '--' if empty -->
@@ -51,11 +51,11 @@
                 <!-- 2. Active Projects Card -->
                 <div class="dash-card active-projects-card">
                     <div class="card-title-bar">
-                        <span>ACTIVE PROJECTS</span>
+                        <span>Active Projects</span>
                     </div>
                     <div class="project-header-stat">
                         <h1 id="statActiveProjectsCount">--</h1>
-                        <p>ONGOING PROJECTS</p>
+                        <p>Ongoing Projects</p>
                     </div>
                     <div class="card-content-list" id="projectsProgressList">
                         <!-- Populated dynamically via JS. Shows '--' if empty -->
@@ -65,7 +65,7 @@
                 <!-- 3. System Notifications Card -->
                 <div class="dash-card notifications-card">
                     <div class="card-title-bar">
-                        <span>SYSTEM NOTIFICATIONS</span>
+                        <span>System Notifications</span>
                     </div>
                     <div class="card-content-list" id="systemNotificationsList">
                         <!-- Populated dynamically via JS. Shows '--' if empty -->
@@ -75,14 +75,14 @@
                 <!-- 4. Total Employees Card -->
                 <div class="dash-card total-employees-card">
                     <div class="card-title-bar">
-                        <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M3 20a6 6 0 0 1 12 0M15 20a5 5 0 0 1 6 0"></path></svg> TOTAL EMPLOYEES</span>
+                        <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M3 20a6 6 0 0 1 12 0M15 20a5 5 0 0 1 6 0"></path></svg>Total Employees</span>
                     </div>
                     <div class="total-emp-flex">
                         <div class="total-count-box">
                             <h1 id="statTotalEmployees">--</h1>
                         </div>
                         <div class="active-now-box">
-                            <p class="label">ACTIVE NOW</p>
+                            <p class="label">Active Now</p>
                             <h2 id="statActiveNow">--</h2>
                         </div>
                     </div>

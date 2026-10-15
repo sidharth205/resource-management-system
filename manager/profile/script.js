@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
 
-  if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
+  if (userNameEl) userNameEl.textContent = storedName;
   if (headerNameEl) headerNameEl.textContent = storedName;
 
   try {
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       document.getElementById('profName').textContent = window.getFirstName(name);
       document.getElementById('profBigAvatar').textContent = pInit;
-      if (userNameEl) userNameEl.textContent = name.toUpperCase();
+      if (userNameEl) userNameEl.textContent = name;
       if (headerNameEl) headerNameEl.textContent = window.getFirstName(name);
 
       const desig = p.designations?.name || p.role || 'Project Manager';

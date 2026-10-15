@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userNameEl = document.getElementById('userName');
   const headerNameEl = document.getElementById('headerName');
 
-  if (userNameEl) userNameEl.textContent = storedName.toUpperCase();
+  if (userNameEl) userNameEl.textContent = storedName;
   if (headerNameEl) headerNameEl.textContent = storedName;
 
   try {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (profRes.ok) {
       const prof = await profRes.json();
       if (prof && prof.name) {
-        if (userNameEl) userNameEl.textContent = prof.name.toUpperCase();
+        if (userNameEl) userNameEl.textContent = prof.name;
         if (headerNameEl) headerNameEl.textContent = window.getFirstName(prof.name);
       }
     }
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      list.innerHTML = '<div class="ts-list-header"><span>EMPLOYEE</span><span>LOGGED</span><span>CREATED AT</span></div>';
+      list.innerHTML = '<div class="ts-list-header"><span>Employee</span><span>Logged</span><span>Created At</span></div>';
       pendingTs.forEach(ts => {
         const row = document.createElement('div');
         row.className = 'ts-quick-row';
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         row.innerHTML = `
           <div class="ts-info">
             <span class="ts-emp-name">${escapeHtml(employeeName)}</span>
-            <span class="ts-details">EMP ID: ${escapeHtml(ts.employee_id || 'N/A')}</span>
+            <span class="ts-details">Emp ID: ${escapeHtml(ts.employee_id || 'N/A')}</span>
           </div>
           <div class="ts-logged">
             <strong>${ts.hours || 0} hrs</strong>
