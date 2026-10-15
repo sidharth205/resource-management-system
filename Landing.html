@@ -8,10 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script>document.documentElement.classList.add('js');</script>
   <style>
     :root {
       --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-heading: "Raleway", "Inter", sans-serif;
 
       /* Core Palette Tokens - Humanized System */
       --slate-indigo: #434775;
@@ -42,6 +44,7 @@
     }
     a { color: inherit; }
     button { font-family: inherit; }
+    h1, h2, h3, h6 { font-family: var(--font-heading); }
     :focus-visible { outline: 2px solid var(--slate-indigo); outline-offset: 3px; }
 
     /* ---------- split-word masks ---------- */
@@ -66,12 +69,21 @@
     .site-nav a { color: var(--muted); font-size: 15px; font-weight: 700; text-decoration: none; transition: color .18s; }
     .site-nav a:hover { color: var(--navy); }
     .nav-cta, .hero-cta {
+      position: relative; z-index: 0; isolation: isolate; overflow: hidden;
       display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; color: var(--white) !important; background: var(--navy);
-      box-shadow: 0 12px 28px rgba(67, 71, 117, .2); font-size: 15px; font-weight: 800; text-decoration: none; transition: box-shadow .2s, background .2s, transform .2s;
+      box-shadow: 0 12px 28px rgba(67, 71, 117, .2); font-size: 15px; font-weight: 800; text-decoration: none; transition: box-shadow .25s;
+    }
+    .nav-cta::before, .hero-cta::before {
+      position: absolute; z-index: -1; inset: 0; border-radius: inherit;
+      background: linear-gradient(110deg, var(--coral), var(--amber), var(--coral));
+      content: ""; transform: translateX(-102%); transition: transform .55s cubic-bezier(.22, 1, .36, 1);
     }
     .nav-cta { min-height: 44px; padding: 0 21px; }
     .hero-cta { min-height: 54px; padding: 0 27px; }
-    .nav-cta:hover, .hero-cta:hover { box-shadow: 0 16px 32px rgba(67, 71, 117, .3); background: #474a7a; }
+    .nav-cta:hover, .hero-cta:hover,
+    .nav-cta:focus-visible, .hero-cta:focus-visible { box-shadow: 0 16px 32px rgba(67, 71, 117, .3); }
+    .nav-cta:hover::before, .hero-cta:hover::before,
+    .nav-cta:focus-visible::before, .hero-cta:focus-visible::before { transform: translateX(0); }
 
     /* ---------- hero ---------- */
     .hero {
@@ -85,20 +97,24 @@
     .net .nd.m { fill: var(--amber); }
     .net .nd.e { fill: var(--white); stroke: var(--coral); stroke-width: 1.8; }
     .net .pkt { fill: var(--coral); }
-    .js .hero-content { visibility: hidden; }
     .hero-content { position: relative; z-index: 2; width: min(820px, 100%); text-align: center; }
     .eyebrow { display: inline-flex; align-items: center; gap: 9px; padding: 8px 16px; border: 1px solid rgba(234, 87, 87, .3); border-radius: 999px; color: #d43b3c; background: rgba(255, 255, 251, .92); font-size: 14px; font-weight: 800; letter-spacing: .04em; box-shadow: 0 4px 14px rgba(234, 87, 87, .12); }
     .eyebrow-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 0 0 rgba(234, 87, 87, .75); animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(234, 87, 87, .75); } 70% { box-shadow: 0 0 0 9px rgba(234, 87, 87, 0); } 100% { box-shadow: 0 0 0 0 rgba(234, 87, 87, 0); } }
-    .hero h1 { margin: 25px auto 19px; font-size: clamp(56px, 8vw, 112px); font-weight: 800; letter-spacing: -.085em; line-height: .99; }
+    .hero h1 { margin: 25px auto 19px; font-size: clamp(56px, 8vw, 112px); font-weight: 800; letter-spacing: -.025em; line-height: 1.08; }
     .hero h1 .line { display: block; }
-    .hero h1 .accent {
-      color: var(--slate-indigo);
-      background: linear-gradient(135deg, var(--slate-indigo) 0%, var(--coral) 45%, var(--amber) 80%, var(--slate-indigo) 100%);
-      background-size: 250% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradientShift 6s ease-in-out infinite alternate;
+    .hero h1 .w { padding-bottom: .18em; margin-bottom: -.18em; }
+    .hero h1 .accent { color: var(--slate-indigo); }
+    .hero h1 .accent .w > span { color: var(--slate-indigo); }
+    @supports (-webkit-background-clip: text) {
+      .hero h1 .accent .w > span {
+        background: linear-gradient(135deg, var(--slate-indigo) 0%, var(--coral) 45%, var(--amber) 80%, var(--slate-indigo) 100%);
+        background-size: 250% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientShift 6s ease-in-out infinite alternate;
+      }
     }
     @keyframes gradientShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
     .hero-copy { max-width: 620px; margin: 0 auto 30px; color: var(--muted); font-size: 19px; font-weight: 500; line-height: 1.8; }
@@ -390,7 +406,10 @@
     @media (max-width: 900px) { .reduce .role-card { grid-template-rows: auto auto; } .reduce .rc-copy > p { display: block; } }
     .reduce .gbar, .reduce .bar { transform: none; }
     .reduce .cline { stroke-dashoffset: 0; } .reduce .ring .rf { stroke-dashoffset: .28; }
-    @media (prefers-reduced-motion: reduce) { .eyebrow-dot, .scroll-cue span, .caret { animation: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .eyebrow-dot, .scroll-cue span, .caret { animation: none; }
+      .nav-cta, .hero-cta, .nav-cta::before, .hero-cta::before { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -638,6 +657,7 @@
   <script>
   (function () {
     const root = document.documentElement;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Keep animations active and resilient
     if (!window.gsap || !window.ScrollTrigger) {
       console.warn("GSAP/ScrollTrigger not ready; pure CSS animations remain fully active.");
