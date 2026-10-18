@@ -19,9 +19,11 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
         const searchTerm = event.target.value.trim().toLowerCase();
         const roleCards = document.querySelectorAll('#dynamicRolesCards .role-card');
         const roleTabs = document.querySelectorAll('#dynamicRolesTabs .tab:not(.create-role)');
-        const rolePanel = document.getElementById('dynamicRolesCards').closest('.dark-card');
-        const sectionTitles = document.querySelectorAll('.section-title h3');
-        const roleSectionMatches = !searchTerm || sectionTitles[0].textContent.toLowerCase().includes(searchTerm);
+        const rolePanel = document.querySelector('.roles-content');
+        const rolesSection = document.querySelector('.roles-section');
+        const securitySection = document.querySelector('.security-section');
+        const configDivider = document.querySelector('.config-divider');
+        const roleSectionMatches = !searchTerm || rolesSection.dataset.searchLabel.includes(searchTerm);
         let visibleRoleCount = 0;
 
         roleCards.forEach(card => {
@@ -33,9 +35,10 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
             tab.hidden = Boolean(searchTerm) && !roleSectionMatches && !tab.textContent.toLowerCase().includes(searchTerm);
         });
         rolePanel.hidden = Boolean(searchTerm) && visibleRoleCount === 0;
+        rolesSection.hidden = rolePanel.hidden;
 
         const securityPanel = document.querySelector('.config-forms');
-        const securitySectionMatches = !searchTerm || sectionTitles[1].textContent.toLowerCase().includes(searchTerm);
+        const securitySectionMatches = !searchTerm || securitySection.dataset.searchLabel.includes(searchTerm);
         let visiblePolicyCount = 0;
         securityPanel.querySelectorAll('.policy-group').forEach(group => {
             const groupHeadingMatches = securitySectionMatches || group.querySelector('h4').textContent.toLowerCase().includes(searchTerm);
@@ -50,6 +53,8 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
             if (visibleRows > 0) visiblePolicyCount += 1;
         });
         securityPanel.hidden = Boolean(searchTerm) && visiblePolicyCount === 0;
+        securitySection.hidden = securityPanel.hidden;
+        configDivider.hidden = rolesSection.hidden || securitySection.hidden;
 
         let emptyState = document.getElementById('roleSearchEmpty');
         if (!emptyState) {
@@ -210,18 +215,15 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                 });
             }
 
-            // Always append the Create Role button at the end of the tabs
-            tabsContainer.innerHTML += `<button class="tab create-role" id="btnCreateRole">Create Role <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM13 6l4 4"></path></svg></button>`;
-            
-            document.getElementById('btnCreateRole').addEventListener('click', () => {
-                window.location.href = '../roles-permissions-create/index.html'; 
-            });
-
         } catch (e) {
             console.error("Failed to load roles:", e);
             document.getElementById('dynamicRolesCards').innerHTML = `<div class="empty-roles-state">Error connecting to database.</div>`;
         }
     }
+
+    document.getElementById('btnCreateRole').addEventListener('click', () => {
+        window.location.href = '../roles-permissions-create/index.html';
+    });
 
     // ==========================================
     // UI STEPPER LOGIC (+/- Buttons)

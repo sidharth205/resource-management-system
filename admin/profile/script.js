@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    if (new URLSearchParams(window.location.search).has('id')) {
+        window.location.replace('../profile/index.html');
+        return;
+    }
+
     try {
         // Use the selected employee when this page is opened from user management.
         const selectedEmpId = new URLSearchParams(window.location.search).get('id');

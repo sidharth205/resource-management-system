@@ -80,10 +80,10 @@
 .stat-ico { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .chip-ongoing { background: var(--sky-blue, #c4c5db); color: var(--navy, #434775); }
 .chip-ongoing .stat-ico { background: var(--navy, #434775); }
-.chip-completed { background: #e9fbf1; color: #1f7a4d; }
-.chip-completed .stat-ico { background: #35b06a; }
-.chip-delayed { background: #fee2e2; color: #b91c1c; }
-.chip-delayed .stat-ico { background: #e0434b; }
+.chip-completed { background: rgba(196, 197, 219, 0.4); color: var(--navy, #434775); }
+.chip-completed .stat-ico { background: var(--navy, #434775); }
+.chip-delayed { background: rgba(234, 87, 87, 0.12); color: var(--coral, #ea5757); }
+.chip-delayed .stat-ico { background: var(--coral, #ea5757); }
 
 /* Table */
 .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line-color, #e4e5ee); }

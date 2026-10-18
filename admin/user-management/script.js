@@ -8,6 +8,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
+        const usersTableBody = document.getElementById('usersTableBody');
+        usersTableBody.addEventListener('click', event => {
+            const profileLink = event.target.closest('.employee-profile-link[data-employee-id]');
+            if (!profileLink) return;
+
+            try {
+                sessionStorage.setItem('adminEmployeeProfileId', profileLink.dataset.employeeId);
+            } catch (error) {
+                event.preventDefault();
+                console.error('Unable to open employee profile:', error);
+                window.alert('Unable to open this employee profile in the current browser session.');
+            }
+        });
+
+        function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>'"]/g, character => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        }[character]));
+    }
+
     // 1. Initialize Constraints & Auto-Generators
     setupFormConstraints();
 
@@ -59,17 +79,20 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
 
             users.forEach(u => {
     const tr = document.createElement('tr');
+    const isLoggedIn = u.active === true;
+    const empId = escapeHtml(u.emp_id || '--');
+    const isCurrentUser = u.emp_id && u.emp_id === localStorage.getItem('user_emp_id');
+    const profileUrl = isCurrentUser
+        ? '../profile/index.html'
+        : `../employee-profile/index.html?id=${encodeURIComponent(u.emp_id || '')}`;
+    const profileAccess = isCurrentUser ? '' : ` data-employee-id="${escapeHtml(u.emp_id || '')}"`;
     tr.innerHTML = `
-        <td><strong>${u.emp_id}</strong></td>
-        <td>
-            <a href="../profile/index.html?id=${u.emp_id}" style="color: #3182ce; text-decoration: none; font-weight: bold;" title="View Profile">
-                ${u.name}
-            </a>
-        </td>
-        <td>${u.department || 'N/A'}</td>
-        <td><span style=" font-weight: 600;">${u.role}</span></td>
-        <td>${u.employment_type || 'N/A'}</td>
-        <td><span class="status-badge status-active">${u.status || 'active'}</span></td>
+        <td class="employee-id-cell"><span class="employee-id-tag">${empId}</span></td>
+        <td><a class="employee-profile-link"${profileAccess} href="${profileUrl}" title="View ${escapeHtml(u.name || 'employee')} profile">${escapeHtml(u.name || 'Unnamed employee')}</a></td>
+        <td>${escapeHtml(u.department || 'N/A')}</td>
+        <td><span class="employee-role-tag">${escapeHtml(u.role || 'Unassigned')}</span></td>
+        <td>${escapeHtml(u.employment_type || 'N/A')}</td>
+        <td><span class="status-badge ${isLoggedIn ? 'status-logged-in' : 'status-logged-out'}">${isLoggedIn ? 'Logged in' : 'Logged out'}</span></td>
     `;
     tbody.appendChild(tr);
 });

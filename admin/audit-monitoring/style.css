@@ -69,8 +69,8 @@
 }
 
 .date-filters input[type="date"]:invalid {
-    border-color: #d9534f;
-    outline: 2px solid rgba(217, 83, 79, 0.15);
+    border-color: var(--coral, #ea5757);
+    outline: 2px solid rgba(234, 87, 87, 0.15);
 }
 
 .search-filters {

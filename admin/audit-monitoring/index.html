@@ -6,8 +6,13 @@
     <title>RMS | Audit & Monitoring</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../admin-theme.css">
+    <script src="../page-loader.js"></script>
 </head>
 <body>
+    <div class="admin-loading-screen" role="status" aria-label="Loading">
+        <div class="admin-loader-visual" aria-hidden="true"></div>
+    </div>
     <div class="app-container">
         <!-- Sidebar Navigation[cite: 1] -->
         <aside class="sidebar">
@@ -31,8 +36,8 @@
             <header class="top-header">
                 <h2>Audit & Monitoring</h2>
                 <div class="header-actions">
-                    <span class="bell-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
-                    <span class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Admin</span></span>
+                    <a href="../dashboard/index.html" class="bell-icon" aria-label="View system notifications" title="System notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></a>
+                    <a href="../profile/index.html" class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Admin</span></a>
                 </div>
             </header>
 

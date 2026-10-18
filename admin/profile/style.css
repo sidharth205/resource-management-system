@@ -66,7 +66,7 @@
 .pwd-input-group input:focus { outline: none; border-color: var(--teal, #434775); background: #fff; }
 .pwd-input-group input:disabled { background: var(--line-color, #e4e5ee); color: var(--muted-color, #5e627d); cursor: not-allowed; }
 .password-rules { display: flex; flex-direction: column; gap: 4px; margin: -4px 0 4px; padding: 0; list-style: none; font-size: 0.72rem; }
-.password-rules li { color: #b0332f; }
+.password-rules li { color: var(--coral, #ea5757); }
 .password-rules li::before { content: '\25CB'; display: inline-block; width: 18px; }
 .password-rules li.fulfilled { color: var(--teal, #434775); font-weight: 600; }
 .password-rules li.fulfilled::before { content: '\2713'; }
@@ -79,4 +79,4 @@
 .btn-update-pwd:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(91, 95, 151, .35); background-color: var(--navy, #434775); }
 .password-message { min-height: 18px; margin: 0; font-size: 0.75rem; }
 .password-message.success { color: var(--teal, #434775); font-weight: 600; }
-.password-message.error { color: #b0332f; }
+.password-message.error { color: var(--coral, #ea5757); }

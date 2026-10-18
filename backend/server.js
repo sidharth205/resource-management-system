@@ -571,12 +571,12 @@ app.get('/api/activities', authenticateUser, requirePermission('view_users'), as
 // 9. REPORTS & DASHBOARD
 // ==========================================
 app.get('/api/reports/project-progress', authenticateUser, requirePermission('view_reports'), async (req, res) => {
-    let query = supabase.from('projects').select('id, name, progress');
+    let query = supabase.from('projects').select('id, name, status, end_date');
     if (req.user.role.toLowerCase() === 'manager') query = query.eq('manager_id', req.user.empId || req.user.id);
     
     const { data, error } = await query;
     if (error) return res.status(500).json({ error: error.message });
-    res.json(data);
+    res.json(await Promise.all((data || []).map(updateProjectStatusByDueDate)));
 });
 
 app.get('/api/audit-logs', authenticateUser, requirePermission('view_audit_logs'), async (req, res) => {
@@ -630,7 +630,7 @@ app.get('/api/dashboard/admin-stats', authenticateUser, requirePermission('view_
         res.json({ 
             totalEmployees: totalEmployees ?? 2, 
             activeProjects: activeProjects ?? 0, 
-            activeUsersToday: activeUsersNow ?? 0,
+            activeUsersNow: activeUsersNow ?? 0,
             activeUsersTodayByActivity: uniqueActiveUsers
         });
     } catch (err) {

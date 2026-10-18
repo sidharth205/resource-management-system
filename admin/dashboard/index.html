@@ -6,8 +6,13 @@
     <title>RMS | Admin Dashboard</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../admin-theme.css">
+    <script src="../page-loader.js"></script>
 </head>
 <body>
+    <div class="admin-loading-screen" role="status" aria-label="Loading">
+        <div class="admin-loader-visual" aria-hidden="true"></div>
+    </div>
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
@@ -31,63 +36,60 @@
             <header class="top-header">
                 <h2>Dashboard</h2>
                 <div class="header-actions">
-                    <span class="bell-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
-                    <span class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">&lt;Name&gt;</span></span>
+                    <a href="../profile/index.html" class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">&lt;Name&gt;</span></a>
                 </div>
             </header>
 
             <div class="dashboard-grid-layout">
-                
-                <!-- 1. Active Users Today Card -->
+                <div class="dash-card total-employees-card">
+                    <div class="card-title-bar">
+                        <span class="dash-title"><svg class="ui-icon dash-heading-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M3 20a6 6 0 0 1 12 0M15 15.5a5 5 0 0 1 6 4.5"></path></svg>Total Employees</span>
+                    </div>
+                    <div class="total-count-box">
+                        <h1 id="statTotalEmployees">--</h1>
+                    </div>
+                </div>
+
+                <div class="dash-card active-now-card">
+                    <div class="card-title-bar">
+                        <span class="dash-title"><svg class="ui-icon dash-heading-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.2-6 4.1 12 2.2-6H21"></path><circle cx="18.5" cy="5.5" r="2.5"></circle></svg>Active Now</span>
+                    </div>
+                    <div class="active-now-box">
+                        <h2 id="statActiveNow">--</h2>
+                    </div>
+                </div>
+
+                <!-- Active users stay above projects in the dashboard flow. -->
                 <div class="dash-card active-users-card">
                     <div class="card-title-bar">
-                        <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg>Active Users Today</span>
+                        <span class="dash-title"><svg class="ui-icon dash-heading-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20a5.5 5.5 0 0 1 11 0M16 11l2 2 4-4"></path></svg>Active Users Today</span>
                     </div>
                     <div class="card-content-list" id="activeUsersList">
                         <!-- Populated dynamically via JS. Shows '--' if empty -->
                     </div>
                 </div>
 
-                <!-- 2. Active Projects Card -->
                 <div class="dash-card active-projects-card">
                     <div class="card-title-bar">
-                        <span>Active Projects</span>
+                        <span class="dash-title"><svg class="ui-icon dash-heading-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"></rect><path d="M8 5V3h8v2M3 10h18M8 14h3M8 17h6"></path></svg>Ongoing Projects</span>
                     </div>
                     <div class="project-header-stat">
                         <h1 id="statActiveProjectsCount">--</h1>
-                        <p>Ongoing Projects</p>
+                        <p>Active Projects</p>
                     </div>
                     <div class="card-content-list" id="projectsProgressList">
                         <!-- Populated dynamically via JS. Shows '--' if empty -->
                     </div>
                 </div>
 
-                <!-- 3. System Notifications Card -->
                 <div class="dash-card notifications-card">
                     <div class="card-title-bar">
-                        <span>System Notifications</span>
+                        <span class="dash-title"><svg class="ui-icon dash-heading-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path><path d="M12 2v1"></path></svg>System Notifications</span>
                     </div>
                     <div class="card-content-list" id="systemNotificationsList">
                         <!-- Populated dynamically via JS. Shows '--' if empty -->
                     </div>
                 </div>
-
-                <!-- 4. Total Employees Card -->
-                <div class="dash-card total-employees-card">
-                    <div class="card-title-bar">
-                        <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M3 20a6 6 0 0 1 12 0M15 20a5 5 0 0 1 6 0"></path></svg>Total Employees</span>
-                    </div>
-                    <div class="total-emp-flex">
-                        <div class="total-count-box">
-                            <h1 id="statTotalEmployees">--</h1>
-                        </div>
-                        <div class="active-now-box">
-                            <p class="label">Active Now</p>
-                            <h2 id="statActiveNow">--</h2>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </main>
     </div>

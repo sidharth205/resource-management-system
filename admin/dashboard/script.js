@@ -31,10 +31,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }) + ' IST';
     }
 
-    function formatChange(value) {
-        if (value === null || value === undefined || value === '') return '';
-        if (typeof value === 'object') return JSON.stringify(value);
-        return String(value);
+    function formatNotificationTime(value) {
+        let rawTime = value == null ? '' : String(value);
+        if (!rawTime) return '--';
+        if (rawTime && !rawTime.endsWith('Z') && !rawTime.includes('+')) rawTime += 'Z';
+        const date = new Date(rawTime);
+        if (Number.isNaN(date.getTime())) return '--';
+        return date.toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            day: '2-digit',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        }) + ' IST';
     }
 
     async function loadExactDashboardData() {
@@ -47,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             if (statsRes.ok) {
                 document.getElementById('statTotalEmployees').textContent = stats.totalEmployees ?? '--';
-                document.getElementById('statActiveNow').textContent = stats.activeUsersToday ?? '--';
+                document.getElementById('statActiveNow').textContent = stats.activeUsersNow ?? '--';
             } else {
                 document.getElementById('statTotalEmployees').textContent = '--';
                 document.getElementById('statActiveNow').textContent = '--';
@@ -99,15 +109,14 @@ if (todayActivities && todayActivities.length > 0) {
                 projectsList.innerHTML = '';
                 
                 projects.slice(0, 6).forEach(p => {
-                    const progress = p.progress ?? 0; // Exact database progress or 0
+                    const projectStatus = String(p.status || '').toLowerCase();
+                    const isDelayed = projectStatus === 'delayed';
+                    const statusLabel = isDelayed ? 'Delayed' : 'In Progress';
                     const row = document.createElement('div');
-                    row.className = 'project-progress-row';
+                    row.className = `project-progress-row${isDelayed ? ' project-progress-row--delayed' : ''}`;
                     row.innerHTML = `
-                        <span class="proj-name">${p.name || '--'}</span>
-                        <div class="proj-bar-container">
-                            <div class="proj-fill" style="width: ${progress}%;"></div>
-                            <span class="proj-percentage">${progress}%</span>
-                        </div>
+                        <span class="proj-name" title="${escapeHtml(p.name || '--')}">${escapeHtml(p.name || '--')}</span>
+                        <span class="proj-status${isDelayed ? ' proj-status--delayed' : ''}">${statusLabel}</span>
                     `;
                     projectsList.appendChild(row);
                 });
@@ -116,36 +125,38 @@ if (todayActivities && todayActivities.length > 0) {
                 projectsList.innerHTML = `<div class="project-progress-row" style="justify-content: center; color: #718096;"><span>--</span></div>`;
             }
 
-            // 4. Show detailed system changes from the audit log.
-                    const notifications = activities.filter(activity =>
-                !activity.profiles?.role || activity.profiles.role.toLowerCase() === 'admin'
-            );
+            // 4. Show concise activity notifications with role-based accents.
+            const notifications = Array.isArray(activities) ? activities.slice(0, 30) : [];
             const notifContainer = document.getElementById('systemNotificationsList');
             
             if (Array.isArray(notifications) && notifications.length > 0) {
                 notifContainer.innerHTML = '';
                 notifications.forEach(n => {
                     const bar = document.createElement('div');
-                    bar.className = 'notif-bar';
-                    const actorName = n.emp_id === currentAdminId ? 'You' : (n.profiles?.name || 'System user');
-                    const actorId = n.emp_id || 'SYSTEM';
-                    const previousValue = formatChange(n.previous_value);
-                    const newValue = formatChange(n.new_value);
-                    bar.innerHTML = `<strong>${escapeHtml(actorName)} <span class="notif-meta">${escapeHtml(actorId)}</span></strong>
-                        <span class="notif-summary">${escapeHtml(n.action || 'Updated the system')} (${escapeHtml(n.module || 'System')})</span>
-                        <span class="notif-meta">${escapeHtml(formatIstTime(n.created_at))}</span>
-                        <span class="notif-details">${n.record_id ? `Record: ${escapeHtml(n.record_id)}<br>` : ''}${previousValue ? `Before: ${escapeHtml(previousValue)}<br>` : ''}${newValue ? `After: ${escapeHtml(newValue)}` : ''}</span>
-                        <button type="button" class="notif-toggle" aria-expanded="false">Read more</button>`;
-                    const toggle = bar.querySelector('.notif-toggle');
-                    toggle.addEventListener('click', () => {
-                        const expanded = bar.classList.toggle('expanded');
-                        toggle.textContent = expanded ? 'Show less' : 'Read more';
-                        toggle.setAttribute('aria-expanded', expanded);
-                    });
+                    const actorRole = String(n.profiles?.role || '').toLowerCase();
+                    const roleClass = ['admin', 'manager', 'employee'].includes(actorRole)
+                        ? ` notif-bar--${actorRole}`
+                        : '';
+                    const roleLabel = actorRole
+                        ? actorRole.charAt(0).toUpperCase() + actorRole.slice(1)
+                        : 'System';
+                    const actorName = n.profiles?.name || (n.emp_id === currentAdminId ? currentAdminName : 'System user');
+                    const actorId = n.emp_id ? `<span class="notif-emp-id">(${escapeHtml(n.emp_id)})</span>` : '';
+                    const action = n.action || 'Updated the system';
+                    const module = n.module || 'System';
+                    const summary = `${action} · ${module}`;
+                    const notificationTime = formatNotificationTime(n.created_at);
+                    bar.className = `notif-bar${roleClass}`;
+                    bar.innerHTML = `<div class="notif-actor">
+                            <strong class="notif-name" title="${escapeHtml(actorName)}">${escapeHtml(actorName)} ${actorId}</strong>
+                            <span class="notif-role">${escapeHtml(roleLabel)}</span>
+                        </div>
+                        <span class="notif-summary" title="${escapeHtml(summary)}">${escapeHtml(summary)}</span>
+                        <time class="notif-time">${escapeHtml(notificationTime)}</time>`;
                     notifContainer.appendChild(bar);
                 });
             } else {
-                notifContainer.innerHTML = `<div class="notif-bar" style="display: flex; align-items: center; justify-content: center; color: #718096; font-size: 0.8rem; font-weight: bold;">--</div>`;
+                notifContainer.innerHTML = '<div class="notif-empty">No recent notifications</div>';
             }
 
         } catch (e) {

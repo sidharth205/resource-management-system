@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS | Employee Profile</title>
+    <link rel="stylesheet" href="../../shared-assets/global.css">
+    <link rel="stylesheet" href="../profile/style.css">
+    <link rel="stylesheet" href="../admin-theme.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="../page-loader.js"></script>
+</head>
+<body class="employee-profile-page">
+    <div class="admin-loading-screen" role="status" aria-label="Loading">
+        <div class="admin-loader-visual" aria-hidden="true"></div>
+    </div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+                <div class="welcome-text">Welcome<span id="userName">Admin</span></div>
+            </div>
+            <nav class="nav-menu">
+                <a href="../dashboard/index.html" class="nav-item">Dashboard</a>
+                <a href="../user-management/index.html" class="nav-item active">User Management</a>
+                <a href="../system-configuration/index.html" class="nav-item">System Configuration</a>
+                <a href="../audit-monitoring/index.html" class="nav-item">Audit &amp; Monitoring</a>
+                <a href="../reports/index.html" class="nav-item">Reports</a>
+                <a href="../profile/index.html" class="nav-item">My Profile</a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout</button>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h2 id="employeeProfileHeading">Employee Profile</h2>
+                <div class="header-actions">
+                    <a href="../dashboard/index.html" class="bell-icon" aria-label="View system notifications" title="System notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></a>
+                    <a href="../profile/index.html" class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Admin</span></a>
+                </div>
+            </header>
+
+            <div class="profile-page-container">
+                <div class="card top-banner-card">
+                    <div class="banner-left">
+                        <div class="large-avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+                        <div class="banner-text-info">
+                            <h2 id="bannerName">Employee Name</h2>
+                            <p id="bannerEmail">Email</p>
+                            <p id="bannerPhone">Phone not provided</p>
+                            <p class="joined-date">Joined on <span id="bannerJoiningDate">--</span></p>
+                            <p class="status-active-text" id="bannerStatus">--</p>
+                        </div>
+                    </div>
+                    <div class="banner-right">
+                        <div class="meta-row"><span>Employee ID</span> <strong id="metaEmpId">--</strong></div>
+                        <div class="meta-row"><span>Department</span> <strong id="metaDepartment">--</strong></div>
+                        <div class="meta-row"><span>Reporting to</span> <strong id="metaReporting">--</strong></div>
+                        <div class="meta-row"><span>Role</span> <strong id="metaRole">--</strong></div>
+                    </div>
+                </div>
+
+                <div class="bottom-grid">
+                    <div class="card details-card">
+                        <div class="card-title-row"><h3>Personal Details</h3></div>
+                        <div class="details-form-list">
+                            <div class="field-row"><label>Full Name :</label><span id="detFullName">--</span></div>
+                            <div class="field-row"><label>Email Address :</label><span id="detEmail">--</span></div>
+                            <div class="field-row"><label>Phone No. :</label><span id="detPhone">--</span></div>
+                        </div>
+                    </div>
+
+                    <div class="right-stack">
+                        <div class="card settings-card">
+                            <div class="card-title-row"><h3>Employment Details</h3></div>
+                            <div class="details-form-list">
+                                <div class="field-row"><label>Department :</label><span id="detDepartment">--</span></div>
+                                <div class="field-row"><label>Role :</label><span id="detRole">--</span></div>
+                                <div class="field-row"><label>Employment Type :</label><span id="detEmploymentType">--</span></div>
+                                <div class="field-row"><label>Account Status :</label><span id="detAccountStatus">--</span></div>
+                            </div>
+                        </div>
+                        <a class="back-to-employees" href="../user-management/index.html">Back to employees</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../shared-assets/session-guard.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -281,12 +281,12 @@ input::-ms-clear {
 
 .error-msg:not(:empty) {
     padding: 8px 12px;
-    border: 1px solid rgba(220, 38, 38, 0.2);
+    border: 1px solid rgba(234, 87, 87, 0.2);
 }
 
 .success-msg {
-    color: #15803d;
-    background: rgba(220, 252, 231, 0.6);
+    color: var(--navy);
+    background: rgba(196, 197, 219, 0.25);
     border-radius: 8px;
     font-size: 13px;
     text-align: center;
@@ -298,7 +298,7 @@ input::-ms-clear {
 
 .success-msg:not(:empty) {
     padding: 8px 12px;
-    border: 1px solid rgba(22, 163, 74, 0.2);
+    border: 1px solid rgba(67, 71, 117, 0.2);
 }
 
 .help-text {

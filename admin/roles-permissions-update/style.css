@@ -79,5 +79,5 @@
 .btn-cancel:hover { background-color: rgba(184, 184, 209, 0.15); color: white; }
 
 .btn-save { background-color: var(--teal, #434775); color: white; border: none; box-shadow: 0 8px 18px rgba(91, 95, 151, .35); }
-.btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(91, 95, 151, .45); background-color: #466776; }
+.btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(91, 95, 151, .45); background-color: var(--navy, #434775); }
 .btn-save:disabled { opacity: .7; cursor: not-allowed; transform: none; }
