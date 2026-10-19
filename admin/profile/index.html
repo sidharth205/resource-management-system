@@ -44,22 +44,23 @@
             <div class="profile-page-container">
                 
                 <!-- Top Card: Summary Banner -->
-                <div class="card top-banner-card">
+                <div class="card top-banner-card profile-hero">
                     <div class="banner-left">
                         <div class="large-avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
                         <div class="banner-text-info">
+                            <span class="profile-kicker">MY PROFILE</span>
                             <h2 id="bannerName">Employee Name</h2>
                             <p id="bannerEmail">Gmail</p>
                             <p id="bannerPhone">Phone No.</p>
                             <p class="joined-date">Joined on <span id="bannerJoiningDate">--/--/----</span></p>
-                            <p class="status-active-text" id="bannerStatus">Active</p>
+                            <span class="status-active-text" id="bannerStatus">Active</span>
                         </div>
                     </div>
                     <div class="banner-right">
-                        <div class="meta-row"><span>Employee ID</span> <strong id="metaEmpId">--</strong></div>
-                        <div class="meta-row"><span>Department</span> <strong id="metaDepartment">--</strong></div>
-                        <div class="meta-row"><span>Reporting to</span> <strong id="metaReporting">--</strong></div>
-                        <div class="meta-row"><span>Role</span> <strong id="metaRole">Employee</strong></div>
+                        <div class="meta-row"><span>Employee ID</span><strong id="metaEmpId">--</strong></div>
+                        <div class="meta-row"><span>Department</span><strong id="metaDepartment">--</strong></div>
+                        <div class="meta-row"><span>Reporting to</span><strong id="metaReporting">--</strong></div>
+                        <div class="meta-row"><span>Role</span><strong id="metaRole">Employee</strong></div>
                     </div>
                 </div>
 
@@ -78,47 +79,48 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: Account Settings & Password -->
-                    <div class="right-stack">
-                        <!-- Account Settings -->
-                        <div class="card settings-card">
-                            <div class="card-title-row">
-                               <h3>Account Settings</h3>
-                            </div>
-                            <div class="details-form-list">
-                                <div class="field-row"><label>Time Zone :</label> <span>IST (UTC+5:30)</span></div>
-                                <div class="field-row"><label>Language :</label> <span>English (UK)</span></div>
-                                <div class="field-row"><label>Theme :</label> <span>Light</span></div>
-                            </div>
+                    <!-- Account Settings -->
+                    <div class="card settings-card">
+                        <div class="card-title-row">
+                            <h3>Account Settings</h3>
                         </div>
+                        <div class="details-form-list">
+                            <div class="field-row"><label>Time Zone</label><span>IST (UTC+5:30)</span></div>
+                            <div class="field-row"><label>Language</label><span>English (UK)</span></div>
+                        </div>
+                    </div>
 
-                        <!-- Change Password Box -->
-                        <div class="card password-card">
-                            <h3>Change Password</h3>
-                            <form id="changePasswordForm">
-                                <div class="pwd-input-group">
-                                    <label>Current Password :</label>
+                    <!-- Change Password Box -->
+                    <div class="card password-card">
+                        <div class="password-card-heading">
+                            <span class="security-icon" aria-hidden="true">✓</span>
+                            <div><h3>Security</h3><p>Keep your account protected</p></div>
+                        </div>
+                        <form id="changePasswordForm">
+                            <div class="pwd-input-group">
+                                <label for="currentPassword">Current password</label>
+                                <div class="verify-row">
                                     <input type="password" id="currentPassword" required placeholder="Enter current password">
                                     <button type="button" class="btn-verify-password" id="verifyPasswordBtn">Verify</button>
                                 </div>
-                                <div class="pwd-input-group">
-                                    <label>New Password :</label>
-                                    <input type="password" id="newPassword" required placeholder="Enter new password" disabled>
-                                </div>
-                                <ul class="password-rules" id="passwordRules" aria-label="Password requirements">
-                                    <li data-rule="length">Minimum length</li>
-                                    <li data-rule="uppercase">Uppercase letter</li>
-                                    <li data-rule="numbers">Number</li>
-                                    <li data-rule="special">Special character</li>
-                                </ul>
-                                <div class="pwd-input-group">
-                                    <label>Confirm New Password :</label>
-                                    <input type="password" id="confirmPassword" required placeholder="Confirm new password" disabled>
-                                </div>
-                                <button type="submit" class="btn-update-pwd" id="updatePasswordBtn" disabled>Update Password</button>
-                                <p id="passwordMessage" class="password-message" role="status" aria-live="polite"></p>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="pwd-input-group">
+                                <label for="newPassword">New password</label>
+                                <input type="password" id="newPassword" required placeholder="Enter new password" disabled>
+                            </div>
+                            <div class="pwd-input-group">
+                                <label for="confirmPassword">Confirm new password</label>
+                                <input type="password" id="confirmPassword" required placeholder="Confirm new password" disabled>
+                            </div>
+                            <ul class="password-rules" id="passwordRules" aria-label="Password requirements">
+                                <li data-rule="length">Minimum length</li>
+                                <li data-rule="uppercase">Uppercase letter</li>
+                                <li data-rule="numbers">Number</li>
+                                <li data-rule="special">Special character</li>
+                            </ul>
+                            <button type="submit" class="btn-update-pwd" id="updatePasswordBtn" disabled>Update Password</button>
+                            <p id="passwordMessage" class="password-message" role="status" aria-live="polite"></p>
+                        </form>
                     </div>
 
                 </div>

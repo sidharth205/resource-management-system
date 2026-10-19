@@ -29,7 +29,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
         } catch (error) {
             console.error("Error loading audit logs:", error);
             document.getElementById('auditTableBody').innerHTML = 
-                `<tr><td colspan="5" style="text-align: center; color: red;">Error loading logs. Check backend connection.</td></tr>`;
+                `<tr><td colspan="6" class="audit-table-message">Error loading logs. Check the backend connection and try again.</td></tr>`;
         }
     }
 
@@ -51,17 +51,121 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
     }
 
     // 3. Render Logs to Table
+    function formatAuditValue(value) {
+        if (value === null || value === undefined) return 'None';
+        if (typeof value === 'boolean') return value ? 'Enabled' : 'Disabled';
+        if (Array.isArray(value)) return value.length ? value.join(', ') : 'None';
+        if (typeof value === 'object') return 'Details recorded';
+        return String(value);
+    }
+
+    function formatLogNumber(log) {
+        if (log.log_number !== null && log.log_number !== undefined) {
+            return `LOG-${String(log.log_number).padStart(6, '0')}`;
+        }
+        return `LOG-${String(log.id || '').toUpperCase()}`;
+    }
+
+    const changeLabels = {
+        minLength: 'Minimum password length (characters)',
+        requireUppercase: 'Uppercase letters',
+        requireNumbers: 'Numbers',
+        requireSpecial: 'Special characters',
+        expiryDays: 'Password expiry (days)',
+        maxAttempts: 'Maximum login attempts',
+        allowMultipleSessions: 'Multiple sessions',
+        allowPasswordReset: 'Password reset',
+        timeoutMins: 'Session timeout (minutes)'
+    };
+
+    function getChangeItems(log) {
+        const previousValue = log.previous_value;
+        const newValue = log.new_value;
+        const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+
+        if (isRecord(previousValue) || isRecord(newValue)) {
+            const previousRecord = isRecord(previousValue) ? previousValue : {};
+            const newRecord = isRecord(newValue) ? newValue : {};
+            const changedKeys = [...new Set([...Object.keys(previousRecord), ...Object.keys(newRecord)])]
+                .filter(key => JSON.stringify(previousRecord[key]) !== JSON.stringify(newRecord[key]));
+            return changedKeys.map(key => ({
+                label: changeLabels[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, character => character.toUpperCase()),
+                previous: Object.prototype.hasOwnProperty.call(previousRecord, key) ? formatAuditValue(previousRecord[key]) : null,
+                current: Object.prototype.hasOwnProperty.call(newRecord, key) ? formatAuditValue(newRecord[key]) : null
+            }));
+        }
+
+        if (previousValue !== undefined || newValue !== undefined) {
+            return [{
+                label: 'Value',
+                previous: previousValue === undefined ? null : formatAuditValue(previousValue),
+                current: newValue === undefined ? null : formatAuditValue(newValue)
+            }];
+        }
+        return [];
+    }
+
+    function changeItemsText(log) {
+        const items = getChangeItems(log);
+        return items.length
+            ? items.map(item => `${item.label}: ${item.previous === null ? 'Set to ' + item.current : item.current === null ? 'Removed (was ' + item.previous + ')' : item.previous + ' → ' + item.current}`).join('; ')
+            : 'No setting changes';
+    }
+
+    function appendChangeDetails(cell, log) {
+        const items = getChangeItems(log);
+        if (items.length === 0) {
+            const note = document.createElement('span');
+            note.className = 'change-empty';
+            note.textContent = 'No setting changes';
+            cell.appendChild(note);
+            return;
+        }
+
+        items.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'change-item';
+            const label = document.createElement('span');
+            label.className = 'change-label';
+            label.textContent = item.label;
+            row.appendChild(label);
+
+            const values = document.createElement('span');
+            values.className = 'change-values';
+            if (item.previous !== null && item.current !== null) {
+                const previous = document.createElement('span');
+                previous.className = 'change-previous';
+                previous.textContent = item.previous;
+                const arrow = document.createElement('span');
+                arrow.className = 'change-arrow';
+                arrow.setAttribute('aria-label', 'changed to');
+                arrow.textContent = '→';
+                const current = document.createElement('strong');
+                current.className = 'change-current';
+                current.textContent = item.current;
+                values.append(previous, arrow, current);
+            } else {
+                const current = document.createElement('strong');
+                current.className = 'change-current';
+                current.textContent = item.current === null ? `Removed (was ${item.previous})` : item.current;
+                values.appendChild(current);
+            }
+            row.appendChild(values);
+            cell.appendChild(row);
+        });
+    }
+
     function renderLogs(logs) {
         visibleLogs = logs;
         const tbody = document.getElementById('auditTableBody');
         tbody.innerHTML = '';
 
         if (logs.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No audit logs found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" class="audit-table-message">No audit logs found.</td></tr>`;
             return;
         }
 
-        logs.forEach((log, index) => {
+        logs.forEach(log => {
             // Ensure PostgreSQL timestamp is parsed as UTC by appending 'Z' if missing
             let rawTime = log.created_at;
             if (rawTime && !rawTime.endsWith('Z') && !rawTime.includes('+')) {
@@ -79,23 +183,43 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                 hour12: false
             });
             
-            const logId = `LOG${index + 1}`; 
+            const logId = formatLogNumber(log);
             
             // Extract EMP ID and Name
             const empId = log.emp_id || 'SYSTEM';
             const empName = log.profiles?.name || 'System Administrator';
 
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><strong>${logId}</strong></td>
-                <td>${timeString}</td>
-                <td title="Employee: ${empName}">
-                    <div class="audit-employee-name">${empName}</div>
-                    <div class="audit-employee-id">${empId}</div>
-                </td>
-                <td>${log.module}</td>
-                <td>${log.action}</td>
-            `;
+            const logIdCell = document.createElement('td');
+            const logIdText = document.createElement('strong');
+            logIdText.textContent = logId;
+            logIdCell.appendChild(logIdText);
+            tr.append(logIdCell);
+
+            const timestampCell = document.createElement('td');
+            timestampCell.textContent = timeString;
+            tr.append(timestampCell);
+
+            const employeeCell = document.createElement('td');
+            employeeCell.title = `Employee: ${empName}`;
+            const employeeName = document.createElement('div');
+            employeeName.className = 'audit-employee-name';
+            employeeName.textContent = empName;
+            const employeeId = document.createElement('div');
+            employeeId.className = 'audit-employee-id';
+            employeeId.textContent = empId;
+            employeeCell.append(employeeName, employeeId);
+            tr.append(employeeCell);
+
+            [log.module || '—', log.action || '—'].forEach(value => {
+                const cell = document.createElement('td');
+                cell.textContent = value;
+                tr.append(cell);
+            });
+            const detailsCell = document.createElement('td');
+            detailsCell.className = 'audit-change-details';
+            appendChangeDetails(detailsCell, log);
+            tr.append(detailsCell);
             tbody.appendChild(tr);
         });
     }
@@ -123,9 +247,10 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
         }
 
         const filteredLogs = allLogs.filter(log => {
-            const moduleMatch = log.module.toLowerCase().includes(searchTerm);
-            const actionMatch = log.action.toLowerCase().includes(searchTerm);
-            const empIdMatch = log.emp_id && log.emp_id.toLowerCase().includes(searchTerm);
+            const moduleMatch = (log.module || '').toLowerCase().includes(searchTerm);
+            const actionMatch = (log.action || '').toLowerCase().includes(searchTerm);
+            const detailsMatch = changeItemsText(log).toLowerCase().includes(searchTerm);
+            const empIdMatch = log.emp_id && String(log.emp_id).toLowerCase().includes(searchTerm);
             const nameMatch = log.profiles?.name && log.profiles.name.toLowerCase().includes(searchTerm);
             const employeeMatch = !employee || (log.emp_id || 'SYSTEM') === employee;
             const selectedModuleMatch = !module || log.module === module;
@@ -138,7 +263,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
             const fromDateMatch = !fromDate || logDate >= fromDate;
             const tillDateMatch = !tillDate || logDate <= tillDate;
 
-            return (moduleMatch || actionMatch || empIdMatch || nameMatch) && employeeMatch && selectedModuleMatch && fromDateMatch && tillDateMatch;
+            return (moduleMatch || actionMatch || detailsMatch || empIdMatch || nameMatch) && employeeMatch && selectedModuleMatch && fromDateMatch && tillDateMatch;
         });
         renderLogs(filteredLogs);
     }
@@ -176,14 +301,15 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
             return;
         }
 
-        const headers = ['Log ID', 'Timestamp', 'Employee Name', 'Employee ID', 'Module', 'Action', 'Record ID', 'Previous Value', 'New Value'];
-        const rows = visibleLogs.map((log, index) => [
-            `LOG${index + 1}`,
+        const headers = ['Log ID', 'Timestamp', 'Employee Name', 'Employee ID', 'Module', 'Action', 'Change Details', 'Record ID', 'Previous Value', 'New Value'];
+        const rows = visibleLogs.map(log => [
+            formatLogNumber(log),
             log.created_at || '',
             log.profiles?.name || 'System Administrator',
             log.emp_id || 'SYSTEM',
             log.module || '',
             log.action || '',
+            changeItemsText(log),
             log.record_id || '',
             typeof log.previous_value === 'object' ? JSON.stringify(log.previous_value) : (log.previous_value || ''),
             typeof log.new_value === 'object' ? JSON.stringify(log.new_value) : (log.new_value || '')

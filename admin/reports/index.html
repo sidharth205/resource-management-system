@@ -71,49 +71,40 @@
           </div>
         </div>
 
-        <!-- 2. Employee Activity Reports -->
-        <div class="report-panel panel-activity">
-          <div class="panel-title"><span class="panel-ico ico-activity"></span>Employee Activity REPORTS</div>
-
-          <div class="input-group">
-            <label>Department</label>
-            <select id="activityDepartment"><option value="">Select Department</option></select>
-          </div>
-          <div class="input-group">
-            <label>Employee</label>
-            <select id="activityEmployee"><option value="">Select Employee</option></select>
-          </div>
-
-          <div class="panel-actions stacked">
-            <button class="btn-dark" id="btnViewActivityReport">View Report</button>
-            <button class="btn-dark" id="btnExportActivityReport">Export Report</button>
-          </div>
-        </div>
-
-        <!-- 3. Resource Allocation Reports -->
+        <!-- 2. Resource Allocation Reports -->
         <div class="report-panel panel-resource">
-          <div class="panel-title"><span class="panel-ico ico-resource"></span>Resource Allocation Reports</div>
+          <div class="panel-title"><span class="panel-ico ico-resource"></span>Team Capacity &amp; Allocation</div>
 
-          <p class="timeline-label">Enter Report Generation Timeline</p>
+          <p class="timeline-label">Available capacity uses 8 hours per weekday. Assigned hours are remaining estimates for open tasks due in this date range.</p>
           <div class="date-row">
-            <input type="date" id="resStartDate">
-            <input type="date" id="resEndDate">
+            <label>From<input type="date" id="resStartDate"></label>
+            <label>To<input type="date" id="resEndDate"></label>
           </div>
 
           <div class="input-group">
-            <label>Project</label>
-            <select id="resProject"><option value="">Select a project</option></select>
+            <label for="resProject">Project</label>
+            <select id="resProject"><option value="">All projects</option></select>
           </div>
 
-          <div class="alloc-block">
-            <p class="alloc-label">Employee Allocation</p>
-            <div class="alloc-bar"><div class="alloc-fill" id="allocFill" style="width:0%"></div></div>
-            <p class="alloc-figures" id="allocFigures">--/--</p>
+          <div class="allocation-summary" aria-live="polite">
+            <div><span>Available</span><strong id="availableHours">-- h</strong></div>
+            <div><span>Assigned</span><strong id="assignedHours">-- h</strong></div>
+            <div><span>Remaining</span><strong id="remainingHours">-- h</strong></div>
           </div>
 
           <div class="util-block">
-            <span>Utilization Percentage</span>
-            <strong id="utilPercentage">--%</strong>
+            <div class="util-heading"><span>Team utilization</span><strong id="utilPercentage">--%</strong></div>
+            <div class="alloc-bar" role="progressbar" id="allocProgress" aria-label="Team capacity utilization" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="alloc-fill" id="allocFill"></div>
+            </div>
+            <span class="allocation-note" id="allocationNote">Select a date range to calculate capacity.</span>
+          </div>
+
+          <div class="allocation-table-wrap">
+            <table class="data-table allocation-table">
+              <thead><tr><th>Team member</th><th>Assigned / available</th><th>Utilization</th></tr></thead>
+              <tbody id="allocationBody"><tr><td colspan="3" class="empty-row">Choose a date range to load allocation.</td></tr></tbody>
+            </table>
           </div>
 
           <button class="btn-dark full" id="btnViewResourceReport">View Report</button>

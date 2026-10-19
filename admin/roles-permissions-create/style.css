@@ -15,15 +15,28 @@
 .top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
 @keyframes fadeIn { to { opacity: 1; } }
 
+.role-heading-icon {
+    width: 1.15em;
+    height: 1.15em;
+    margin-left: 7px;
+    color: var(--amber, #f09a1a);
+}
+
+.top-header h2 { font-size: 1.6rem; }
+
 .role-creation-layout {
     display: flex;
     flex-direction: column;
     max-width: 900px;
+    width: 100%;
+    margin: auto;
     position: relative;
     z-index: 1;
 }
 
 .card {
+    box-sizing: border-box;
+    width: 100%;
     border-radius: 14px;
     padding: 30px;
     box-shadow: 0 14px 30px rgba(35, 38, 70, 0.08);
@@ -34,6 +47,41 @@
 .dark-card {
     background-color: var(--navy, #434775);
     color: #ffffff;
+}
+
+.form-message {
+    margin: 0 0 18px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.form-message[hidden],
+.message-back-link[hidden] {
+    display: none;
+}
+
+.form-message--success {
+    color: #d8f5e1;
+    background: rgba(42, 140, 78, 0.28);
+    border: 1px solid rgba(126, 220, 157, 0.55);
+}
+
+.form-message--error {
+    color: #ffe0e0;
+    background: rgba(196, 55, 55, 0.25);
+    border: 1px solid rgba(255, 150, 150, 0.55);
+}
+
+.message-back-link {
+    display: inline-block;
+    margin: -6px 0 18px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 .input-group {
@@ -150,4 +198,10 @@
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(91, 95, 151, .45);
     background-color: var(--navy, #434775);
+}
+
+@media (max-width: 700px) {
+    .top-header h2 { font-size: 1.4rem; }
+    .card { padding: 22px; }
+    .permissions-grid { grid-template-columns: 1fr; gap: 20px; }
 }

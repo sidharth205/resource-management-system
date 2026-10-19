@@ -234,64 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (report) downloadCurrentReport();
     });
 
-    // ---------- 2. Employee Activity Reports ----------
-    async function loadActivityFilters() {
-        try {
-            const users = await apiGet('/api/users');
-            const departments = [...new Set(users.map(u => u.department).filter(Boolean))];
-
-            const deptSelect = document.getElementById('activityDepartment');
-            departments.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d; opt.textContent = d;
-                deptSelect.appendChild(opt);
-            });
-
-            const empSelect = document.getElementById('activityEmployee');
-            function renderEmployees(filterDept) {
-                empSelect.innerHTML = '<option value="">Select Employee</option>';
-                users.filter(u => !filterDept || u.department === filterDept).forEach(u => {
-                    const opt = document.createElement('option');
-                    opt.value = u.emp_id; opt.textContent = u.name;
-                    empSelect.appendChild(opt);
-                });
-            }
-            renderEmployees(null);
-            deptSelect.addEventListener('change', () => renderEmployees(deptSelect.value));
-        } catch (e) {
-            console.error('Failed to load employees:', e);
-        }
-    }
-
-    document.getElementById('btnViewActivityReport').addEventListener('click', async () => {
-        const department = document.getElementById('activityDepartment').value;
-        const empId = document.getElementById('activityEmployee').value;
-        try {
-            const result = await apiGet(`/api/reports/employee-activity?department=${encodeURIComponent(department)}&empId=${encodeURIComponent(empId)}`);
-            const rows = result.activity.length
-                ? result.activity.map(a => `${a.action || 'Activity'} — ${new Date(a.created_at).toLocaleString()}`)
-                : ['No activity found for this selection'];
-            openModal('EMPLOYEE ACTIVITY REPORT', rows);
-        } catch (e) {
-            setReportStatus('Could not load the employee activity report.', true);
-        }
-    });
-    document.getElementById('btnExportActivityReport').addEventListener('click', async () => {
-        const department = document.getElementById('activityDepartment').value;
-        const empId = document.getElementById('activityEmployee').value;
-        try {
-            const result = await apiGet(`/api/reports/employee-activity?department=${encodeURIComponent(department)}&empId=${encodeURIComponent(empId)}`);
-            const rows = result.activity.length
-                ? result.activity.map(a => `${a.action || 'Activity'} - ${new Date(a.created_at).toLocaleString()}`)
-                : ['No activity found for this selection'];
-            openModal('EMPLOYEE ACTIVITY REPORT', rows);
-            downloadCurrentReport();
-        } catch (e) {
-            setReportStatus('Could not download the employee activity report.', true);
-        }
-    });
-
-    // ---------- 3. Resource Allocation Reports ----------
+    // ---------- 2. Resource Allocation Reports ----------
     async function loadResourceProjects() {
         try {
             const projects = await apiGet('/api/projects');
@@ -301,59 +244,130 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opt.value = p.id; opt.textContent = p.name;
                 select.appendChild(opt);
             });
-            select.addEventListener('change', () => {
-                if (select.value) {
-                    loadAllocation(select.value);
-                    setReportStatus(`Loading allocation for ${select.options[select.selectedIndex].textContent}...`);
-                } else {
-                    resetAllocationDisplay();
-                    setReportStatus('Select a project to view its allocation.');
-                }
-            });
-            resetAllocationDisplay();
+            const today = new Date();
+            const monday = new Date(today);
+            monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+            const localDateValue = date => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            document.getElementById('resStartDate').value = localDateValue(monday);
+            document.getElementById('resEndDate').value = localDateValue(today);
+            select.addEventListener('change', refreshAllocation);
+            document.getElementById('resStartDate').addEventListener('change', refreshAllocation);
+            document.getElementById('resEndDate').addEventListener('change', refreshAllocation);
+            await refreshAllocation();
         } catch (e) {
             console.error('Failed to load projects:', e);
+            setReportStatus('Could not load projects for the resource report.', true);
         }
     }
 
     let currentAllocation = null;
+    let allocationRequestId = 0;
+
+    function formatHours(value) {
+        return `${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 1 })} h`;
+    }
 
     function resetAllocationDisplay() {
         currentAllocation = null;
         document.getElementById('allocFill').style.width = '0%';
-        document.getElementById('allocFigures').textContent = '--/--';
+        document.getElementById('allocProgress').classList.remove('over-capacity');
+        document.getElementById('availableHours').textContent = '-- h';
+        document.getElementById('assignedHours').textContent = '-- h';
+        document.getElementById('remainingHours').textContent = '-- h';
         document.getElementById('utilPercentage').textContent = '--%';
+        document.getElementById('allocProgress').setAttribute('aria-valuenow', '0');
+        document.getElementById('allocationNote').textContent = 'Select a valid date range to calculate capacity.';
+        document.getElementById('allocationBody').innerHTML = '<tr><td colspan="3" class="empty-row">Choose a valid date range to load allocation.</td></tr>';
     }
 
-    async function loadAllocation(projectId) {
+    async function refreshAllocation() {
+        const requestId = ++allocationRequestId;
+        const startDate = document.getElementById('resStartDate').value;
+        const endDate = document.getElementById('resEndDate').value;
+        const startInput = document.getElementById('resStartDate');
+        const endInput = document.getElementById('resEndDate');
+        const validRange = startDate && endDate && startDate <= endDate;
+        startInput.setCustomValidity(validRange || !startDate || !endDate ? '' : 'From date must be on or before the To date.');
+        endInput.setCustomValidity(validRange || !startDate || !endDate ? '' : 'To date must be on or after the From date.');
+
+        if (!validRange) {
+            resetAllocationDisplay();
+            if (startDate && endDate) {
+                startInput.reportValidity();
+                setReportStatus('Correct the date range to view resource allocation.', true);
+            }
+            return;
+        }
+
         try {
-            const query = projectId ? `?projectId=${encodeURIComponent(projectId)}` : '';
-            const alloc = await apiGet(`/api/reports/resource-allocation${query}`);
+            const params = new URLSearchParams({ from: startDate, to: endDate });
+            const projectId = document.getElementById('resProject').value;
+            if (projectId) params.set('projectId', projectId);
+            const alloc = await apiGet(`/api/reports/resource-allocation?${params}`);
+            if (requestId !== allocationRequestId) return;
             currentAllocation = alloc;
-            document.getElementById('allocFill').style.width = `${alloc.utilizationPercentage}%`;
-            document.getElementById('allocFigures').textContent = `${alloc.allocatedEmployees}/${alloc.totalEmployees}`;
-            document.getElementById('utilPercentage').textContent = `${alloc.utilizationPercentage}%`;
+            const { totals, members } = alloc;
+            const utilization = totals.utilizationPercentage;
+            const fillPercentage = Math.min(utilization || 0, 100);
+            const progress = document.getElementById('allocProgress');
+            document.getElementById('availableHours').textContent = formatHours(totals.availableHours);
+            document.getElementById('assignedHours').textContent = formatHours(totals.assignedHours);
+            document.getElementById('remainingHours').textContent = formatHours(totals.remainingHours);
+            document.getElementById('utilPercentage').textContent = utilization === null ? 'N/A' : `${utilization}%`;
+            document.getElementById('allocFill').style.width = `${fillPercentage}%`;
+            progress.setAttribute('aria-valuenow', String(fillPercentage));
+            progress.classList.toggle('over-capacity', totals.overallocatedMembers > 0);
+            document.getElementById('allocationNote').textContent = utilization === null
+                ? (totals.assignedHours > 0
+                    ? 'No weekday capacity; assigned tasks exceed capacity.'
+                    : 'No weekday capacity in this date range.')
+                : totals.overallocatedMembers
+                    ? `${totals.overallocatedMembers} team member${totals.overallocatedMembers === 1 ? '' : 's'} over capacity.`
+                    : `${alloc.workingDays} weekdays × 8 hours per employee.`;
+
+            const tbody = document.getElementById('allocationBody');
+            tbody.innerHTML = members.length
+                ? members.map(member => `
+                    <tr class="${member.utilizationPercentage > 100 ? 'overallocated' : ''}">
+                      <td>${escapeHtml(member.name)}</td>
+                      <td>${formatHours(member.assignedHours)} / ${formatHours(member.availableHours)}</td>
+                      <td>${member.utilizationPercentage === null ? 'N/A' : `${member.utilizationPercentage}%`}${member.utilizationPercentage > 100 ? ' · Over' : ''}</td>
+                    </tr>
+                  `).join('')
+                : '<tr><td colspan="3" class="empty-row">No team members found.</td></tr>';
         } catch (e) {
             console.error('Failed to load allocation:', e);
+            if (requestId !== allocationRequestId) return;
+            resetAllocationDisplay();
+            setReportStatus('Could not load resource allocation. Check the backend connection and try again.', true);
         }
     }
 
     document.getElementById('btnViewResourceReport').addEventListener('click', () => {
-        if (!currentAllocation) { setReportStatus('Select a project before viewing its allocation report.', true); return; }
-        const figures = document.getElementById('allocFigures').textContent;
-        const util = document.getElementById('utilPercentage').textContent;
+        if (!currentAllocation) { setReportStatus('Wait for allocation data to load before viewing its report.', true); return; }
         const selectedProject = document.getElementById('resProject');
         const projectName = selectedProject.value
             ? selectedProject.options[selectedProject.selectedIndex].textContent
             : 'All projects';
         openModal('RESOURCE ALLOCATION REPORT', [
             `Project: ${projectName}`,
-            `Allocated employees: ${figures}`,
-            `Organization utilization: ${util}`,
-            `Tracked projects: ${currentAllocation.projects.length}`,
-            currentAllocation.members.length
-                ? `Assigned employee IDs: ${currentAllocation.members.map(member => member.emp_id).join(', ')}`
-                : 'No employees are assigned to this project'
+            `Date range: ${currentAllocation.from} to ${currentAllocation.to}`,
+            `Capacity basis: ${currentAllocation.workingDays} weekdays at 8 hours per employee`,
+            `Available hours: ${formatHours(currentAllocation.totals.availableHours)}`,
+            `Assigned hours: ${formatHours(currentAllocation.totals.assignedHours)}`,
+            `Remaining hours: ${formatHours(currentAllocation.totals.remainingHours)}`,
+            `Utilization: ${currentAllocation.totals.utilizationPercentage === null ? 'N/A' : `${currentAllocation.totals.utilizationPercentage}%`}`,
+            `Team members over capacity: ${currentAllocation.totals.overallocatedMembers}`,
+            '',
+            'TEAM MEMBER BREAKDOWN',
+            ...(currentAllocation.members.length
+                ? currentAllocation.members.map(member => `${member.name} (${member.emp_id}): ${formatHours(member.assignedHours)} assigned / ${formatHours(member.availableHours)} available; ${member.utilizationPercentage === null ? 'N/A' : `${member.utilizationPercentage}% utilization`}; ${member.taskCount} open tasks`)
+                : ['No team members found'])
         ]);
     });
 
@@ -381,7 +395,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btnShareReport').addEventListener('click', shareCurrentReport);
 
     // ---------- Boot ----------
-    await Promise.all([loadProjectReports(), loadActivityFilters(), loadResourceProjects()]);
+    await Promise.all([loadProjectReports(), loadResourceProjects()]);
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
         await fetch('http://localhost:3000/api/auth/logout', {

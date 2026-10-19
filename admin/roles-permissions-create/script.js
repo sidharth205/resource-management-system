@@ -11,6 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set UI Header
     document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
+    const message = document.getElementById('createRoleMessage');
+    const backLink = document.getElementById('createRoleBackLink');
+    const showMessage = (text, type) => {
+        message.textContent = text;
+        message.className = `form-message form-message--${type}`;
+        message.setAttribute('role', type === 'error' ? 'alert' : 'status');
+        message.hidden = false;
+    };
 
     // UI Helper: If "Full Admin Access" is checked, visually check everything else
     const adminOverride = document.getElementById('adminOverride');
@@ -29,6 +37,8 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
         e.preventDefault();
         
         const btnSave = document.getElementById('btnSaveRole');
+        message.hidden = true;
+        backLink.hidden = true;
         btnSave.textContent = 'SAVING...';
         btnSave.disabled = true;
 
@@ -39,8 +49,8 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
         const permissions = Array.from(checkedBoxes).map(cb => cb.value);
 
         if (permissions.length === 0) {
-            alert("Please assign at least one permission to this role.");
-            btnSave.textContent = 'SAVE ROLE';
+            showMessage('Please assign at least one permission to this role.', 'error');
+            btnSave.textContent = 'Save Role';
             btnSave.disabled = false;
             return;
         }
@@ -58,20 +68,22 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                 })
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => ({}));
 
             if (!response.ok) {
                 // E.g., if a role with the same name already exists
-                throw new Error(data.error || 'Failed to create role');
+                throw new Error(data.error || 'The role could not be created. Please try again.');
             }
 
-            // Successfully created - redirect back to System Configuration
-            window.location.href = '../system-configuration/index.html';
+            showMessage('Role created successfully.', 'success');
+            backLink.hidden = false;
+            btnSave.textContent = 'Saved';
 
         } catch (error) {
             console.error(error);
-            alert("Error creating role: " + error.message);
-            btnSave.textContent = 'SAVE ROLE';
+            const reason = error instanceof Error ? error.message : 'An unexpected error occurred.';
+            showMessage(`Could not create role: ${reason}`, 'error');
+            btnSave.textContent = 'Save Role';
             btnSave.disabled = false;
         }
     });

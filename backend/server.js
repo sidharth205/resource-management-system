@@ -8,7 +8,45 @@ const { supabase, createNotification, logAudit } = require('./helpers');
 const { authenticateUser, requirePermission } = require('./middleware');
 
 const app = express();
-app.use(cors());
+const defaultCorsOrigins = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500'
+];
+const allowedCorsOrigins = new Set(
+    (process.env.CORS_ALLOWED_ORIGINS
+        ? process.env.CORS_ALLOWED_ORIGINS.split(',')
+        : defaultCorsOrigins)
+        .map(value => {
+            const origin = value.trim();
+            if (!origin) return null;
+
+            let parsedOrigin;
+            try {
+                parsedOrigin = new URL(origin);
+            } catch {
+                throw new Error(`Invalid origin in CORS_ALLOWED_ORIGINS: ${origin}`);
+            }
+            if (!['http:', 'https:'].includes(parsedOrigin.protocol)
+                || parsedOrigin.origin !== origin
+                || parsedOrigin.username
+                || parsedOrigin.password) {
+                throw new Error(`CORS_ALLOWED_ORIGINS entries must be HTTP(S) origins without paths: ${origin}`);
+            }
+            return parsedOrigin.origin;
+        })
+        .filter(Boolean)
+);
+
+app.use(cors({
+    origin(origin, callback) {
+        callback(null, !origin || allowedCorsOrigins.has(origin));
+    },
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Authorization', 'Content-Type'],
+    maxAge: 600
+}));
 app.use(express.json());
 
 // Block access to backend internal files and serve frontend static assets
@@ -61,7 +99,7 @@ app.post('/api/auth/login', async (req, res) => {
 
         const { data: profile } = await supabase
             .from('profiles')
-            .select('name, role,emp_id')
+            .select('name, role, emp_id')
             .eq('auth_id', user.id)
             .single();
 
@@ -148,6 +186,16 @@ app.patch('/api/settings/:key', authenticateUser, requirePermission('manage_syst
     const { key } = req.params;
     const { value } = req.body;
 
+    const { data: currentSetting, error: currentSettingError } = await supabase
+        .from('system_settings')
+        .select('value')
+        .eq('key', key)
+        .maybeSingle();
+    if (currentSettingError) return res.status(500).json({ error: currentSettingError.message });
+    if (!currentSetting) {
+        return res.status(404).json({ error: 'System setting not found' });
+    }
+
     const { data, error } = await supabase
         .from('system_settings')
         .update({ value, updated_at: new Date() })
@@ -155,6 +203,7 @@ app.patch('/api/settings/:key', authenticateUser, requirePermission('manage_syst
         .select();
 
     if (error) return res.status(500).json({ error: error.message });
+    if (!data?.length) return res.status(404).json({ error: 'System setting not found' });
 
     const formattedKey = key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     await logAudit({ 
@@ -162,6 +211,7 @@ app.patch('/api/settings/:key', authenticateUser, requirePermission('manage_syst
         module: 'System Configuration', 
         action: `Updated the ${formattedKey}`, 
         recordId: key, 
+        previousValue: currentSetting.value,
         newValue: value 
     });
 
@@ -261,17 +311,48 @@ app.get('/api/auth/me', authenticateUser, async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-app.get('/api/users/:empId', authenticateUser, async (req, res) => {
+
+function authorizeProfileAccess(req, res, next) {
+    if (String(req.params.empId) === String(req.user.id)) return next();
+    return requirePermission('view_users')(req, res, next);
+}
+
+app.get('/api/users/:empId', authenticateUser, authorizeProfileAccess, async (req, res) => {
     const { empId } = req.params;
     
     const { data, error } = await supabase
         .from('profiles')
         .select('*, designations(name)')
         .eq('emp_id', empId)
-        .single();
+        .maybeSingle();
 
-    if (error || !data) return res.status(404).json({ error: 'Employee profile not found' });
-    res.json(data);
+    if (error) {
+        console.error(`GET /api/users/${empId} Error:`, error.message);
+        return res.status(500).json({ error: 'Could not load employee profile.' });
+    }
+    if (!data) return res.status(404).json({ error: 'Employee profile not found' });
+
+    const profileFields = [
+        'emp_id',
+        'name',
+        'email',
+        'phone',
+        'role',
+        'department',
+        'employment_type',
+        'joining_date',
+        'status',
+        'active',
+        'manager_id'
+    ];
+    const profile = Object.fromEntries(
+        profileFields
+            .filter(field => Object.prototype.hasOwnProperty.call(data, field))
+            .map(field => [field, data[field]])
+    );
+    if (data.designations) profile.designations = data.designations;
+
+    res.json(profile);
 });
 
 app.post('/api/users', authenticateUser, requirePermission('create_users'), async (req, res) => {
@@ -581,15 +662,24 @@ app.get('/api/reports/project-progress', authenticateUser, requirePermission('vi
 
 app.get('/api/audit-logs', authenticateUser, requirePermission('view_audit_logs'), async (req, res) => {
     const { module, empId, dateRange } = req.query;
-    
-    let query = supabase.from('audit_logs')
-        .select('*, profiles(name)')
-        .order('created_at', { ascending: false });
-    
-    if (module) query = query.eq('module', module);
-    if (empId) query = query.eq('emp_id', empId); 
-    
-    const { data, error } = await query;
+
+    const buildQuery = (includeLogNumberOrder) => {
+        let query = supabase.from('audit_logs')
+            .select('*, profiles(name)')
+            .order('created_at', { ascending: false });
+
+        if (includeLogNumberOrder) query = query.order('log_number', { ascending: false });
+        if (module) query = query.eq('module', module);
+        if (empId) query = query.eq('emp_id', empId);
+        return query;
+    };
+
+    let { data, error } = await buildQuery(true);
+    if (error && ['42703', 'PGRST204'].includes(error.code) && /log_number/i.test(error.message || '')) {
+        console.warn('Audit log number column is unavailable; retrying without log-number ordering. Apply the audit log number migration to enable numbered IDs.');
+        ({ data, error } = await buildQuery(false));
+    }
+
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
 });
@@ -714,66 +804,93 @@ app.get('/api/reports/project/:projectId', authenticateUser, requirePermission('
     }
 });
 
-app.get('/api/reports/employee-activity', authenticateUser, requirePermission('view_reports'), async (req, res) => {
-    const { department, empId } = req.query;
+app.get('/api/reports/resource-allocation', authenticateUser, requirePermission('view_reports'), async (req, res) => {
+    const { projectId, from, to } = req.query;
+    const isValidDate = value => {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return false;
+        const date = new Date(`${value}T00:00:00.000Z`);
+        return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+    };
 
-    let profileQuery = supabase.from('profiles').select('emp_id, name, department');
-    if (department) profileQuery = profileQuery.eq('department', department);
-    if (empId) profileQuery = profileQuery.eq('emp_id', empId);
-
-    const { data: profiles, error: profileError } = await profileQuery;
-    if (profileError) return res.status(500).json({ error: profileError.message });
-
-    const empIds = profiles.map(p => p.emp_id);
-    let logs = [];
-    if (empIds.length > 0) {
-        const { data: logData, error: logError } = await supabase
-            .from('audit_logs')
-            .select('*')
-            .in('emp_id', empIds)
-            .order('created_at', { ascending: false });
-        if (logError) return res.status(500).json({ error: logError.message });
-        logs = logData;
+    if (!isValidDate(from) || !isValidDate(to) || from > to) {
+        return res.status(400).json({ error: 'A valid from and to date range is required.' });
     }
 
-    res.json({ employees: profiles, activity: logs });
-});
-
-app.get('/api/reports/resource-allocation', authenticateUser, requirePermission('view_reports'), async (req, res) => {
-    const { projectId } = req.query;
-
-    let memberQuery = supabase.from('project_members').select('emp_id, project_id');
-    if (projectId) memberQuery = memberQuery.eq('project_id', projectId);
-
-    const { data: members, error: memberError } = await memberQuery;
-    if (memberError) return res.status(500).json({ error: memberError.message });
-
-    const { count: totalEmployees, error: empError } = await supabase
+    const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
-        .select('*', { count: 'exact', head: true });
-    if (empError) return res.status(500).json({ error: empError.message });
+        .select('emp_id, name, role')
+        .ilike('role', 'employee');
+    if (profilesError) return res.status(500).json({ error: profilesError.message });
 
-    const allocatedEmployeeIds = [...new Set((members || []).map(member => member.emp_id).filter(Boolean))];
-    const allocatedEmployees = allocatedEmployeeIds.length;
-    const utilizationPercentage = totalEmployees > 0 ? Math.round((allocatedEmployees / totalEmployees) * 100) : 0;
-
-    let projects = [];
     if (projectId) {
         const { data: project, error: projectError } = await supabase
-            .from('projects').select('id, name, status, progress').eq('id', projectId).single();
-        if (projectError || !project) return res.status(404).json({ error: 'Project not found' });
-        projects = [project];
-    } else {
-        const projectIds = [...new Set((members || []).map(member => member.project_id).filter(Boolean))];
-        if (projectIds.length > 0) {
-            const { data: projectData, error: projectError } = await supabase
-                .from('projects').select('id, name, status, progress').in('id', projectIds);
-            if (projectError) return res.status(500).json({ error: projectError.message });
-            projects = projectData || [];
-        }
+            .from('projects')
+            .select('id')
+            .eq('id', projectId)
+            .maybeSingle();
+        if (projectError) return res.status(500).json({ error: projectError.message });
+        if (!project) return res.status(404).json({ error: 'Project not found' });
     }
 
-    res.json({ projectId: projectId || null, projects, allocatedEmployees, totalEmployees: totalEmployees ?? 0, utilizationPercentage, members: members || [] });
+    let taskQuery = supabase.from('tasks')
+        .select('id, assigned_to, estimated_hours, due_date, status')
+        .gte('due_date', from)
+        .lte('due_date', to);
+    if (projectId) taskQuery = taskQuery.eq('project_id', projectId);
+
+    const { data: tasks, error: tasksError } = await taskQuery;
+    if (tasksError) return res.status(500).json({ error: tasksError.message });
+
+    let workingDays = 0;
+    for (let day = new Date(`${from}T00:00:00.000Z`), end = new Date(`${to}T00:00:00.000Z`); day <= end; day.setUTCDate(day.getUTCDate() + 1)) {
+        const weekday = day.getUTCDay();
+        if (weekday !== 0 && weekday !== 6) workingDays++;
+    }
+
+    const members = (profiles || []).map(profile => {
+        const assignedTasks = (tasks || []).filter(task =>
+            task.assigned_to === profile.emp_id &&
+            !['completed', 'cancelled', 'canceled'].includes(String(task.status || '').toLowerCase())
+        );
+        const availableHours = workingDays * 8;
+        const assignedHours = assignedTasks.reduce((total, task) => {
+            const hours = Number(task.estimated_hours);
+            return total + (Number.isFinite(hours) ? hours : 0);
+        }, 0);
+
+        return {
+            emp_id: profile.emp_id,
+            name: profile.name || profile.emp_id,
+            availableHours,
+            assignedHours,
+            remainingHours: availableHours - assignedHours,
+            utilizationPercentage: availableHours > 0 ? Math.round((assignedHours / availableHours) * 100) : null,
+            taskCount: assignedTasks.length
+        };
+    }).sort((a, b) =>
+        (b.utilizationPercentage ?? -1) - (a.utilizationPercentage ?? -1) ||
+        a.name.localeCompare(b.name)
+    );
+
+    const availableHours = members.reduce((total, member) => total + member.availableHours, 0);
+    const assignedHours = members.reduce((total, member) => total + member.assignedHours, 0);
+    const utilizationPercentage = availableHours > 0 ? Math.round((assignedHours / availableHours) * 100) : null;
+
+    res.json({
+        projectId: projectId || null,
+        from,
+        to,
+        workingDays,
+        members,
+        totals: {
+            teamMembers: members.length,
+            availableHours,
+            assignedHours,
+            remainingHours: availableHours - assignedHours,
+            utilizationPercentage,
+            overallocatedMembers: members.filter(member => member.assignedHours > member.availableHours).length
+        }
+    });
 });
 // ==========================================
 // 10. EMPLOYEE API ENDPOINTS

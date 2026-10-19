@@ -3,7 +3,7 @@
    Theme: Slate Indigo, Lavender, Amber, Ivory, Coral (#434775, #c4c5db, #f09a1a, #ffffff, #ea5757)
 ========================================= */
 
-.main-content { position: relative; overflow-x: hidden; overflow-y: auto; }
+.main-content { position: relative; min-height: 0; overflow: hidden; }
 .main-content::before, .main-content::after {
     content: ""; position: absolute; border-radius: 50%; filter: blur(70px);
     opacity: .2; z-index: 0; pointer-events: none; animation: pageFloat 11s ease-in-out infinite;
@@ -14,6 +14,11 @@
 
 .top-header { opacity: 0; animation: fadeIn .5s ease forwards; position: relative; z-index: 1; }
 @keyframes fadeIn { to { opacity: 1; } }
+
+.top-header h2 {
+    font-family: var(--font-heading, var(--font-sans));
+    font-size: 1.55rem;
+}
 
 .card {
     background: var(--card-bg, #ffffff);
@@ -35,12 +40,38 @@
 .audit-card {
     background-color: var(--card-bg, #ffffff);
     border: 1px solid var(--line-color, #e4e5ee);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.audit-header { flex: 0 0 auto; }
+
+.audit-title h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 5px;
+    font-family: var(--font-heading, var(--font-sans));
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-heading, #121424);
+}
+
+.audit-title-icon {
+    width: 1.1em;
+    height: 1.1em;
+    color: var(--amber, #f09a1a);
+}
+
+.audit-description {
+    margin: 0 0 16px;
+    color: var(--muted-color, #5e627d);
+    font-size: 0.86rem;
 }
 
 .audit-header h3 {
-    margin: 0 0 15px 0;
-    font-size: 1.1rem;
-    color: var(--text-color, #1a1d2e);
+    letter-spacing: -0.02em;
 }
 
 /* Controls & Filters */
@@ -190,30 +221,38 @@
     background-color: white;
     border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 10px;
-    overflow: hidden;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
     box-shadow: 0 2px 4px rgba(91, 95, 151, 0.04);
 }
 
 .data-table {
     width: 100%;
+    min-width: 980px;
     border-collapse: collapse;
 }
 
 .data-table th, .data-table td {
-    padding: 15px;
+    padding: 12px 14px;
     text-align: left;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     border-bottom: 1px solid var(--line-color, #e4e5ee);
     color: var(--text-color, #1a1d2e);
+    vertical-align: top;
 }
 
 .data-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     background-color: var(--bg-color, #f7f8fa);
     color: var(--text-color, #1a1d2e);
-    font-weight: bold;
+    font-family: var(--font-heading, var(--font-sans));
+    font-weight: 800;
     text-transform: none;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
+    font-size: 0.78rem;
+    letter-spacing: 0.25px;
 }
 
 .data-table tr:last-child td {
@@ -250,7 +289,70 @@
     font-size: 0.75rem;
 }
 
+.audit-change-details {
+    min-width: 320px;
+    max-width: 560px;
+    color: #353954;
+}
+
+.change-item {
+    display: grid;
+    grid-template-columns: minmax(130px, 0.8fr) minmax(170px, 1fr);
+    align-items: baseline;
+    gap: 12px;
+    padding: 5px 0;
+}
+
+.change-item + .change-item {
+    border-top: 1px solid rgba(228, 229, 238, 0.8);
+}
+
+.change-label {
+    color: var(--muted-color, #5e627d);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.change-values {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.change-previous {
+    color: var(--muted-color, #5e627d);
+}
+
+.change-arrow {
+    color: var(--amber, #f09a1a);
+    font-weight: 800;
+}
+
+.change-current {
+    color: var(--text-heading, #121424);
+    font-weight: 700;
+}
+
+.change-empty {
+    color: var(--muted-color, #5e627d);
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.audit-table-message {
+    padding: 24px !important;
+    text-align: center !important;
+    color: var(--muted-color, #5e627d) !important;
+}
+
 @media (max-width: 700px) {
     .search-filters { flex-wrap: wrap; }
     .search-input { flex-basis: 100%; }
+    .top-header h2 { font-size: 1.3rem; }
+    .audit-card { padding: 18px; }
+    .date-filters { flex-wrap: wrap; }
+    .change-item { grid-template-columns: 1fr; gap: 2px; }
 }

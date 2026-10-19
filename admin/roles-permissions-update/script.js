@@ -10,12 +10,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'User';
 document.getElementById('headerName').textContent = localStorage.getItem('user_name') || 'User';
+    const message = document.getElementById('updateRoleMessage');
+    const backLink = document.getElementById('updateRoleBackLink');
+    const updateForm = document.getElementById('updateRoleForm');
+    const showMessage = (text, type) => {
+        message.textContent = text;
+        message.className = `form-message form-message--${type}`;
+        message.setAttribute('role', type === 'error' ? 'alert' : 'status');
+        message.hidden = false;
+    };
     const params = new URLSearchParams(window.location.search);
     const roleId = params.get('id');
 
     if (!roleId) {
-        alert('No role specified to update.');
-        window.location.href = '../system-configuration/index.html';
+        showMessage('No role was specified to update. Return to System Configuration and select a role.', 'error');
+        updateForm.hidden = true;
         return;
     }
 
@@ -36,8 +45,8 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
         });
     } catch (e) {
         console.error(e);
-        alert('Could not load this role.');
-        window.location.href = '../system-configuration/index.html';
+        showMessage('Could not load this role. Return to System Configuration and try again.', 'error');
+        updateForm.hidden = true;
         return;
     }
 
@@ -51,10 +60,12 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
     });
 
     // ---------- Submit update ----------
-    document.getElementById('updateRoleForm').addEventListener('submit', async (e) => {
+    updateForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const btnConfirm = document.getElementById('btnConfirmUpdate');
+        message.hidden = true;
+        backLink.hidden = true;
         btnConfirm.textContent = 'UPDATING...';
         btnConfirm.disabled = true;
 
@@ -64,7 +75,7 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
         const permissions = Array.from(checkedBoxes).map(cb => cb.value);
 
         if (permissions.length === 0) {
-            alert('Please assign at least one permission to this role.');
+            showMessage('Please assign at least one permission to this role.', 'error');
             btnConfirm.textContent = 'Confirm Update';
             btnConfirm.disabled = false;
             return;
@@ -77,24 +88,19 @@ document.getElementById('headerName').textContent = localStorage.getItem('user_n
                 body: JSON.stringify({ name: roleName, description, permissions })
             });
 
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Failed to update role');
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.error || 'The role could not be updated. Please try again.');
 
-            window.location.href = '../system-configuration/index.html';
+            showMessage('Role updated successfully.', 'success');
+            backLink.hidden = false;
+            btnConfirm.textContent = 'Updated';
         } catch (error) {
             console.error(error);
-            alert('Error updating role: ' + error.message);
+            const reason = error instanceof Error ? error.message : 'An unexpected error occurred.';
+            showMessage(`Could not update role: ${reason}`, 'error');
             btnConfirm.textContent = 'Confirm Update';
             btnConfirm.disabled = false;
         }
-    });
-
-    // ---------- Navigation ----------
-    document.getElementById('btnBack').addEventListener('click', () => {
-        window.location.href = '../system-configuration/index.html';
-    });
-    document.getElementById('btnBackToEditing').addEventListener('click', () => {
-        window.location.href = '../system-configuration/index.html';
     });
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {

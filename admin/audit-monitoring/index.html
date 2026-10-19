@@ -34,7 +34,7 @@
         <!-- Main Content[cite: 1] -->
         <main class="main-content">
             <header class="top-header">
-                <h2>Audit & Monitoring</h2>
+                <h2>Audit &amp; Monitoring</h2>
                 <div class="header-actions">
                     <a href="../dashboard/index.html" class="bell-icon" aria-label="View system notifications" title="System notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></a>
                     <a href="../profile/index.html" class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Admin</span></a>
@@ -44,7 +44,8 @@
             <div class="card audit-card">
                 <div class="audit-header">
                     <div class="audit-title">
-                        <h3>Audit Logs<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="16" rx="2"></rect><path d="M9 4V2h6v2M9 9h6M9 13h6M9 17h4"></path></svg></h3>
+                        <h3>Audit Logs <svg class="ui-icon audit-title-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 4V2h6v2M8 9h8M8 13h8M8 17h5"></path></svg></h3>
+                        <p class="audit-description">Review system activity and see what changed, including the previous and updated values.</p>
                     </div>
                     
                     <!-- Filtering Controls[cite: 1] -->
@@ -78,7 +79,7 @@
                 </div>
 
                 <!-- Data Table[cite: 1] -->
-                <div class="table-responsive">
+                <div class="table-responsive" role="region" aria-label="Audit log records" tabindex="0">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -87,12 +88,13 @@
                                 <th>User ID</th>
                                 <th>Module</th>
                                 <th>Action</th>
+                                <th>Change Details</th>
                             </tr>
                         </thead>
                         <tbody id="auditTableBody">
                             <!-- Populated by JS -->
                             <tr>
-                                <td colspan="5" style="text-align: center;">Loading logs...</td>
+                                <td colspan="6" style="text-align: center;">Loading logs...</td>
                             </tr>
                         </tbody>
                     </table>

@@ -34,7 +34,7 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="top-header">
-                <h2>Create New Role<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM13 6l4 4"></path></svg></h2>
+                <h2>Create Role <svg class="ui-icon role-heading-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0M18 8v8M14 12h8"></path></svg></h2>
                 <div class="header-actions">
                     <a href="../dashboard/index.html" class="bell-icon" aria-label="View system notifications" title="System notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></a>
                     <a href="../profile/index.html" class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Admin</span></a>
@@ -43,6 +43,8 @@
 
             <div class="role-creation-layout">
                 <div class="card dark-card">
+                    <p class="form-message" id="createRoleMessage" hidden></p>
+                    <a class="message-back-link" id="createRoleBackLink" href="../system-configuration/index.html" hidden>Back to System Configuration</a>
                     <form id="createRoleForm">
                         <div class="input-group">
                             <label>Role Name</label>

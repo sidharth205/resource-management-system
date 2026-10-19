@@ -85,11 +85,19 @@
         }, 400);
     }
 
+    const originalFetch = window.fetch.bind(window);
     window.fetch = function (...args) {
+        const requestOptions = args[1] || {};
+        if (requestOptions.cacheRevalidation) {
+            const cleanOptions = Object.assign({}, requestOptions);
+            delete cleanOptions.cacheRevalidation;
+            return originalFetch(args[0], cleanOptions);
+        }
+
         pendingRequests += 1;
         window.clearTimeout(idleTimer);
 
-        return fetch(...args).finally(() => {
+        return originalFetch(...args).finally(() => {
             pendingRequests -= 1;
             scheduleReveal();
         });

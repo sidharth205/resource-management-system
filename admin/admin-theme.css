@@ -138,13 +138,150 @@ h6 {
     content: "";
 }
 
-.profile-section {
-    background: linear-gradient(110deg, rgba(196, 197, 219, 0.44), rgba(196, 197, 219, 0.12));
-    border-color: rgba(196, 197, 219, 0.72);
+.nav-menu .nav-item {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transform-origin: left center;
+    transition:
+        background-color 0.3s ease,
+        background-image 0.35s ease,
+        border-color 0.3s ease,
+        box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        color 0.25s ease,
+        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: admin-nav-enter 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.avatar {
-    background: linear-gradient(145deg, #434775 0 68%, #ea5757 68% 82%, #f09a1a 82%);
+.nav-menu .nav-item:nth-child(1) { animation-delay: 0.04s; }
+.nav-menu .nav-item:nth-child(2) { animation-delay: 0.08s; }
+.nav-menu .nav-item:nth-child(3) { animation-delay: 0.12s; }
+.nav-menu .nav-item:nth-child(4) { animation-delay: 0.16s; }
+.nav-menu .nav-item:nth-child(5) { animation-delay: 0.2s; }
+.nav-menu .nav-item:nth-child(6) { animation-delay: 0.24s; }
+
+.nav-menu .nav-item::before {
+    z-index: 1;
+    inset: 50% auto auto 0;
+    width: 4px;
+    height: 0;
+    border-radius: 0 4px 4px 0;
+    background: linear-gradient(180deg, #f09a1a, #ea5757);
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: height 0.3s ease, opacity 0.25s ease;
+}
+
+.nav-menu .nav-item::after {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 46%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(240, 154, 26, 0.26), rgba(234, 87, 87, 0.1) 45%, transparent 72%);
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.nav-menu .nav-item:hover {
+    border-color: rgba(67, 71, 117, 0.12);
+    background-color: rgba(196, 197, 219, 0.24);
+    box-shadow: 0 9px 22px rgba(48, 52, 95, 0.12);
+    color: #30345f;
+    transform: translateX(7px) scale(1.025);
+}
+
+.nav-menu .nav-item:hover::before,
+.nav-menu .nav-item.active::before {
+    height: calc(100% - 18px);
+    opacity: 1;
+}
+
+.nav-menu .nav-item.active {
+    border-color: rgba(67, 71, 117, 0.22);
+    background: linear-gradient(110deg, #30345f 0%, #434775 62%, #555a89 100%);
+    box-shadow: 0 10px 23px rgba(48, 52, 95, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    color: #fff;
+    transform: translateX(3px);
+}
+
+.nav-menu .nav-item.active:hover {
+    box-shadow: 0 13px 28px rgba(48, 52, 95, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateX(7px) scale(1.025);
+}
+
+.nav-menu .nav-item:active {
+    box-shadow: 0 3px 8px rgba(48, 52, 95, 0.2);
+    transform: translateX(2px) scale(0.96);
+    transition-duration: 0.08s;
+}
+
+.nav-menu .nav-item:active::after {
+    animation: admin-nav-ripple 0.55s ease-out;
+}
+
+.nav-menu .nav-item:focus-visible {
+    outline: 3px solid rgba(67, 71, 117, 0.3);
+    outline-offset: 2px;
+}
+
+.logout-btn {
+    position: relative;
+    overflow: hidden;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        color 0.25s ease,
+        transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.logout-btn:hover {
+    border-color: rgba(234, 87, 87, 0.48);
+    background: linear-gradient(105deg, rgba(234, 87, 87, 0.12), rgba(240, 154, 26, 0.08));
+    box-shadow: 0 8px 20px rgba(48, 52, 95, 0.12);
+    color: #a93d4a;
+    transform: translateX(4px);
+}
+
+.logout-btn:active {
+    background: rgba(234, 87, 87, 0.2);
+    transform: translateX(2px) scale(0.97);
+    transition-duration: 0.08s;
+}
+
+.logout-btn:focus-visible {
+    outline: 3px solid rgba(234, 87, 87, 0.25);
+    outline-offset: 2px;
+}
+
+@keyframes admin-nav-enter {
+    from { opacity: 0; filter: blur(3px); }
+    to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes admin-nav-ripple {
+    0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-menu .nav-item {
+        animation: none;
+        transition-duration: 0.01ms;
+    }
+
+    .nav-menu .nav-item:active::after {
+        animation: none;
+    }
+
+    .logout-btn {
+        transition-duration: 0.01ms;
+    }
 }
 
 .top-header h2 {
@@ -182,16 +319,36 @@ h6 {
 .card,
 .dash-card,
 .report-panel,
-.role-card {
+.role-card,
+.config-section,
+.policy-group {
+    border: 1px solid var(--line-color, #e4e5ee);
+    border-radius: 14px;
+    border-top: 3px solid var(--admin-card-accent, #434775);
     box-shadow: 0 10px 26px rgba(35, 38, 70, 0.055);
     transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.panel-resource,
+.active-now-card,
+.notifications-card,
+.audit-card {
+    --admin-card-accent: #ea5757;
+}
+
+.total-employees-card,
+.security-section {
+    --admin-card-accent: #f09a1a;
 }
 
 .card:hover,
 .dash-card:hover,
 .report-panel:hover,
-.role-card:hover {
+.role-card:hover,
+.config-section:hover,
+.policy-group:hover {
     border-color: #c4c5db;
+    border-top-color: var(--admin-card-accent, #434775);
     box-shadow: 0 16px 34px rgba(67, 71, 117, 0.11);
 }
 
@@ -338,22 +495,21 @@ h6 {
 .dark-card .active-roles-tabs {
     padding: 16px;
     border: 1px solid #e4e5ee;
-    border-left: 3px solid #f09a1a;
-    border-radius: 10px;
-    background: linear-gradient(105deg, rgba(240, 154, 26, 0.08), #ffffff 55%);
+    border-top: 3px solid #f09a1a;
+    border-radius: 14px;
+    background: #ffffff;
 }
 
 .dark-card .policy-group {
     padding: 18px;
     border: 1px solid #e4e5ee;
-    border-left: 3px solid #434775;
-    border-radius: 10px;
-    background: linear-gradient(110deg, rgba(196, 197, 219, 0.16), #ffffff 48%);
+    border-top: 3px solid #434775;
+    border-radius: 14px;
+    background: #ffffff;
 }
 
 .dark-card .policy-group:nth-child(even) {
-    border-left-color: #ea5757;
-    background: linear-gradient(110deg, rgba(234, 87, 87, 0.06), #ffffff 48%);
+    border-top-color: #ea5757;
 }
 
 .dark-card .policy-group h4 {
