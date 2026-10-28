@@ -1,0 +1,346 @@
+/* ==========================================================================
+   EMPLOYEE MODULE UNIFIED TYPOGRAPHY & LEGIBILITY THEME
+   Increases readability, font-size scales, and component visual balance
+   across all employee screens.
+   ========================================================================== */
+
+/* 1. Base Root Typography Scaling */
+html {
+  font-size: 18px !important;
+}
+
+body {
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+}
+
+/* 2. Sidebar & Navigation Legibility */
+.sidebar {
+  width: 260px;
+}
+
+.welcome-text {
+  font-size: 0.92rem !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.2px;
+}
+
+.welcome-text span,
+#userName {
+  font-size: 1.05rem !important;
+  font-weight: 800;
+  display: block;
+  margin-top: 2px;
+}
+
+.nav-item {
+  font-size: 0.96rem !important;
+  font-weight: 600 !important;
+  padding: 12px 16px !important;
+  gap: 12px !important;
+}
+
+.nav-item .ui-icon {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.nav-badge {
+  font-size: 0.8rem !important;
+  padding: 3px 9px !important;
+}
+
+.logout-btn {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  padding: 13px 16px !important;
+  gap: 10px;
+}
+
+/* 3. Top Header & User Identity */
+.top-header h2 {
+  font-size: 1.55rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px;
+}
+
+.header-profile,
+.header-profile-tag {
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+}
+
+.header-profile-tag span:not(.profile-icon-small),
+#headerName {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+}
+
+.bell-icon,
+.bell-icon .ui-icon {
+  font-size: 1.25rem !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+
+/* 4. Greeting Banner & Page Headers */
+.greeting-banner h1,
+.task-page-header-row h1 {
+  font-size: 1.65rem !important;
+  font-weight: 800 !important;
+  line-height: 1.3;
+}
+
+.greeting-banner p {
+  font-size: 0.96rem !important;
+  line-height: 1.5 !important;
+  margin-top: 6px !important;
+}
+
+/* 5. Stat Cards, Metric Boxes & Summary Grids */
+.stat-box {
+  padding: 18px 22px !important;
+  gap: 16px !important;
+}
+
+.stat-number {
+  font-size: 1.85rem !important;
+  font-weight: 900 !important;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.92rem !important;
+  font-weight: 800 !important;
+  line-height: 1.3;
+}
+
+.stat-sub {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  margin-top: 3px !important;
+}
+
+.stat-value,
+#projectStartDate,
+#projectDueDate {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+}
+
+/* 6. Section Cards, Titles & Containers */
+.section-card h3 {
+  font-size: 1.22rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 14px !important;
+  letter-spacing: 0.2px;
+}
+
+.card-title-row h3 {
+  font-size: 1.22rem !important;
+  font-weight: 800 !important;
+}
+
+/* 7. Tables (Dashboard, Projects, Tasks) */
+.table-container table,
+table {
+  font-size: 0.95rem !important;
+}
+
+.table-container th,
+table th {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px !important;
+  padding: 14px 16px !important;
+}
+
+.table-container td,
+table td {
+  font-size: 0.95rem !important;
+  padding: 14px 16px !important;
+  line-height: 1.5 !important;
+}
+
+.table-footer-link a,
+#viewAllProjectsLink {
+  font-size: 0.94rem !important;
+  font-weight: 700 !important;
+  gap: 6px;
+}
+
+/* 8. Assigned Tasks Page Components */
+.task-block-header h2 {
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+}
+
+.task-description,
+.task-details-desc {
+  font-size: 0.96rem !important;
+  line-height: 1.6 !important;
+}
+
+.task-meta-label {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+.task-meta-item strong {
+  font-size: 1.02rem !important;
+  font-weight: 700 !important;
+}
+
+.dash-card h3 {
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+}
+
+.dash-card label,
+.task-form label {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 5px;
+}
+
+.dash-card input,
+.dash-card select,
+.dash-card textarea,
+.task-form input,
+.task-form select,
+.task-form textarea {
+  font-size: 0.95rem !important;
+  padding: 10px 14px !important;
+}
+
+.btn-log-time,
+.btn-submit-task,
+.primary-btn {
+  font-size: 0.96rem !important;
+  font-weight: 700 !important;
+  padding: 11px 22px !important;
+  letter-spacing: 0.3px;
+}
+
+/* 9. Project Details Page */
+.back-projects-link {
+  font-size: 0.94rem !important;
+  font-weight: 700 !important;
+  gap: 6px;
+}
+
+.project-info-banner h1,
+#projectTitle {
+  font-size: 1.85rem !important;
+  font-weight: 800 !important;
+  line-height: 1.3;
+}
+
+.project-info-banner p,
+#projectDescription {
+  font-size: 1.02rem !important;
+  line-height: 1.6 !important;
+}
+
+.member-name {
+  font-size: 1.02rem !important;
+  font-weight: 700 !important;
+}
+
+.member-role {
+  font-size: 0.9rem !important;
+  font-weight: 500;
+}
+
+/* 10. Notifications Page */
+.filter-tabs .tab-btn {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  padding: 8px 18px !important;
+}
+
+.mark-read-link {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+}
+
+.notif-item {
+  padding: 18px 20px !important;
+  gap: 16px !important;
+}
+
+.notif-title {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+}
+
+.notif-desc,
+.notif-message {
+  font-size: 0.94rem !important;
+  line-height: 1.55 !important;
+}
+
+.notif-time {
+  font-size: 0.86rem !important;
+  margin-top: 4px;
+}
+
+/* 11. Profile Page */
+#bannerName {
+  font-size: 1.55rem !important;
+  font-weight: 800 !important;
+}
+
+#bannerEmail,
+#bannerPhone,
+.joined-date {
+  font-size: 0.95rem !important;
+}
+
+.status-active-text {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+.banner-right .meta-row span {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+}
+
+.banner-right .meta-row strong {
+  font-size: 1.02rem !important;
+  font-weight: 800 !important;
+}
+
+.detail-item label {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+.detail-item span,
+.detail-item input {
+  font-size: 0.98rem !important;
+}
+
+/* 12. Status Badges, Chips & Meta Tags */
+.status-badge,
+.task-badge,
+.priority-badge {
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  padding: 5px 12px !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* 13. Empty States & Toast Alerts */
+.empty-state {
+  font-size: 1.02rem !important;
+  font-weight: 600 !important;
+  padding: 36px 20px !important;
+}
+
+.toast {
+  font-size: 0.95rem !important;
+  padding: 14px 22px !important;
+}

@@ -1,7 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap');
 
 html {
-    font-size: 95%;
+    font-size: 18px !important;
+}
+
+body {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
 }
 
 :root {
@@ -752,3 +757,322 @@ h6 {
 .chip-completed .stat-ico {
     background-color: #f09a1a;
 }
+
+/* ==========================================================================
+   ADMIN MODULE UNIFIED TYPOGRAPHY & LEGIBILITY THEME
+   Increases readability, font-size scales, and component visual balance
+   across all admin screens.
+   ========================================================================== */
+
+/* 1. Sidebar & Navigation Legibility */
+.sidebar {
+    width: 260px;
+}
+
+.welcome-text {
+    font-size: 0.92rem !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0.2px;
+}
+
+.welcome-text span,
+#userName {
+    font-size: 1.05rem !important;
+    font-weight: 800;
+    display: block;
+    margin-top: 2px;
+}
+
+.nav-item {
+    font-size: 0.96rem !important;
+    font-weight: 600 !important;
+    padding: 12px 16px !important;
+    gap: 12px !important;
+}
+
+.nav-item .ui-icon {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.nav-badge {
+    font-size: 0.8rem !important;
+    padding: 3px 9px !important;
+}
+
+.logout-btn {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    padding: 13px 16px !important;
+    gap: 10px;
+}
+
+/* 2. Top Header & User Identity */
+.top-header h2 {
+    font-size: 1.55rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.3px;
+}
+
+.header-profile,
+.header-profile-tag,
+.profile-chip {
+    font-size: 0.98rem !important;
+    font-weight: 700 !important;
+    padding: 6px 16px 6px 8px !important;
+}
+
+.chip-name,
+#headerName {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+}
+
+.bell-icon,
+.bell-icon .ui-icon {
+    font-size: 1.25rem !important;
+    width: 22px !important;
+    height: 22px !important;
+}
+
+.header-search input,
+.search-box input {
+    font-size: 0.95rem !important;
+}
+
+/* 3. Dashboard Cards, Titles & User Pill Rows */
+.dash-title {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+}
+
+.card-title-bar {
+    font-size: 0.92rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.3px;
+}
+
+.user-pill-row {
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    padding: 8px 12px !important;
+}
+
+.active-now-card .active-now-box h2,
+.total-employees-card .total-count-box h2 {
+    font-size: 2.1rem !important;
+    font-weight: 900 !important;
+    line-height: 1.1;
+}
+
+.card-subtitle,
+.stat-label,
+.pill-title {
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    line-height: 1.4;
+}
+
+/* 4. Inputs, Selects, Buttons & Form Sections */
+.input-group label,
+.form-group label,
+.form-section label,
+.setting-item label {
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select,
+.form-group input,
+.form-group select,
+.form-group textarea,
+.search-input,
+.glass-input,
+.glass-select,
+select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="date"] {
+    font-size: 0.95rem !important;
+}
+
+.form-section h4 {
+    font-size: 0.96rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.3px;
+}
+
+.btn-add,
+.btn-save,
+.btn-primary,
+.primary-btn {
+    font-size: 0.96rem !important;
+    font-weight: 700 !important;
+    padding: 11px 24px !important;
+    letter-spacing: 0.3px;
+}
+
+/* 5. Data Tables & Audit Logs */
+.data-table th,
+.glass-table th,
+table th {
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.4px !important;
+    padding: 14px 16px !important;
+}
+
+.data-table td,
+.glass-table td,
+table td {
+    font-size: 0.95rem !important;
+    padding: 14px 16px !important;
+    line-height: 1.5 !important;
+}
+
+/* 6. Activity Feed & Monitoring */
+.activity-filters label {
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+}
+
+.activity-filters select,
+.custom-activity-dates input {
+    font-size: 0.88rem !important;
+    padding: 8px 12px !important;
+}
+
+.activity-item {
+    font-size: 0.92rem !important;
+    line-height: 1.55 !important;
+    padding: 12px 14px !important;
+}
+
+.activity-item .time {
+    font-size: 0.82rem !important;
+    margin-top: 4px;
+}
+
+.drop-zone p {
+    font-size: 0.92rem !important;
+}
+
+.audit-title h3 {
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+}
+
+/* 7. System Configuration & Settings */
+.config-tab,
+.tab-btn {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    padding: 10px 18px !important;
+}
+
+.config-section h3,
+.section-title {
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+}
+
+.setting-desc,
+.form-hint,
+.helper-text {
+    font-size: 0.88rem !important;
+    line-height: 1.5;
+}
+
+/* 8. Reports & Summary KPIs */
+.kpi-tile strong,
+.summary-tile strong {
+    font-size: 1.85rem !important;
+    font-weight: 800 !important;
+}
+
+.kpi-tile span,
+.summary-tile span {
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+}
+
+/* 9. Roles & Permissions Matrix */
+.role-title,
+.role-card h3 {
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+}
+
+.permission-group h4 {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+}
+
+.perm-checkbox-label {
+    font-size: 0.92rem !important;
+}
+
+/* 10. Profile & Account Settings */
+.profile-overview-card h3,
+.profile-hero-info h3,
+#profName {
+    font-size: 1.55rem !important;
+    font-weight: 800 !important;
+}
+
+.meta-label {
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+}
+
+.meta-item strong,
+.meta-row strong {
+    font-size: 1.02rem !important;
+    font-weight: 800 !important;
+}
+
+/* 11. Status Badges, Chips & Meta Tags */
+.status-badge,
+.role-badge,
+.status-pill,
+.chip {
+    font-size: 0.84rem !important;
+    font-weight: 700 !important;
+    padding: 5px 12px !important;
+    letter-spacing: 0.3px !important;
+    line-height: 1.3 !important;
+}
+
+/* 12. Modals, Forms & Toasts */
+.modal-header h3 {
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+}
+
+.modal-form label {
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+}
+
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+    font-size: 0.96rem !important;
+    padding: 11px 15px !important;
+}
+
+.toast {
+    font-size: 0.95rem !important;
+    padding: 14px 22px !important;
+}
+
+.empty-state {
+    font-size: 1.02rem !important;
+    font-weight: 600 !important;
+    padding: 36px 20px !important;
+}
+
