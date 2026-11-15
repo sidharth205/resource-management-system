@@ -62,8 +62,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Landing.html'));
 });
 
-
-
 // Update your multer configuration to accept documents
 const upload = multer({ 
     storage: multer.memoryStorage(),
@@ -91,17 +89,66 @@ const upload = multer({
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required.' });
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (error) return res.status(401).json({ error: error.message });
 
         const session = data.session;
         const user = data.user;
 
-        const { data: profile } = await supabase
+        // 1. Look up profile by auth_id
+        let { data: profile } = await supabase
             .from('profiles')
-            .select('name, role, emp_id')
+            .select('name, role, emp_id, email, auth_id')
             .eq('auth_id', user.id)
-            .single();
+            .maybeSingle();
+
+        // 2. Fallback: match by email (case-insensitive) if auth_id lookup didn't find a record
+        if (!profile) {
+            const userEmail = (user.email || email).trim();
+            const { data: profileByEmail } = await supabase
+                .from('profiles')
+                .select('name, role, emp_id, email, auth_id')
+                .ilike('email', userEmail)
+                .maybeSingle();
+
+            if (profileByEmail) {
+                profile = profileByEmail;
+                // Sync auth_id so future lookups match directly
+                await supabase
+                    .from('profiles')
+                    .update({ auth_id: user.id })
+                    .eq('emp_id', profile.emp_id);
+            }
+        }
+
+        // 3. Fallback for Chandrima's login (chandrimachawdhury07@gmail.com vs chandrimachawdhury@gmail.com)
+        if (!profile && user.email) {
+            const normalized = user.email.toLowerCase().trim();
+            if (normalized === 'chandrimachawdhury07@gmail.com' || normalized === 'chandrimachawdhury@gmail.com') {
+                const { data: chandrimaProfile } = await supabase
+                    .from('profiles')
+                    .select('name, role, emp_id, email, auth_id')
+                    .eq('emp_id', 'EMP-0004')
+                    .maybeSingle();
+
+                if (chandrimaProfile) {
+                    profile = chandrimaProfile;
+                    // Sync auth_id and email so future lookups and auth match directly
+                    await supabase
+                        .from('profiles')
+                        .update({ auth_id: user.id, email: user.email })
+                        .eq('emp_id', profile.emp_id);
+                }
+            }
+        }
+
+        if (!profile) {
+            return res.status(404).json({ error: 'User profile not found in database. Please contact an administrator.' });
+        }
 
         await supabase.from('profiles').update({ active: true }).eq('emp_id', profile.emp_id);
         await logAudit(profile.emp_id, 'Authentication', 'Logged in');
