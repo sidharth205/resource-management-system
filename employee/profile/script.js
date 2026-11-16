@@ -45,10 +45,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Header and Sidebar Name Updates
         document.getElementById('headerName').textContent = window.getFirstName(emp.name || 'User');
         const firstName = (emp.name || 'User').split(' ')[0];
-        const sidebarUserElem = document.getElementById('sidebarUserName');
-        if (sidebarUserElem) {
-            sidebarUserElem.textContent = firstName;
-        }
+const sidebarUserElem = document.getElementById('userName');
+if (sidebarUserElem) {
+    sidebarUserElem.textContent = firstName;
+}
 
     } catch (err) {
         console.error("Error loading profile:", err);

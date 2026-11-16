@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assigned Tasks</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../employee-theme.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar Navigation (Stays fixed and intact) -->
+        <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="profile-section">
                 <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
@@ -23,9 +23,10 @@
                 <a href="../notifications/index.html" class="nav-item">Notifications</a>
                 <a href="../profile/index.html" class="nav-item">My Profile</a>
             </nav>
-            <button id="logoutBtn" class="logout-btn">
-                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout
-            </button>
+            <button id="logoutBtn" class="logout-btn" aria-label="Logout" title="Logout">
+    <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span>
+    <span class="logout-label">Logout</span>
+</button>
         </aside>
 
         <!-- Main Content Area -->
@@ -34,25 +35,20 @@
             <header class="top-header">
                 <h2>Assigned Tasks</h2>
                 <div class="header-actions">
-                    <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
+                    <a href="../notifications/index.html" class="header-bell" aria-label="Notifications">
                         <span class="bell-icon" title="Notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
                     </a>
-                    <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
-                        <span class="profile-icon-small"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+                    <a href="../profile/index.html" class="header-profile">
+                        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
                         <span id="headerName">-</span>
-                    </div>
+                    </a>
                 </div>
             </header>
 
-            <!-- Page Title -->
-            
-
             <!-- Scrollable Content Window: JS will inject multiple tasks here -->
-            <!-- The timeline IDs and form inputs are created dynamically by your script.js inside this container -->
             <div class="scrollable-task-window" id="tasksContainer">
-                <p>Loading tasks...</p>
+                <p style="color: #64748b; font-size: 0.8rem;">Loading tasks...</p>
             </div>
-
         </main>
     </div>
 

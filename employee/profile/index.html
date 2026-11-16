@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMS | Employee Profile</title>
+    <title>Employee Profile</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../employee-theme.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
@@ -14,18 +14,18 @@
         <aside class="sidebar">
             <div class="profile-section">
                 <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
-                <div class="welcome-text">Welcome<span id="userName">User</span></div>
+                <div class="welcome-text">Welcome<span id="userName">-</span></div>
             </div>
             <nav class="nav-menu">
                 <a href="../dashboard/index.html" class="nav-item">Dashboard</a>
                 <a href="../assigned-tasks/index.html" class="nav-item">Assigned Tasks</a>
                 <a href="../projects/index.html" class="nav-item">Projects</a>
                 <a href="../notifications/index.html" class="nav-item">Notifications</a>
-                
                 <a href="index.html" class="nav-item active">My Profile</a>
             </nav>
-            <button id="logoutBtn" class="logout-btn">
-                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout
+            <button id="logoutBtn" class="logout-btn" aria-label="Logout" title="Logout">
+                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span>
+                <span class="logout-label">Logout</span>
             </button>
         </aside>
 
@@ -34,36 +34,40 @@
             <header class="top-header">
                 <h2>My Profile</h2>
                 <div class="header-actions">
-                    <span class="bell-icon" onclick="window.location.href='../notifications/index.html'" style="cursor: pointer;"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
-                    <span class="header-profile"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg> <span id="headerName">Employee</span></span>
+                    <a href="../notifications/index.html" class="header-bell" aria-label="Notifications">
+                        <span class="bell-icon" title="Notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
+                    </a>
+                    <a href="index.html" class="header-profile">
+                        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                        <span id="headerName">-</span>
+                    </a>
                 </div>
             </header>
 
             <div class="profile-page-container">
-                
                 <!-- Top Card: Summary Banner -->
-                <div class="card top-banner-card">
+                <div class="card top-banner-card profile-hero">
                     <div class="banner-left">
                         <div class="large-avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
                         <div class="banner-text-info">
+                            <span class="profile-kicker">EMPLOYEE PROFILE</span>
                             <h2 id="bannerName">Employee Name</h2>
                             <p id="bannerEmail">Gmail</p>
                             <p id="bannerPhone">Phone No.</p>
                             <p class="joined-date">Joined on <span id="bannerJoiningDate">--/--/----</span></p>
-                            <p class="status-active-text" id="bannerStatus">Active</p>
+                            <span class="status-active-text" id="bannerStatus">Active</span>
                         </div>
                     </div>
                     <div class="banner-right">
-                        <div class="meta-row"><span>Employee ID</span> <strong id="metaEmpId">--</strong></div>
-                        <div class="meta-row"><span>Department</span> <strong id="metaDepartment">--</strong></div>
-                        <div class="meta-row"><span>Reporting to</span> <strong id="metaReporting">--</strong></div>
-                        <div class="meta-row"><span>Role</span> <strong id="metaRole">Employee</strong></div>
+                        <div class="meta-row"><span>Employee ID</span><strong id="metaEmpId">--</strong></div>
+                        <div class="meta-row"><span>Department</span><strong id="metaDepartment">--</strong></div>
+                        <div class="meta-row"><span>Reporting to</span><strong id="metaReporting">--</strong></div>
+                        <div class="meta-row"><span>Role</span><strong id="metaRole">Employee</strong></div>
                     </div>
                 </div>
 
                 <!-- Bottom Grid Section -->
                 <div class="bottom-grid">
-                    
                     <!-- Left: Personal Details -->
                     <div class="card details-card">
                         <div class="card-title-row">
@@ -76,51 +80,50 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: Account Settings & Password -->
-                    <div class="right-stack">
-                        <!-- Account Settings -->
-                        <div class="card settings-card">
-                            <div class="card-title-row">
-                               <h3>Account Settings</h3>
-                            </div>
-                            <div class="details-form-list">
-                                <div class="field-row"><label>Time Zone :</label> <span>IST (UTC+5:30)</span></div>
-                                <div class="field-row"><label>Language :</label> <span>English (UK)</span></div>
-                                <div class="field-row"><label>Theme :</label> <span>Light</span></div>
-                            </div>
+                    <!-- Account Settings -->
+                    <div class="card settings-card">
+                        <div class="card-title-row">
+                            <h3>Account Settings</h3>
                         </div>
-
-                        <!-- Change Password Box -->
-                        <div class="card password-card">
-                            <h3>Change Password</h3>
-                            <form id="changePasswordForm">
-                                <div class="pwd-input-group">
-                                    <label>Current Password :</label>
-                                    <input type="password" id="currentPassword" required placeholder="Enter current password">
-                                    <button type="button" class="btn-verify-password" id="verifyPasswordBtn">Verify</button>
-                                </div>
-                                <div class="pwd-input-group">
-                                    <label>New Password :</label>
-                                    <input type="password" id="newPassword" required placeholder="Enter new password" disabled>
-                                </div>
-                                <ul class="password-rules" id="passwordRules" aria-label="Password requirements">
-                                    <li data-rule="length">Minimum length</li>
-                                    <li data-rule="uppercase">Uppercase letter</li>
-                                    <li data-rule="numbers">Number</li>
-                                    <li data-rule="special">Special character</li>
-                                </ul>
-                                <div class="pwd-input-group">
-                                    <label>Confirm New Password :</label>
-                                    <input type="password" id="confirmPassword" required placeholder="Confirm new password" disabled>
-                                </div>
-                                <button type="submit" class="btn-update-pwd" id="updatePasswordBtn" disabled>Update Password</button>
-                                <p id="passwordMessage" class="password-message" role="status" aria-live="polite"></p>
-                            </form>
+                        <div class="details-form-list">
+                            <div class="field-row"><label>Time Zone</label><span>IST (UTC+5:30)</span></div>
+                            <div class="field-row"><label>Language</label><span>English (UK)</span></div>
                         </div>
                     </div>
 
+                    <!-- Change Password Box -->
+                    <div class="card password-card">
+                        <div class="password-card-heading">
+                            <span class="security-icon" aria-hidden="true">✓</span>
+                            <div><h3>Security</h3><p>Keep your account protected</p></div>
+                        </div>
+                        <form id="changePasswordForm">
+                            <div class="pwd-input-group">
+                                <label for="currentPassword">Current password</label>
+                                <div class="verify-row">
+                                    <input type="password" id="currentPassword" required placeholder="Enter current password">
+                                    <button type="button" class="btn-verify-password" id="verifyPasswordBtn">Verify</button>
+                                </div>
+                            </div>
+                            <div class="pwd-input-group">
+                                <label for="newPassword">New password</label>
+                                <input type="password" id="newPassword" required placeholder="Enter new password" disabled>
+                            </div>
+                            <div class="pwd-input-group">
+                                <label for="confirmPassword">Confirm new password</label>
+                                <input type="password" id="confirmPassword" required placeholder="Confirm new password" disabled>
+                            </div>
+                            <ul class="password-rules" id="passwordRules" aria-label="Password requirements">
+                                <li data-rule="length">Minimum length</li>
+                                <li data-rule="uppercase">Uppercase letter</li>
+                                <li data-rule="numbers">Number</li>
+                                <li data-rule="special">Special character</li>
+                            </ul>
+                            <button type="submit" class="btn-update-pwd" id="updatePasswordBtn" disabled>Update Password</button>
+                            <p id="passwordMessage" class="password-message" role="status" aria-live="polite"></p>
+                        </form>
+                    </div>
                 </div>
-
             </div>
         </main>
     </div>

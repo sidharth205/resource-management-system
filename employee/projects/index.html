@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMPLOYEE Projects</title>
+    <title>Projects</title>
     <link rel="stylesheet" href="../../shared-assets/global.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../employee-theme.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
@@ -14,7 +14,7 @@
         <aside class="sidebar">
             <div class="profile-section">
                 <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
-                <div class="welcome-text">Welcome<span id="userName">User</span></div>
+                <div class="welcome-text">Welcome<span id="userName">-</span></div>
             </div>
             <nav class="nav-menu">
                 <a href="../dashboard/index.html" class="nav-item">Dashboard</a>
@@ -23,8 +23,9 @@
                 <a href="../notifications/index.html" class="nav-item">Notifications</a>
                 <a href="../profile/index.html" class="nav-item">My Profile</a>
             </nav>
-            <button id="logoutBtn" class="logout-btn">
-                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span> Logout
+            <button id="logoutBtn" class="logout-btn" aria-label="Logout" title="Logout">
+                <span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span>
+                <span class="logout-label">Logout</span>
             </button>
         </aside>
 
@@ -34,24 +35,30 @@
             <header class="top-header">
                 <h2>Projects</h2>
                 <div class="header-actions">
-                    <a href="../notifications/index.html" style="text-decoration: none; color: inherit;">
+                    <a href="../notifications/index.html" class="header-bell" aria-label="Notifications">
                         <span class="bell-icon" title="Notifications"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span>
                     </a>
-                    <div class="header-profile-tag" onclick="window.location.href='../profile/index.html'" style="cursor: pointer;">
-                        <span class="profile-icon-small"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
-                        <span id="headerName">Name</span>
-                    </div>
+                    <a href="../profile/index.html" class="header-profile">
+                        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                        <span id="headerName">-</span>
+                    </a>
                 </div>
             </header>
 
+            <!-- Greeting Banner -->
+            <div class="greeting-banner">
+                <h1>Active Projects</h1>
+                <p>Track all ongoing projects and team collaboration</p>
+            </div>
 
-            <!-- Top 2 Stat Cards Grid -->
-            <div class="stats-grid-projects">
+            <!-- Top Stat Cards Grid -->
+            <div class="stats-grid stats-grid-projects">
                 <div class="stat-box card-blue">
                     <div class="stat-icon-wrapper blue-bg"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4M9 12h6M9 16h6"></path></svg></div>
                     <div class="stat-info">
                         <span class="stat-number" id="statTotalProjects">0</span>
-                        <span class="stat-label">Total projects</span>
+                        <span class="stat-label">Total Projects</span>
+                        <span class="stat-sub">All assigned</span>
                     </div>
                 </div>
                 <div class="stat-box card-green">
@@ -59,12 +66,19 @@
                     <div class="stat-info">
                         <span class="stat-number" id="statCompletedProjects">0</span>
                         <span class="stat-label">Completed</span>
+                        <span class="stat-sub">Finished milestones</span>
                     </div>
                 </div>
             </div>
 
             <!-- Projects Table Section Card -->
-            <div class="section-card">
+            <div class="section-card projects-section-card">
+                <h3>
+                    <svg class="ui-icon section-heading-icon section-heading-icon--projects" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Project Directory
+                </h3>
                 <div class="table-container">
                     <table>
                         <thead>

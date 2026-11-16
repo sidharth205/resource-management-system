@@ -50,12 +50,15 @@ async function loadEmployeeProjects(token) {
         
         projects.forEach(p => {
             const tr = document.createElement('tr');
-            // Clicking the project name navigates to the corresponding Project Details page with ID parameter
+            const projectId = p.id || '';
+            const detailUrl = `../project_details/index.html?id=${encodeURIComponent(projectId)}`;
+
             const ownerName = p.profiles?.name || p.owner || 'Manager';
             const ownerId = p.profiles?.emp_id || p.manager_id || '';
+            
             tr.innerHTML = `
                 <td>
-                    <a href="../project_details/index.html?id=${encodeURIComponent(p.id || '')}" class="project-title-link">${escapeHtml(p.project_name || p.name || 'Project')}</a><br>
+                    <a href="${detailUrl}" class="project-title-link">${escapeHtml(p.project_name || p.name || 'Project')}</a><br>
                     <span class="project-sub-text">${escapeHtml(p.team || 'General Team')}</span>
                 </td>
                 <td>
@@ -67,6 +70,14 @@ async function loadEmployeeProjects(token) {
                 <td>${escapeHtml(p.start_date || 'N/A')}</td>
                 <td><span style="font-weight: 600; color: #1e293b;">${escapeHtml(p.end_date || 'Pending')}</span></td>
             `;
+
+            // Make the entire row clickable to navigate to the details screen
+            tr.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'A') {
+                    window.location.href = detailUrl;
+                }
+            });
+
             tbody.appendChild(tr);
         });
     } catch (err) {
