@@ -232,11 +232,34 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
 
       card.addEventListener('click', () => {
-        selectTaskForEdit(t);
+        openTaskModal('edit', t);
       });
 
       list.appendChild(card);
     });
+  }
+
+  const taskModal = document.getElementById('taskModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const cancelFormBtn = document.getElementById('cancelFormBtn');
+  const newTaskBtn = document.getElementById('newTaskBtn');
+
+  function openTaskModal(mode = 'create', task = null) {
+    if (!taskModal) return;
+    if (mode === 'create') {
+      resetToCreateMode();
+    } else if (mode === 'edit' && task) {
+      selectTaskForEdit(task);
+    }
+    taskModal.classList.add('show');
+    taskModal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeTaskModal() {
+    if (!taskModal) return;
+    taskModal.classList.remove('show');
+    taskModal.setAttribute('aria-hidden', 'true');
+    resetToCreateMode();
   }
 
   function selectTaskForEdit(task) {
@@ -273,11 +296,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         c.classList.remove('selected');
       }
     });
-
-    const rightPanel = document.querySelector('.split-right-panel');
-    if (window.innerWidth <= 1024 && rightPanel) {
-      rightPanel.scrollIntoView({ behavior: 'smooth' });
-    }
   }
 
   function resetToCreateMode() {
@@ -293,9 +311,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  document.getElementById('newTaskBtn').addEventListener('click', resetToCreateMode);
-  document.getElementById('resetFormBtn').addEventListener('click', resetToCreateMode);
-  document.getElementById('cancelFormBtn').addEventListener('click', resetToCreateMode);
+  if (newTaskBtn) newTaskBtn.addEventListener('click', () => openTaskModal('create'));
+  if (closeModalBtn) closeModalBtn.addEventListener('click', closeTaskModal);
+  if (cancelFormBtn) cancelFormBtn.addEventListener('click', closeTaskModal);
+
+  if (taskModal) {
+    taskModal.addEventListener('click', (e) => {
+      if (e.target === taskModal) {
+        closeTaskModal();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && taskModal && taskModal.classList.contains('show')) {
+      closeTaskModal();
+    }
+  });
 
   document.getElementById('taskSearchInput').addEventListener('input', renderTasksList);
   document.getElementById('filterProject').addEventListener('change', renderTasksList);
@@ -347,7 +379,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (res.ok) {
           showToast('Task created successfully!');
-          resetToCreateMode();
+          closeTaskModal();
           await loadTasks();
         } else {
           const err = await res.json();
@@ -371,6 +403,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (res.ok) {
           showToast('Task updated successfully!');
+          closeTaskModal();
           await loadTasks();
         } else {
           const err = await res.json();

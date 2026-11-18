@@ -45,122 +45,122 @@
         </div>
       </header>
 
-      <div class="split-layout">
-        <div class="split-left-panel">
-          <div class="panel-header-row">
-            <div>
-              <h3 class="panel-heading">Task List</h3>
-              <span class="panel-subheading">Select a task to edit or inspect</span>
-            </div>
-            <button class="primary-btn" id="newTaskBtn">+ New Task</button>
+      <div class="tasks-view">
+        <div class="panel-header-row">
+          <div>
+            <h3 class="panel-heading">Task List</h3>
+            <span class="panel-subheading">Select a task to edit or inspect</span>
           </div>
+          <button class="primary-btn" id="newTaskBtn">+ New Task</button>
+        </div>
 
-          <div class="task-filters-card">
-            <div class="search-box">
-              <span class="search-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg></span>
-              <input type="text" id="taskSearchInput" placeholder="Search tasks by title or assignee...">
-            </div>
-            <div class="filter-dropdowns">
-              <select id="filterProject" class="glass-select">
-                <option value="all">All Projects</option>
-              </select>
-              <select id="filterStatus" class="glass-select">
-                <option value="all">All Statuses</option>
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
-              <select id="filterPriority" class="glass-select">
-                <option value="all">All Priorities</option>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
-              </select>
-            </div>
+        <div class="task-filters-card">
+          <div class="search-box">
+            <span class="search-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg></span>
+            <input type="text" id="taskSearchInput" placeholder="Search tasks by title or assignee...">
           </div>
-
-          <div class="task-cards-list" id="taskCardsList">
-            <div class="skeleton-row"></div>
-            <div class="skeleton-row"></div>
-            <div class="skeleton-row"></div>
+          <div class="filter-dropdowns">
+            <select id="filterProject" class="glass-select">
+              <option value="all">All Projects</option>
+            </select>
+            <select id="filterStatus" class="glass-select">
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+            <select id="filterPriority" class="glass-select">
+              <option value="all">All Priorities</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
           </div>
         </div>
 
-        <div class="split-right-panel">
-          <div class="glass-card form-card">
-            <div class="form-header-bar">
-              <div>
-                <h3 class="panel-heading" id="formTitle">Create New Task</h3>
-                <span class="panel-subheading" id="formSubtitle">Fill in task details below</span>
-              </div>
-              <button type="button" class="icon-btn-reset" id="resetFormBtn" title="Clear / New Form">↻ Clear</button>
-            </div>
-
-            <form id="taskForm" class="task-form">
-              <input type="hidden" id="editingTaskId" value="">
-
-              <div class="form-group">
-                <label for="taskProject">Project *</label>
-                <select id="taskProject" required class="glass-input">
-                  <option value="">Select Project</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="taskAssignee">Assignee (Employee)</label>
-                <select id="taskAssignee" class="glass-input">
-                  <option value="">Unassigned</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="taskTitle">Task Title *</label>
-                <input type="text" id="taskTitle" required placeholder="e.g. Design responsive landing hero" class="glass-input">
-              </div>
-
-              <div class="form-group">
-                <label for="taskDescription">Description</label>
-                <textarea id="taskDescription" rows="4" placeholder="Detailed requirements and deliverables..." class="glass-input"></textarea>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="taskPriority">Priority</label>
-                  <select id="taskPriority" class="glass-input">
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="low">Low</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="taskDueDate">Due Date</label>
-                  <input type="date" id="taskDueDate" class="glass-input">
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="taskHours">Estimated Hours</label>
-                  <input type="number" id="taskHours" min="0" step="0.5" placeholder="e.g. 8" class="glass-input">
-                </div>
-                <div class="form-group" id="statusGroup" style="display: none;">
-                  <label for="taskStatus">Status</label>
-                  <select id="taskStatus" class="glass-input">
-                    <option value="pending">Pending</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="completed">Completed</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-actions-row">
-                <button type="button" class="cancel-btn" id="cancelFormBtn">Reset</button>
-                <button type="submit" class="primary-btn" id="saveTaskBtn">Create Task</button>
-              </div>
-            </form>
-          </div>
+        <div class="task-cards-list" id="taskCardsList">
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
         </div>
       </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="taskModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="formTitle">Create New Task</h3>
+          <span class="modal-subtitle" id="formSubtitle">Fill in task details below</span>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">×</button>
+      </div>
+
+      <form id="taskForm" class="task-form">
+        <input type="hidden" id="editingTaskId" value="">
+
+        <div class="form-group">
+          <label for="taskProject">Project *</label>
+          <select id="taskProject" required class="glass-input">
+            <option value="">Select Project</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="taskAssignee">Assignee (Employee)</label>
+          <select id="taskAssignee" class="glass-input">
+            <option value="">Unassigned</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="taskTitle">Task Title *</label>
+          <input type="text" id="taskTitle" required placeholder="e.g. Design responsive landing hero" class="glass-input">
+        </div>
+
+        <div class="form-group">
+          <label for="taskDescription">Description</label>
+          <textarea id="taskDescription" rows="3" placeholder="Detailed requirements and deliverables..." class="glass-input"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskPriority">Priority</label>
+            <select id="taskPriority" class="glass-input">
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskDueDate">Due Date</label>
+            <input type="date" id="taskDueDate" class="glass-input">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskHours">Estimated Hours</label>
+            <input type="number" id="taskHours" min="0" step="0.5" placeholder="e.g. 8" class="glass-input">
+          </div>
+          <div class="form-group" id="statusGroup" style="display: none;">
+            <label for="taskStatus">Status</label>
+            <select id="taskStatus" class="glass-input">
+              <option value="pending">Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" id="cancelFormBtn">Cancel</button>
+          <button type="submit" class="primary-btn" id="saveTaskBtn">Create Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
     </main>
   </div>
 

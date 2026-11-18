@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --navy: #434775;
   --teal: #434775;
   --sky-blue: #c4c5db;
@@ -289,19 +289,12 @@ body {
   color: #1e293b;
 }
 
-.split-layout {
+.tasks-view {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1.15fr 0.95fr;
-  gap: 20px;
-  overflow: hidden;
-}
-
-.split-left-panel,
-.split-right-panel {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  width: 100%;
 }
 
 .panel-header-row {
@@ -386,9 +379,10 @@ body {
   flex: 1;
   overflow-y: auto;
   padding-right: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 14px;
+  align-content: start;
 }
 
 .task-cards-list::-webkit-scrollbar {
@@ -492,57 +486,104 @@ body {
   font-weight: 600;
 }
 
-.glass-card {
-  background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: var(--glass-shadow);
+/* Modal Backdrop & Dialog */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: 20px;
+}
+
+.modal-backdrop.show {
   display: flex;
-  flex-direction: column;
 }
 
-.form-card {
-  height: 100%;
+.modal-dialog {
+  background: #ffffff;
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
   overflow-y: auto;
-  animation: fadeInUp 0.4s ease backwards;
+  padding: 26px;
+  box-shadow: 0 20px 50px rgba(18, 20, 36, 0.2);
+  animation: modalFadeIn 0.25s ease-out;
 }
 
-.form-card::-webkit-scrollbar {
+.modal-dialog::-webkit-scrollbar {
   width: 6px;
 }
 
-.form-card::-webkit-scrollbar-thumb {
+.modal-dialog::-webkit-scrollbar-thumb {
   background: rgba(148, 163, 184, 0.5);
   border-radius: 4px;
 }
 
-.form-header-bar {
+.modal-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-  flex-shrink: 0;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--card-border);
 }
 
-.icon-btn-reset {
-  background: rgba(241, 245, 249, 0.8);
-  border: 1px solid rgba(203, 213, 225, 0.8);
-  border-radius: 8px;
-  padding: 5px 10px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #475569;
+.modal-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-heading);
+}
+
+.modal-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  display: block;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--text-muted);
   cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
-.icon-btn-reset:hover {
-  background: #e2e8f0;
+.modal-close-btn:hover {
+  background: var(--sidebar-active);
+  color: var(--text-color);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--card-border);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .task-form {
@@ -688,16 +729,8 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .split-layout {
-    grid-template-columns: 1fr;
-    overflow-y: auto;
-  }
-  .split-left-panel,
-  .split-right-panel {
-    overflow: visible;
-  }
   .task-cards-list {
-    max-height: 400px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
@@ -718,6 +751,9 @@ body {
   }
   .main-content {
     padding: 16px;
+  }
+  .task-cards-list {
+    grid-template-columns: 1fr;
   }
 }
 
