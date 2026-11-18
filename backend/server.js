@@ -947,14 +947,31 @@ app.get('/api/reports/resource-allocation', authenticateUser, requirePermission(
 // Get logged-in employee profile
 // Shortcut to get current logged-in employee profile using middleware req.user.id
 app.get('/api/employee/profile', authenticateUser, async (req, res) => {
-    const { data, error } = await supabase
-        .from('profiles')
-        .select('*, designations(name)')
-        .eq('emp_id', req.user.id)
-        .single();
+    try {
+        const empId = req.user.empId || req.user.id;
+        let { data, error } = await supabase
+            .from('profiles')
+            .select('*, designations(name)')
+            .eq(empId ? 'emp_id' : 'auth_id', empId || req.user.authId)
+            .maybeSingle();
 
-    if (error || !data) return res.status(404).json({ error: 'Employee profile not found' });
-    res.json(data);
+        if (error || !data) {
+            // Fallback without relation if designations join failed
+            const fallback = await supabase
+                .from('profiles')
+                .select('*')
+                .eq(empId ? 'emp_id' : 'auth_id', empId || req.user.authId)
+                .maybeSingle();
+            data = fallback.data;
+            error = fallback.error;
+        }
+
+        if (error || !data) return res.status(404).json({ error: 'Employee profile not found' });
+        res.json(data);
+    } catch (err) {
+        console.error("GET /api/employee/profile Error:", err);
+        res.status(500).json({ error: 'Internal server error fetching employee profile' });
+    }
 });
 
 // Update employee password securely via Supabase Auth
@@ -962,8 +979,13 @@ app.put('/api/employee/profile/update-password', authenticateUser, async (req, r
     const { password } = req.body;
     if (!password) return res.status(400).json({ error: 'Password is required' });
 
-    const { error } = await supabase.auth.admin.updateUserById(req.user.id, { password });
-    if (error) {
+    const authId = req.user.authId;
+    let updateError = null;
+    if (authId) {
+        const { error } = await supabase.auth.admin.updateUserById(authId, { password });
+        updateError = error;
+    }
+    if (updateError || !authId) {
         const { error: userError } = await supabase.auth.updateUser({ password });
         if (userError) return res.status(400).json({ error: userError.message });
     }

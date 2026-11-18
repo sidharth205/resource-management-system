@@ -10,6 +10,7 @@
 </head>
 <body>
   <div class="app-container">
+    <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
       <div class="profile-section">
         <div class="avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
@@ -27,6 +28,8 @@
       </nav>
       <button id="logoutBtn" class="logout-btn"><span class="logout-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 19V5a2 2 0 0 0-2-2h-6"></path></svg></span>Logout</button>
     </aside>
+
+    <!-- Main Content -->
     <main class="main-content">
       <header class="top-header">
         <div class="header-left">
@@ -45,86 +48,84 @@
         </div>
       </header>
 
-      <div class="profile-scrollable">
-        <div class="profile-grid-top">
-          <div class="glass-card profile-overview-card">
-            <div class="profile-hero-row">
-              <div class="profile-large-avatar" id="profBigAvatar">M</div>
-              <div class="profile-hero-info">
-                <h3 id="profName">Manager Name</h3>
-                <span class="role-badge" id="profRoleBadge">Project Manager</span>
-                <span class="status-pill status-active" id="profStatus">Active Account</span>
-              </div>
-            </div>
-
-            <div class="profile-meta-grid">
-              <div class="meta-item">
-                <span class="meta-label">Employee ID</span>
-                <strong id="profEmpId">--</strong>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Email Address</span>
-                <strong id="profEmail">--</strong>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Department</span>
-                <strong id="profDept">--</strong>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Employment Type</span>
-                <strong id="profType">--</strong>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Designation</span>
-                <strong id="profDesignation">--</strong>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Joining Date</span>
-                <strong id="profJoiningDate">--</strong>
-              </div>
+      <div class="profile-page-container">
+        <!-- Top Card: Summary Banner -->
+        <div class="card top-banner-card profile-hero">
+          <div class="banner-left">
+            <div class="large-avatar"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+            <div class="banner-text-info">
+              <span class="profile-kicker">MY PROFILE</span>
+              <h2 id="bannerName">Manager Name</h2>
+              <p id="bannerEmail">--</p>
+              <p id="bannerPhone">Phone not provided</p>
+              <p class="joined-date">Joined on <span id="bannerJoiningDate">--/--/----</span></p>
+              <span class="status-active-text" id="bannerStatus">Active</span>
             </div>
           </div>
-
-          <div class="glass-card password-card">
-            <div class="card-header-bar">
-              <div>
-                <h3 class="card-title">Security & Password</h3>
-                <span class="card-subtitle">Update your account authentication credentials</span>
-              </div>
-            </div>
-
-            <form id="passwordForm" class="password-form">
-              <div class="form-group">
-                <label for="newPassword">New Password *</label>
-                <input type="password" id="newPassword" required placeholder="At least 6 characters..." class="glass-input">
-              </div>
-
-              <div class="form-group">
-                <label for="confirmPassword">Confirm New Password *</label>
-                <input type="password" id="confirmPassword" required placeholder="Repeat new password..." class="glass-input">
-              </div>
-
-              <div class="password-hints">
-                <span>Must contain min. 6 characters, uppercase & number.</span>
-              </div>
-
-              <div class="form-action-right">
-                <button type="submit" class="primary-btn" id="updatePasswordBtn">Update Password</button>
-              </div>
-            </form>
+          <div class="banner-right">
+            <div class="meta-row"><span>Employee ID</span><strong id="metaEmpId">--</strong></div>
+            <div class="meta-row"><span>Department</span><strong id="metaDepartment">--</strong></div>
+            <div class="meta-row"><span>Reporting to</span><strong id="metaReporting">--</strong></div>
+            <div class="meta-row"><span>Role</span><strong id="metaRole">Project Manager</strong></div>
           </div>
         </div>
 
-        <div class="glass-card activity-card">
-          <div class="card-header-bar">
-            <div>
-              <h3 class="card-title">Recent Personal Activity</h3>
-              <span class="card-subtitle">Your actions and system events recorded</span>
+        <!-- Bottom Grid Section -->
+        <div class="bottom-grid">
+          <!-- Left: Personal Details -->
+          <div class="card details-card">
+            <div class="card-title-row">
+              <h3>Personal Details</h3>
+            </div>
+            <div class="details-form-list">
+              <div class="field-row"><label>Full Name :</label> <span id="detFullName">--</span></div>
+              <div class="field-row"><label>Email Address :</label> <span id="detEmail">--</span></div>
+              <div class="field-row"><label>Phone No. :</label> <span id="detPhone">--</span></div>
             </div>
           </div>
-          <div class="activity-feed" id="userActivityFeed">
-            <div class="skeleton-row"></div>
-            <div class="skeleton-row"></div>
+
+          <!-- Account Settings -->
+          <div class="card settings-card">
+            <div class="card-title-row">
+              <h3>Account Settings</h3>
+            </div>
+            <div class="details-form-list">
+              <div class="field-row"><label>Time Zone</label><span>IST (UTC+5:30)</span></div>
+              <div class="field-row"><label>Language</label><span>English (UK)</span></div>
+            </div>
+          </div>
+
+          <!-- Change Password Box -->
+          <div class="card password-card">
+            <div class="password-card-heading">
+              <span class="security-icon" aria-hidden="true">✓</span>
+              <div><h3>Security</h3><p>Keep your account protected</p></div>
+            </div>
+            <form id="changePasswordForm">
+              <div class="pwd-input-group">
+                <label for="currentPassword">Current password</label>
+                <div class="verify-row">
+                  <input type="password" id="currentPassword" required placeholder="Enter current password">
+                  <button type="button" class="btn-verify-password" id="verifyPasswordBtn">Verify</button>
+                </div>
+              </div>
+              <div class="pwd-input-group">
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" required placeholder="Enter new password" disabled>
+              </div>
+              <div class="pwd-input-group">
+                <label for="confirmPassword">Confirm new password</label>
+                <input type="password" id="confirmPassword" required placeholder="Confirm new password" disabled>
+              </div>
+              <ul class="password-rules" id="passwordRules" aria-label="Password requirements">
+                <li data-rule="length">Minimum length</li>
+                <li data-rule="uppercase">Uppercase letter</li>
+                <li data-rule="numbers">Number</li>
+                <li data-rule="special">Special character</li>
+              </ul>
+              <button type="submit" class="btn-update-pwd" id="updatePasswordBtn" disabled>Update Password</button>
+              <p id="passwordMessage" class="password-message" role="status" aria-live="polite"></p>
+            </form>
           </div>
         </div>
       </div>
