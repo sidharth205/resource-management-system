@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap');
 
 /* =========================================
    EMPLOYEE DASHBOARD STYLING
@@ -112,7 +112,8 @@ body {
     color: var(--muted-text, #5e627d);
     border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 10px;
-    text-align: left;
+    text-align: center;
+    justify-content: center;
     font-weight: bold;
     cursor: pointer;
     font-size: 0.85rem;

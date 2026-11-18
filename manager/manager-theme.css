@@ -181,7 +181,8 @@ button, input, select, textarea {
   border: 1px solid var(--line-color, #e4e5ee) !important;
   border-radius: 10px !important;
   color: var(--muted-text, #5e627d) !important;
-  text-align: left !important;
+  text-align: center !important;
+  justify-content: center !important;
   font-weight: 700 !important;
   cursor: pointer !important;
   font-size: 0.95rem !important;

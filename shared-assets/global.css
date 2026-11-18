@@ -489,7 +489,8 @@ button, input, select, textarea {
   background: transparent;
   border: 1px solid var(--line-color);
   border-radius: 10px;
-  text-align: left;
+  text-align: center;
+  justify-content: center;
   font-weight: 600;
   color: var(--muted-text);
   cursor: pointer;

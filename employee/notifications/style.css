@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap');
 
 /* =========================================
    EMPLOYEE NOTIFICATION PAGE STYLING
@@ -163,7 +163,8 @@ body {
     border: 1px solid var(--line-color, #e4e5ee);
     border-radius: 10px;
     color: var(--muted-text, #5e627d);
-    text-align: left;
+    text-align: center;
+    justify-content: center;
     font-weight: 700 !important;
     cursor: pointer;
     font-size: 0.95rem !important;
